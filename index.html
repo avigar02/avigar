@@ -191,20 +191,26 @@ function aplicarFiltrosCruzados() {
     // Redibujamos la pantalla pasándole solo los que pasaron el filtro duplo
     renderizarProductos(productosFiltrados);
 }
-
-function aplicarFiltrosCruzados() {
-    const productosFiltrados = productos.filter(producto => {
-        // 1. Validar la marca
-        const coincideMarca = (marcaSeleccionadaActual === "todos" || producto.marca === marcaSeleccionadaActual);
-        
-        // 2. Validar la categoría (busca dentro del arreglo de tu objeto)
-        const coincideCategoria = (categoriaSeleccionadaActual === "todos" || producto.categoria.includes(categoriaSeleccionadaActual));
-
-        return coincideMarca && coincideCategoria;
+function seleccionarMarca(nombreMarca, elementoBoton) {
+    marcaSeleccionadaActual = nombreMarca;
+    
+    document.querySelectorAll('.btn-marca').forEach(btn => {
+        btn.className = "btn-marca px-4 py-2 rounded-full text-xs md:text-sm bg-zinc-900 text-zinc-400 border border-zinc-800 transition";
     });
+    elementoBoton.className = "btn-marca px-4 py-2 rounded-full text-xs md:text-sm bg-white text-black font-semibold transition";
 
-    // Redibujamos la pantalla pasándole solo los que pasaron el filtro duplo
-    renderizarProductos(productosFiltrados);
+    aplicarFiltrosCruzados();
+}
+
+function seleccionarCategoria(nombreCategoria, elementoBoton) {
+    categoriaSeleccionadaActual = nombreCategoria;
+
+    document.querySelectorAll('.btn-categoria').forEach(btn => {
+        btn.className = "btn-categoria px-4 py-2 rounded-full text-xs md:text-sm bg-zinc-900 text-zinc-400 border border-zinc-800 transition";
+    });
+    elementoBoton.className = "btn-categoria px-4 py-2 rounded-full text-xs md:text-sm bg-white text-black font-semibold transition";
+
+    aplicarFiltrosCruzados();
 }
         function renderizarProductos(lista) {
             contenedor.innerHTML = "";
