@@ -307,28 +307,50 @@ function seleccionarCategoria(nombreCategoria, elementoBoton) {
         }
 
         function añadirAlCarrito() {
-            if(!productoSeleccionadoActual) return;
+    if (!productoSeleccionadoActual) return;
 
-            const tallaSeleccionada = document.getElementById('selector-talla').value;
-            const colorSeleccionado = document.getElementById('selector-color').value;
+    const tallaSeleccionada = document.getElementById('selector-talla').value;
+    const colorSeleccionado = document.getElementById('selector-color').value;
 
-            const item = {
-                idUnico: Date.now(),
-                nombre: productoSeleccionadoActual.nombre,
-                marca: productoSeleccionadoActual.marca,
-                talla: tallaSeleccionada,
-                color: colorSeleccionado,
-                pMenudeo: productoSeleccionadoActual.precioMenudeo,
-                pMayoreo: productoSeleccionadoActual.precioMayoreo,
-                pDistribuidor: productoSeleccionadoActual.precioDistribuidor
-            };
+    // VALIDACIÓN: Por si el cliente no elige talla
+    if (!tallaSeleccionada || tallaSeleccionada === "") {
+        alert("Por favor, selecciona una talla antes de agregar al carrito.");
+        return;
+    }
 
-            carrito.push(item);
-            localStorage.setItem("carritoAvigar", JSON.stringify(carrito));
-            actualizarInterfazCarrito();
-            cerrarModal();
-            abrirCarrito();
-        }
+    // 1. Buscar si YA existe EXACTAMENTE ese mismo producto (por id del inventario, talla y color) en el carrito
+    const productoExistente = carrito.find(item => 
+        item.idBase === productoSeleccionadoActual.id && 
+        item.talla === tallaSeleccionada && 
+        item.color === colorSeleccionado
+    );
+
+    if (productoExistente) {
+        // Si ya está en el carrito, SOLO le sumamos 1 a la cantidad de piezas
+        productoExistente.cantidad += 1;
+    } else {
+        // Si NO existe, creamos el elemento agregándole la propiedad 'cantidad: 1'
+        const item = {
+            idUnico: Date.now(), // Sigue sirviendo para borrarlo individualmente
+            idBase: productoSeleccionadoActual.id, // Guardamos el ID del inventario para comparar
+            nombre: productoSeleccionadoActual.nombre,
+            marca: productoSeleccionadoActual.marca,
+            talla: tallaSeleccionada,
+            color: colorSeleccionado,
+            pMenudeo: productoSeleccionadoActual.precioMenudeo,
+            pMayoreo: productoSeleccionadoActual.precioMayoreo,
+            pDistribuidor: productoSeleccionadoActual.precioDistribuidor,
+            cantidad: 1 // <--- Aquí empieza nuestro contador de piezas
+        };
+        carrito.push(item);
+    }
+
+    // Guardar y refrescar la pantalla del carrito
+    localStorage.setItem("carritoAvigar", JSON.stringify(carrito));
+    actualizarInterfazCarrito();
+    cerrarModal();
+    abrirCarrito();
+}
 
         function eliminarDelCarrito(idUnico) {
             carrito = carrito.filter(item => item.idUnico !== idUnico);
@@ -336,11 +358,13 @@ function seleccionarCategoria(nombreCategoria, elementoBoton) {
         }
 
         function actualizarInterfazCarrito() {
-            const contador = document.getElementById('carrito-contador');
+            // Reemplaza la línea del contador para que sume las cantidades totales de piezas:
+const totalPiezas = carrito.reduce((suma, item) => suma + item.cantidad, 0);
+document.getElementById('carrito-contador').innerText = totalPiezas;
             const botonFlotante = document.getElementById('btn-carrito-flotante');
             const contenedorItems = document.getElementById('carrito-items');
 
-            contador.innerText = carrito.length;
+            
             if(carrito.length > 0) {
                 botonFlotante.classList.remove('hidden');
             } else {
@@ -351,26 +375,31 @@ function seleccionarCategoria(nombreCategoria, elementoBoton) {
             contenedorItems.innerHTML = "";
             let totMenudeo = 0, totMayoreo = 0, totDist = 0;
 
-            carrito.forEach(item => {
-                totMenudeo += item.pMenudeo;
-                totMayoreo += item.pMayoreo;
-                totDist += item.pDistribuidor;
+           carrito.forEach(item => {
+    // 1. Multiplicamos cada precio por la cantidad de piezas de la variante
+    totMenudeo += item.pMenudeo * item.cantidad;
+    totMayoreo += item.pMayoreo * item.cantidad;
+    totDist += item.pDistribuidor * item.cantidad;
 
-                contenedorItems.innerHTML += `
-                    <div class="flex justify-between items-start bg-zinc-900/40 p-3 border border-zinc-950 rounded-xl text-xs">
-                        <div>
-                            <h4 class="font-bold text-zinc-100">${item.nombre}</h4>
-                            <p class="text-zinc-500 uppercase text-[10px] mt-0.5">${item.marca} • Talla: <span class="text-zinc-300 font-semibold">${item.talla}</span> • Modelo: <span class="text-zinc-300 font-semibold">${item.color}</span></p>
-                            <div class="flex gap-3 text-zinc-400 text-[10px] mt-2">
-                                <span>Men: $${item.pMenudeo}</span>
-                                <span class="text-emerald-400">May: $${item.pMayoreo}</span>
-                                <span class="text-indigo-400">Dist: $${item.pDistribuidor}</span>
-                            </div>
-                        </div>
-                        <button onclick="eliminarDelCarrito(${item.idUnico})" class="text-zinc-600 hover:text-red-400 text-sm font-bold pl-2">✕</button>
-                    </div>
-                `;
-            });
+    // 2. Agregamos el item al contenedorHTML incluyendo la cantidad
+    contenedorItems.innerHTML += `
+        <div class="flex justify-between items-start bg-zinc-900/40 p-3 border border-zinc-950 rounded-xl text-xs">
+            <div>
+                <h4 class="font-bold text-zinc-100">${item.nombre}</h4>
+                <p class="text-zinc-500 uppercase text-[10px] mt-0.5">${item.marca} • Talla: <span class="text-zinc-300 font-semibold">${item.talla}</span> • Color: <span class="text-zinc-300 font-semibold">${item.color}</span></p>
+                
+                <p class="text-[11px] text-zinc-400 mt-1">Cantidad: <span class="text-emerald-400 font-bold">${item.cantidad} pza(s)</span></p>
+
+                <div class="flex gap-3 text-zinc-400 text-[10px] mt-2">
+                    <span>Men: $${(item.pMenudeo * item.cantidad).toLocaleString()}</span>
+                    <span class="text-emerald-400">May: $${(item.pMayoreo * item.cantidad).toLocaleString()}</span>
+                    <span class="text-indigo-400">Dist: $${(item.pDistribuidor * item.cantidad).toLocaleString()}</span>
+                </div>
+            </div>
+            <button onclick="eliminarDelCarrito(${item.idUnico})" class="text-zinc-600 hover:text-red-400 text-sm font-bold pl-2">×</button>
+        </div>
+    `;
+});
 
             document.getElementById('total-menudeo').innerText = `$${totMenudeo}`;
             document.getElementById('total-mayoreo').innerText = `$${totMayoreo}`;
