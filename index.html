@@ -216,7 +216,12 @@
             },
         ];
 
-        let carrito = [];
+        let carrito = JSON.parse(localStorage.getItem("carritoAvigar")) || [];
+        actualizarInterfazCarrito();
+
+// OJO: Como no veo en esta foto el nombre exacto de la función que dibuja el carrito en tu pantalla, 
+// pon aquí abajo el nombre de la función que usas para actualizar visualmente el carrito.
+// Ejemplo: actualizarInterfazCarrito();
         let productoSeleccionadoActual = null;
         const contenedor = document.querySelector('main');
 
@@ -326,6 +331,7 @@
             };
 
             carrito.push(item);
+            localStorage.setItem("carritoAvigar", JSON.stringify(carrito));
             actualizarInterfazCarrito();
             cerrarModal();
             abrirCarrito();
@@ -384,7 +390,7 @@
         function enviarPedidoWhatsApp() {
             if(carrito.length === 0) return;
 
-            let textoMensaje = `🔥 *NUEVO PEDIDO DE COMPRA - AVIGAR* 🔥\n`;
+            let textoMensaje = `*NUEVO PEDIDO DE COMPRA - AVIGAR*\n`;
             textoMensaje += `-------------------------------------\n\n`;
 
             let subMenudeo = 0, subMayoreo = 0, subDistribuidor = 0;
@@ -397,19 +403,22 @@
                 textoMensaje += `*${index + 1}. ${item.nombre}*\n`;
                 textoMensaje += `   • Marca: ${item.marca.toUpperCase()}\n`;
                 textoMensaje += `   • Talla: ${item.talla}\n`;
-                textoMensaje += `   • Modelo/Color: ${item.color}\n`;
+                textoMensaje += `   • Modelo: ${item.color}\n`;
                 textoMensaje += `   • Precios pza: (Men: $${item.pMenudeo} | May: $${item.pMayoreo} | Dist: $${item.pDistribuidor})\n\n`;
             });
 
             textoMensaje += `-------------------------------------\n`;
-            textoMensaje += `💰 *SUBTOTALES SEGÚN TU VOLUMEN:*\n`;
-            textoMensaje += `• Total Menudeo (1 pza): *$${subMenudeo}*\n`;
-            textoMensaje += `• Total Mayoreo (> $4k): *$${subMayoreo}*\n`;
-            textoMensaje += `• Total Distribuidor (> $8k): *$${subDistribuidor}*\n\n`;
-            textoMensaje += `📌 _Quedo a la espera de la cotización final y los datos de depósito._`;
+            textoMensaje += `*SUBTOTALES SEGÚN TU VOLUMEN:*\n`;
+            textoMensaje += `Total Menudeo (1 pza): *$${subMenudeo}*\n`;
+            textoMensaje += `Total Mayoreo (> $4k): *$${subMayoreo}*\n`;
+            textoMensaje += `Total Distribuidor (> $8k): *$${subDistribuidor}*\n\n`;
+            textoMensaje += `_Quedo a la espera de los datos de depósito._`;
 
             const linkFinal = `https://wa.me/${MI_WHATSAPP}?text=${encodeURIComponent(textoMensaje)}`;
             window.open(linkFinal, '_blank');
+            carrito = [];
+    localStorage.removeItem("carritoAvigar");
+    actualizarInterfazCarrito();
         }
 
         renderizarProductos(productos);
