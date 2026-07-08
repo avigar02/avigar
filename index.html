@@ -46,6 +46,13 @@
 
     <main class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
         </main>
+        </main>
+
+<div id="centinela-scroll" class="w-full text-center py-8 text-zinc-500 text-xs tracking-wider font-semibold clear-both">
+    Cargando más prendas extraordinarias...
+</div>
+
+<div id="btn-carrito-flotante" onclick="abrirCarrito()" ...
 
     <div id="btn-carrito-flotante" onclick="abrirCarrito()" class="fixed bottom-6 right-6 bg-emerald-500 text-black font-bold px-6 py-4 rounded-full shadow-2xl flex items-center gap-3 cursor-pointer hover:bg-emerald-400 transition transform hover:scale-105 z-40 hidden">
         <span>🛒 Carrito</span>
@@ -173,7 +180,9 @@
         ]
             },
         ];
-
+let productosPorPagina = 6;            // Bloques de 6 en 6 como TikTok
+let paginaActual = 1;                  // Control de página activa
+let productosFiltrados = [];           // Almacén para el resultado de tus filtros
         let carrito = JSON.parse(localStorage.getItem("carritoAvigar")) || [];
         actualizarInterfazCarrito();
         let marcaSeleccionadaActual = "todos";
@@ -184,18 +193,19 @@ let categoriaSeleccionadaActual = "todos";
         let productoSeleccionadoActual = null;
         const contenedor = document.querySelector('main');
 function aplicarFiltrosCruzados() {
-    const productosFiltrados = productos.filter(producto => {
-        // 1. Validar la marca
+    // 1. Guardamos el resultado en la variable global compartida
+    productosFiltrados = productos.filter(producto => {
+        // Validar la marca
         const coincideMarca = (marcaSeleccionadaActual === "todos" || producto.marca === marcaSeleccionadaActual);
         
-        // 2. Validar la categoría (busca dentro del arreglo de tu objeto)
+        // Validar la categoría
         const coincideCategoria = (categoriaSeleccionadaActual === "todos" || producto.categoria.includes(categoriaSeleccionadaActual));
-
+        
         return coincideMarca && coincideCategoria;
     });
 
-    // Redibujamos la pantalla pasándole solo los que pasaron el filtro duplo
-    renderizarProductos(productosFiltrados);
+    // 2. Redibujamos la pantalla desde cero con el scroll reiniciado
+    mostrarProductosPorBloque(true);
 }
 function seleccionarMarca(nombreMarca, elementoBoton) {
     marcaSeleccionadaActual = nombreMarca;
@@ -356,6 +366,38 @@ function seleccionarCategoria(nombreCategoria, elementoBoton) {
             carrito = carrito.filter(item => item.idUnico !== idUnico);
             actualizarInterfazCarrito();
         }
+        // ... tus otras funciones anteriores ...
+
+function eliminarDelCarrito(idUnico) {
+    carrito = carrito.filter(item => item.idUnico !== idUnico);
+    actualizarInterfazCarrito();
+}
+
+function actualizarInterfazCarrito() {
+    // ... tu lógica de carrito ...
+}
+
+// === AQUÍ PEGUE LA NUEVA FUNCIÓN DE RENDERIZADO ===
+function mostrarProductosPorBloque(reiniciar = false) {
+    const contenedor = document.querySelector('main.grid');
+    if (!contenedor) return;
+
+    if (reiniciar) {
+        contenedor.innerHTML = "";
+        paginaActual = 1;
+    }
+
+    const inicio = (paginaActual - 1) * productosPorPagina;
+    const fin = inicio + productosPorPagina;
+    const bloqueDePrendas = productosFiltrados.slice(inicio, fin);
+    
+    // ... resto de tu lógica que te pasé antes ...
+}
+
+// === AQUÍ VA EL OBSERVADOR QUE VIGILA EL SCROLL ===
+const observadorPantalla = new IntersectionObserver((entries) => {
+    // ...
+});
 function eliminarDelCarrito(idUnico) {
     carrito = carrito.filter(item => item.idUnico !== idUnico);
     actualizarInterfazCarrito();
@@ -470,6 +512,7 @@ document.getElementById('carrito-contador').innerText = totalPiezas;
 }
 
         renderizarProductos(productos);
+    
     </script>
 </body>
 </html>
