@@ -445,7 +445,6 @@ document.getElementById('carrito-contador').innerText = totalPiezas;
     let subMenudeo = 0, subMayoreo = 0, subDistribuidor = 0;
 
     carrito.forEach((item, index) => {
-        // === AQUÍ SE REALIZA LA MULTIPLICACIÓN MATEMÁTICA CORRECTA ===
         subMenudeo += item.pMenudeo * item.cantidad;
         subMayoreo += item.pMayoreo * item.cantidad;
         subDistribuidor += item.pDistribuidor * item.cantidad;
@@ -454,9 +453,9 @@ document.getElementById('carrito-contador').innerText = totalPiezas;
         textoMensaje += `    • Marca: ${item.marca.toUpperCase()}\n`;
         textoMensaje += `    • Talla: ${item.talla}\n`;
         textoMensaje += `    • Modelo/Color: ${item.color}\n`;
-        // Agregamos de manera visual la cantidad de piezas al texto de WhatsApp
         textoMensaje += `    • Cantidad: *${item.cantidad} pza(s)*\n`;
-        textoMensaje += `    • Subtotal: (Men: $${(item.pMenudeo * item.cantidad).toLocaleString()} | May: $${(item.pMayoreo * item.cantidad).toLocaleString()})\n\n`;
+        // === LÍNEA CORREGIDA CON DISTRIBUIDOR INCLUIDO ===
+        textoMensaje += `    • Subtotal: (Men: $${(item.pMenudeo * item.cantidad).toLocaleString()} | May: $${(item.pMayoreo * item.cantidad).toLocaleString()} | Dist: $${(item.pDistribuidor * item.cantidad).toLocaleString()})\n\n`;
     });
 
     textoMensaje += "──────────────────────────────────\n";
@@ -468,12 +467,6 @@ document.getElementById('carrito-contador').innerText = totalPiezas;
 
     const linkFinal = `https://wa.me/${MI_WHATSAPP}?text=${encodeURIComponent(textoMensaje)}`;
     window.open(linkFinal, '_blank');
-
-    // OPCIONAL: Si no quieres que se te borre el carrito de la pantalla al mandar el mensaje,
-    // puedes comentar o borrar las siguientes líneas (348-470 en tu código original):
-    // carrito = [];
-    // localStorage.removeItem("carritoAvigar");
-    // actualizarInterfazCarrito();
 }
 
         renderizarProductos(productos);
