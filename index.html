@@ -437,38 +437,44 @@ document.getElementById('carrito-contador').innerText = totalPiezas;
         function cerrarCarrito() { document.getElementById('carrito-sidebar').classList.add('hidden'); }
 
         function enviarPedidoWhatsApp() {
-            if(carrito.length === 0) return;
+    if (carrito.length === 0) return;
 
-            let textoMensaje = `*NUEVO PEDIDO DE COMPRA - AVIGAR*\n`;
-            textoMensaje += `-------------------------------------\n\n`;
+    let textoMensaje = "*NUEVO PEDIDO DE COMPRA - AVIGAR*\n";
+    textoMensaje += "──────────────────────────────────\n\n";
 
-            let subMenudeo = 0, subMayoreo = 0, subDistribuidor = 0;
+    let subMenudeo = 0, subMayoreo = 0, subDistribuidor = 0;
 
-            carrito.forEach((item, index) => {
-                subMenudeo += item.pMenudeo;
-                subMayoreo += item.pMayoreo;
-                subDistribuidor += item.pDistribuidor;
+    carrito.forEach((item, index) => {
+        // === AQUÍ SE REALIZA LA MULTIPLICACIÓN MATEMÁTICA CORRECTA ===
+        subMenudeo += item.pMenudeo * item.cantidad;
+        subMayoreo += item.pMayoreo * item.cantidad;
+        subDistribuidor += item.pDistribuidor * item.cantidad;
 
-                textoMensaje += `*${index + 1}. ${item.nombre}*\n`;
-                textoMensaje += `   • Marca: ${item.marca.toUpperCase()}\n`;
-                textoMensaje += `   • Talla: ${item.talla}\n`;
-                textoMensaje += `   • Modelo: ${item.color}\n`;
-                textoMensaje += `   • Precios pza: (Men: $${item.pMenudeo} | May: $${item.pMayoreo} | Dist: $${item.pDistribuidor})\n\n`;
-            });
+        textoMensaje += `*${index + 1}.* ${item.nombre}\n`;
+        textoMensaje += `    • Marca: ${item.marca.toUpperCase()}\n`;
+        textoMensaje += `    • Talla: ${item.talla}\n`;
+        textoMensaje += `    • Modelo/Color: ${item.color}\n`;
+        // Agregamos de manera visual la cantidad de piezas al texto de WhatsApp
+        textoMensaje += `    • Cantidad: *${item.cantidad} pza(s)*\n`;
+        textoMensaje += `    • Subtotal: (Men: $${(item.pMenudeo * item.cantidad).toLocaleString()} | May: $${(item.pMayoreo * item.cantidad).toLocaleString()})\n\n`;
+    });
 
-            textoMensaje += `-------------------------------------\n`;
-            textoMensaje += `*SUBTOTALES SEGÚN TU VOLUMEN:*\n`;
-            textoMensaje += `Total Menudeo (1 pza): *$${subMenudeo}*\n`;
-            textoMensaje += `Total Mayoreo (> $4k): *$${subMayoreo}*\n`;
-            textoMensaje += `Total Distribuidor (> $8k): *$${subDistribuidor}*\n\n`;
-            textoMensaje += `_Quedo a la espera de los datos de depósito._`;
+    textoMensaje += "──────────────────────────────────\n";
+    textoMensaje += "*SUBTOTALES SEGÚN TU VOLUMEN:*\n";
+    textoMensaje += `* Total Menudeo (1 pza): *$${subMenudeo.toLocaleString()}*\n`;
+    textoMensaje += `* Total Mayoreo (> $4k): *$${subMayoreo.toLocaleString()}*\n`;
+    textoMensaje += `* Total Distribuidor (> $8k): *$${subDistribuidor.toLocaleString()}*\n\n`;
+    textoMensaje += "_Quedo a la espera de los datos de depósito._";
 
-            const linkFinal = `https://wa.me/${MI_WHATSAPP}?text=${encodeURIComponent(textoMensaje)}`;
-            window.open(linkFinal, '_blank');
-            carrito = [];
-    localStorage.removeItem("carritoAvigar");
-    actualizarInterfazCarrito();
-        }
+    const linkFinal = `https://wa.me/${MI_WHATSAPP}?text=${encodeURIComponent(textoMensaje)}`;
+    window.open(linkFinal, '_blank');
+
+    // OPCIONAL: Si no quieres que se te borre el carrito de la pantalla al mandar el mensaje,
+    // puedes comentar o borrar las siguientes líneas (348-470 en tu código original):
+    // carrito = [];
+    // localStorage.removeItem("carritoAvigar");
+    // actualizarInterfazCarrito();
+}
 
         renderizarProductos(productos);
     </script>
