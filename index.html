@@ -29,13 +29,19 @@
         </div>
     </header>
 
- <section class="flex flex-wrap justify-center gap-2 mb-12 max-w-xl mx-auto">
-    <button class="btn-marca px-4 py-2 rounded-full text-xs md:text-sm bg-white text-black font-semibold transition" onclick="seleccionarMarca('todos', this)">Todos</button>
-    <button class="btn-marca px-4 py-2 rounded-full text-xs md:text-sm bg-zinc-900 text-zinc-400 border border-zinc-800 transition" onclick="seleccionarMarca('chrome-hearts', this)">Chrome Hearts</button>
-    <button class="btn-marca px-4 py-2 rounded-full text-xs md:text-sm bg-zinc-900 text-zinc-400 border border-zinc-800 transition" onclick="seleccionarMarca('trapstar', this)">Trapstar</button>
+<section class="flex flex-col items-center gap-4 mb-12 max-w-xl mx-auto">
+    <div class="flex flex-wrap justify-center gap-2">
+        <button class="btn-marca px-4 py-2 rounded-full text-xs md:text-sm bg-white text-black font-semibold transition" onclick="seleccionarMarca('todos', this)">Todos</button>
+        <button class="btn-marca px-4 py-2 rounded-full text-xs md:text-sm bg-zinc-900 text-zinc-400 border border-zinc-800 transition" onclick="seleccionarMarca('chrome-hearts', this)">Chrome Hearts</button>
+        <button class="btn-marca px-4 py-2 rounded-full text-xs md:text-sm bg-zinc-900 text-zinc-400 border border-zinc-800 transition" onclick="seleccionarMarca('trapstar', this)">Trapstar</button>
+    </div>
 
-    <button class="btn-categoria px-4 py-2 rounded-full text-xs md:text-sm bg-white text-black font-semibold transition" onclick="seleccionarCategoria('todos', this)">Todas las prendas</button>
-    <button class="btn-categoria px-4 py-2 rounded-full text-xs md:text-sm bg-zinc-900 text-zinc-400 border border-zinc-800 transition" onclick="seleccionarCategoria('chamarras', this)">Chamarras</button>
+    <div class="flex flex-wrap justify-center gap-2">
+        <button class="btn-categoria px-4 py-2 rounded-full text-xs md:text-sm bg-white text-black font-semibold transition" onclick="seleccionarCategoria('todos', this)">Todas las prendas</button>
+        <button class="btn-categoria px-4 py-2 rounded-full text-xs md:text-sm bg-zinc-900 text-zinc-400 border border-zinc-800 transition" onclick="seleccionarCategoria('chamarras', this)">Chamarras</button>
+        <button class="btn-categoria px-4 py-2 rounded-full text-xs md:text-sm bg-zinc-900 text-zinc-400 border border-zinc-800 transition" onclick="seleccionarCategoria('chaquetas', this)">Chaquetas</button>
+        <button class="btn-categoria px-4 py-2 rounded-full text-xs md:text-sm bg-zinc-900 text-zinc-400 border border-zinc-800 transition" onclick="seleccionarCategoria('mezclilla', this)">Mezclilla</button>
+    </div>
 </section>
 
     <main class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
@@ -125,7 +131,7 @@
                 id: 1,
                 nombre: "Chaqueta de mezclilla Chrome hearts 0002",
                 marca: "chrome hearts",
-                categoria: ["chrome-hearts", "chaqueta", "mezclilla"],
+                categoria: ["chamarra", "mezclilla"],
                 precioMenudeo: 1200,
                 precioMayoreo: 1100,
                 precioDistribuidor: 900,
@@ -147,7 +153,7 @@
                 id: 2,
                 nombre: "Chaqueta de mezclilla Chrome hearts 0001",
                 marca: "chrome hearts",
-                categoria: ["chrome-hearts", "chaqueta", "mezclilla"],
+                categoria: ["chrome-hearts", "chamarra", "mezclilla"],
                 precioMenudeo: 1200,
                 precioMayoreo: 1100,
                 precioDistribuidor: 900,
