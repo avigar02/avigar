@@ -29,12 +29,13 @@
         </div>
     </header>
 
-    <section class="flex flex-wrap justify-center gap-2 mb-12 max-w-xl mx-auto">
-        <button onclick="filtrarProductos('todos')" class="bg-white text-black px-4 py-2 rounded-full font-semibold text-sm hover:opacity-90 transition">Todos</button>
-        <button onclick="filtrarProductos('chrome hearts')" class="bg-zinc-900 border border-zinc-800 text-zinc-400 px-4 py-2 rounded-full font-semibold text-sm hover:text-white transition">Chrome Hearts</button>
-        <button onclick="filtrarProductos('trapstar')" class="bg-zinc-900 border border-zinc-800 text-zinc-400 px-4 py-2 rounded-full font-semibold text-sm hover:text-white transition">Trapstar</button>
-        <button onclick="filtrarProductos('chamarras')" class="bg-zinc-900 border border-zinc-800 text-zinc-400 px-4 py-2 rounded-full font-semibold text-sm hover:text-white transition">Chamarras</button>
-    </section>
+ <section class="flex flex-wrap justify-center gap-2 mb-12 max-w-xl mx-auto">
+    <button class="btn-marca px-4 py-2 rounded-full text-xs md:text-sm bg-white text-black font-semibold transition" onclick="seleccionarMarca('Todos', this)">Todos</button>
+    <button class="btn-marca px-4 py-2 rounded-full text-xs md:text-sm bg-zinc-900 text-zinc-400 border border-zinc-800 transition" onclick="seleccionarMarca('chrome-hearts', this)">Chrome Hearts</button>
+    <button class="btn-marca px-4 py-2 rounded-full text-xs md:text-sm bg-zinc-900 text-zinc-400 border border-zinc-800 transition" onclick="seleccionarMarca('trapstar', this)">Trapstar</button>
+
+    <button class="btn-categoria px-4 py-2 rounded-full text-xs md:text-sm bg-zinc-900 text-zinc-400 border border-zinc-800 transition" onclick="seleccionarCategoria('chamarras', this)">Chamarras</button>
+</section>
 
     <main class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
         </main>
@@ -123,7 +124,7 @@
                 id: 1,
                 nombre: "Chaqueta de mezclilla Chrome hearts 0002",
                 marca: "chrome hearts",
-                categoria: ["Chrome Hearts", "Chaqueta", "Mezclilla"],
+                categoria: ["Chrome-Hearts", "Chaqueta", "Mezclilla"],
                 precioMenudeo: 1200,
                 precioMayoreo: 1100,
                 precioDistribuidor: 900,
@@ -131,13 +132,13 @@
                 colores: ["Mezclilla azul"],
                 descripcion: "Chaqueta de mezclilla con 2 bolsas en el pecho. Botones con el diseño de la marca. Parches de piel con relieve y diseño de la marca. Costuras de excelente calidad, con etiquetas internas y externas de la marca y bolsa chrome hearts.",
                     imagen: [
+            "productos/chrome-hearts/camisa-de-mezclilla-con-parches-de-cuero-cosidos-azul/100.jpg",
             "productos/chrome-hearts/camisa-de-mezclilla-con-parches-de-cuero-cosidos-azul/101.jpg",
             "productos/chrome-hearts/camisa-de-mezclilla-con-parches-de-cuero-cosidos-azul/102.jpg",
             "productos/chrome-hearts/camisa-de-mezclilla-con-parches-de-cuero-cosidos-azul/103.jpg",
             "productos/chrome-hearts/camisa-de-mezclilla-con-parches-de-cuero-cosidos-azul/104.jpg",
-            "productos/chrome-hearts/camisa-de-mezclilla-con-parches-de-cuero-cosidos-azul/105.jpg",
-            "productos/chrome-hearts/camisa-de-mezclilla-con-parches-de-cuero-cosidos-azul/106.jpg",
-            "productos/chrome-hearts/camisa-de-mezclilla-con-parches-de-cuero-cosidos-azul/107.jpg"
+            "productos/chrome-hearts/camisa-de-mezclilla-con-parches-de-cuero-cosidos-azul/105.jpg"
+            
             
         ]
             },
@@ -145,7 +146,7 @@
                 id: 2,
                 nombre: "Chaqueta de mezclilla Chrome hearts 0001",
                 marca: "chrome hearts",
-                categoria: ["Chrome Hearts", "Chaqueta", "Mezclilla"],
+                categoria: ["Chrome-Hearts", "Chaqueta", "Mezclilla"],
                 precioMenudeo: 1200,
                 precioMayoreo: 1100,
                 precioDistribuidor: 900,
@@ -168,13 +169,42 @@
 
         let carrito = JSON.parse(localStorage.getItem("carritoAvigar")) || [];
         actualizarInterfazCarrito();
-
+        let marcaSeleccionadaActual = "Todos";
+let categoriaSeleccionadaActual = "Todos";
 // OJO: Como no veo en esta foto el nombre exacto de la función que dibuja el carrito en tu pantalla, 
 // pon aquí abajo el nombre de la función que usas para actualizar visualmente el carrito.
 // Ejemplo: actualizarInterfazCarrito();
         let productoSeleccionadoActual = null;
         const contenedor = document.querySelector('main');
+function aplicarFiltrosCruzados() {
+    const productosFiltrados = productos.filter(producto => {
+        // 1. Validar la marca
+        const coincideMarca = (marcaSeleccionadaActual === "Todos" || producto.marca === marcaSeleccionadaActual);
+        
+        // 2. Validar la categoría (busca dentro del arreglo de tu objeto)
+        const coincideCategoria = (categoriaSeleccionadaActual === "Todos" || producto.categoria.includes(categoriaSeleccionadaActual));
 
+        return coincideMarca && coincideCategoria;
+    });
+
+    // Redibujamos la pantalla pasándole solo los que pasaron el filtro duplo
+    renderizarProductos(productosFiltrados);
+}
+
+function aplicarFiltrosCruzados() {
+    const productosFiltrados = productos.filter(producto => {
+        // 1. Validar la marca
+        const coincideMarca = (marcaSeleccionadaActual === "Todos" || producto.marca === marcaSeleccionadaActual);
+        
+        // 2. Validar la categoría (busca dentro del arreglo de tu objeto)
+        const coincideCategoria = (categoriaSeleccionadaActual === "Todos" || producto.categoria.includes(categoriaSeleccionadaActual));
+
+        return coincideMarca && coincideCategoria;
+    });
+
+    // Redibujamos la pantalla pasándole solo los que pasaron el filtro duplo
+    renderizarProductos(productosFiltrados);
+}
         function renderizarProductos(lista) {
             contenedor.innerHTML = "";
             if(lista.length === 0) {
