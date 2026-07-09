@@ -93,7 +93,6 @@
                     imagen: [
             "productos/chrome-hearts/0005/1.jpeg",
             "productos/chrome-hearts/0005/2.jpeg",
-            "productos/chrome-hearts/0005/2.jpeg",
             "productos/chrome-hearts/0005/3.jpeg",
             "productos/chrome-hearts/0005/4.jpeg",
             "productos/chrome-hearts/0005/5.jpeg",
@@ -117,7 +116,6 @@
                     imagen: [
             "productos/chrome-hearts/0006/1.jpeg",
             "productos/chrome-hearts/0006/2.jpeg",
-            "productos/chrome-hearts/0006/2.jpeg",
             "productos/chrome-hearts/0006/3.jpeg",
             "productos/chrome-hearts/0006/4.jpeg",
             "productos/chrome-hearts/0006/5.jpeg",
@@ -139,7 +137,6 @@
                     imagen: [
             "productos/chrome-hearts/0007/1.jpeg",
             "productos/chrome-hearts/0007/2.jpeg",
-            "productos/chrome-hearts/0007/2.jpeg",
             "productos/chrome-hearts/0007/3.jpeg",
             "productos/chrome-hearts/0007/4.jpeg",
             "productos/chrome-hearts/0007/5.jpeg"
@@ -160,7 +157,6 @@
                     imagen: [
             "productos/chrome-hearts/0008/1.jpeg",
             "productos/chrome-hearts/0008/2.jpeg",
-            "productos/chrome-hearts/0008/2.jpeg",
             "productos/chrome-hearts/0008/3.jpeg",
             "productos/chrome-hearts/0008/4.jpeg"
         ]
@@ -179,7 +175,6 @@
                 descripcion: "Sueter de punto con diseño de cruces y logos de la marca. Costuras de excelente calidad, con etiquetas internas y externas de la marca y bolsa chrome hearts",
                     imagen: [
             "productos/chrome-hearts/0009/1.jpg",
-            "productos/chrome-hearts/0009/2.jpeg",
             "productos/chrome-hearts/0009/2.jpeg",
             "productos/chrome-hearts/0009/3.jpeg",
             "productos/chrome-hearts/0009/4.jpeg",
@@ -200,7 +195,6 @@
                 descripcion: "sueter de tipo punto. Parches piel roja con relieve del diseño de la marca y simbolos. Costuras de excelente calidad, con etiquetas internas y externas de la marca y bolsa chrome hearts",
                     imagen: [
             "productos/chrome-hearts/0010/1.jpeg",
-            "productos/chrome-hearts/0010/2.jpeg",
             "productos/chrome-hearts/0010/2.jpeg",
             "productos/chrome-hearts/0010/3.jpeg",
             "productos/chrome-hearts/0010/4.jpeg",
