@@ -79,4 +79,133 @@
             "productos/chrome-hearts/0004/104.jpg"
         ]
             },
+            {
+                id: 5,
+                nombre: "cardigan Chrome hearts 0005",
+                marca: "chrome-hearts",
+                categoria: ["cardigan"],
+                precioMenudeo: 1150,
+                precioMayoreo: 1050,
+                precioDistribuidor: 850,
+                tallas: ["S", "M", "L", "XL"],
+                colores: ["negro", "gris", "beige"],
+                descripcion: "Cardigan con 2 bolsas. Botones con el diseño de la marca. Parches de piel con relieve y diseño de la marca. Costuras de excelente calidad, con etiquetas internas y externas de la marca y bolsa chrome hearts.",
+                    imagen: [
+            "productos/chrome-hearts/0005/1.jpeg",
+            "productos/chrome-hearts/0005/2.jpeg",
+            "productos/chrome-hearts/0005/2.jpeg",
+            "productos/chrome-hearts/0005/3.jpeg",
+            "productos/chrome-hearts/0005/4.jpeg",
+            "productos/chrome-hearts/0005/5.jpeg",
+            "productos/chrome-hearts/0005/6.jpeg",
+            "productos/chrome-hearts/0005/7.jpeg",
+            "productos/chrome-hearts/0005/8.jpeg"
+            
+        ]
+            },
+             {
+                id: 6,
+                nombre: "Playera Chrome hearts 0006",
+                marca: "chrome-hearts",
+                categoria: ["playeras"],
+                precioMenudeo: 1050,
+                precioMayoreo: 900,
+                precioDistribuidor: 800,
+                tallas: ["S", "M", "L", "XL"],
+                colores: ["negro", "gris"],
+                descripcion: "Playera de textura tipo waffle. Botones con el diseño de la marca. Parches de piel con relieve y diseño de la marca. Costuras de excelente calidad, con etiquetas internas y externas de la marca y bolsa chrome hearts",
+                    imagen: [
+            "productos/chrome-hearts/0006/1.jpeg",
+            "productos/chrome-hearts/0006/2.jpeg",
+            "productos/chrome-hearts/0006/2.jpeg",
+            "productos/chrome-hearts/0006/3.jpeg",
+            "productos/chrome-hearts/0006/4.jpeg",
+            "productos/chrome-hearts/0006/5.jpeg",
+            "productos/chrome-hearts/0006/6.jpeg",
+            "productos/chrome-hearts/0006/7.jpeg"
+        ]
+            },
+            {
+                id: 7,
+                nombre: "Chamarra Chrome hearts 0007",
+                marca: "chrome-hearts",
+                categoria: ["chamarras"],
+                precioMenudeo: 1200,
+                precioMayoreo: 1100,
+                precioDistribuidor: 900,
+                tallas: ["S", "M", "L", "XL"],
+                colores: ["negro"],
+                descripcion: "Chamarra de tipo punto con 2 bolsas enfrente. cierre con el diseño de la marca. Parches piel con relieve del diseño de la marca y simbolos. Costuras de excelente calidad, con etiquetas internas y externas de la marca y bolsa chrome hearts",
+                    imagen: [
+            "productos/chrome-hearts/0007/1.jpeg",
+            "productos/chrome-hearts/0007/2.jpeg",
+            "productos/chrome-hearts/0007/2.jpeg",
+            "productos/chrome-hearts/0007/3.jpeg",
+            "productos/chrome-hearts/0007/4.jpeg",
+            "productos/chrome-hearts/0007/5.jpeg"
+        ]
+        
+            },
+             {
+                id: 8,
+                nombre: "Sueter Chrome hearts 0009",
+                marca: "chrome-hearts",
+                categoria: ["sueters"],
+                precioMenudeo: 1100,
+                precioMayoreo: 1000,
+                precioDistribuidor: 830,
+                tallas: ["S", "M", "L", "XL"],
+                colores: ["negro"],
+                descripcion: "sueter punto. diseño de bocas en las mangas del sueter. En la parte tracera lleva cosidos parches de cuero de cruces rojas y el logo de la marca. Costuras de excelente calidad, con etiquetas internas y externas de la marca y bolsa chrome hearts",
+                    imagen: [
+            "productos/chrome-hearts/0008/1.jpeg",
+            "productos/chrome-hearts/0008/2.jpeg",
+            "productos/chrome-hearts/0008/2.jpeg",
+            "productos/chrome-hearts/0008/3.jpeg",
+            "productos/chrome-hearts/0008/4.jpeg"
+        ]
+
+            },
+            {
+                id: 9,
+                nombre: "Sueter Chrome hearts 0009",
+                marca: "chrome-hearts",
+                categoria: ["sueters"],
+                precioMenudeo: 1150,
+                precioMayoreo: 950,
+                precioDistribuidor: 800,
+                tallas: ["S", "M", "L", "XL"],
+                colores: ["negro"],
+                descripcion: "Sueter de punto con diseño de cruces y logos de la marca. Costuras de excelente calidad, con etiquetas internas y externas de la marca y bolsa chrome hearts",
+                    imagen: [
+            "productos/chrome-hearts/0009/1.jpg",
+            "productos/chrome-hearts/0009/2.jpeg",
+            "productos/chrome-hearts/0009/2.jpeg",
+            "productos/chrome-hearts/0009/3.jpeg",
+            "productos/chrome-hearts/0009/4.jpeg",
+            "productos/chrome-hearts/0009/5.jpeg"
+        ]
+        
+            },
+            {
+                id: 10,
+                nombre: "Sueter Chrome hearts 0010",
+                marca: "chrome-hearts",
+                categoria: ["sueters"],
+                precioMenudeo: 810,
+                precioMayoreo: 970,
+                precioDistribuidor: 810,
+                tallas: ["S", "M", "L", "XL"],
+                colores: ["negro"],
+                descripcion: "sueter de tipo punto. Parches piel roja con relieve del diseño de la marca y simbolos. Costuras de excelente calidad, con etiquetas internas y externas de la marca y bolsa chrome hearts",
+                    imagen: [
+            "productos/chrome-hearts/0010/1.jpeg",
+            "productos/chrome-hearts/0010/2.jpeg",
+            "productos/chrome-hearts/0010/2.jpeg",
+            "productos/chrome-hearts/0010/3.jpeg",
+            "productos/chrome-hearts/0010/4.jpeg",
+            "productos/chrome-hearts/0010/5.jpeg"
+        ]
+        
+            },
         ];
