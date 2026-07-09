@@ -434,7 +434,7 @@ function mostrarProductosPorBloque(reiniciar = false) {
         if (centinela) centinela.innerHTML = "Cargando más prendas...";
     }
 
-    bloqueDePrendas.forEach(prod => {
+   bloqueDePrendas.forEach(prod => {
         contenedor.innerHTML += `
             <div class="bg-zinc-900/50 border border-zinc-800/80 rounded-2xl overflow-hidden p-3.5 flex flex-col justify-between transition-all hover:border-zinc-700">
                 <div class="relative group overflow-hidden rounded-xl bg-zinc-950 aspect-square">
@@ -446,7 +446,6 @@ function mostrarProductosPorBloque(reiniciar = false) {
                         <h3 class="font-bold text-xs text-zinc-100 mt-1.5 line-clamp-2 h-8">${prod.nombre}</h3>
                     </div>
                     
-                    <!-- === SECCIÓN DE PRECIOS COMPLETA === -->
                     <div class="mt-2.5 flex flex-col gap-1">
                         <div class="flex justify-between items-baseline text-[11px]">
                             <span class="text-zinc-500">Menudeo:</span>
@@ -458,11 +457,9 @@ function mostrarProductosPorBloque(reiniciar = false) {
                         </div>
                         <div class="flex justify-between items-baseline text-[11px]">
                             <span class="text-zinc-500">Distribuidor:</span>
-                            <span class="text-zinc-300 font-medium">$${prod.precioDistribuidor.toLocaleString()}</span>
+                            <span class="text-purple-400 font-bold">$${prod.precioDistribuidor.toLocaleString()}</span>
                         </div>
                     </div>
-                    <!-- ================================== -->
-                    
                 </div>
                 <button onclick="abrirModal(${prod.id})" class="mt-3 w-full bg-zinc-100 hover:bg-zinc-200 text-black font-bold py-2 rounded-xl text-[11px] transition-colors" type="button">
                     Ver Detalles
