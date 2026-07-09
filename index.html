@@ -394,13 +394,52 @@ function mostrarProductosPorBloque(reiniciar = false) {
     // ... resto de tu lógica que te pasé antes ...
 }
 
-// === AQUÍ VA EL OBSERVADOR QUE VIGILA EL SCROLL ===
-const observadorPantalla = new IntersectionObserver((entries) => {
-    // ...
-});
-function eliminarDelCarrito(idUnico) {
-    carrito = carrito.filter(item => item.idUnico !== idUnico);
-    actualizarInterfazCarrito();
+function mostrarProductosPorBloque(reiniciar = false) {
+    const contenedor = document.querySelector('main.grid');
+    if (!contenedor) return;
+
+    if (reiniciar) {
+        contenedor.innerHTML = "";
+        paginaActual = 1;
+    }
+
+    const inicio = (paginaActual - 1) * productosPorPagina;
+    const fin = inicio + productosPorPagina;
+    const bloqueDePrendas = productosFiltrados.slice(inicio, fin);
+
+    const centinela = document.getElementById('centinela-scroll');
+
+    if (bloqueDePrendas.length === 0) {
+        if (centinela) centinela.innerHTML = "✨ Has recorrido todo nuestro catálogo disponible ✨";
+        return;
+    } else {
+        if (centinela) centinela.innerHTML = "Cargando más prendas extraordinarias...";
+    }
+
+    bloqueDePrendas.forEach(prod => {
+        contenedor.innerHTML += `
+            <div class="bg-zinc-900/50 border border-zinc-800/80 rounded-2xl overflow-hidden p-3.5 flex flex-col justify-between transition-all hover:border-zinc-700">
+                <div class="relative group overflow-hidden rounded-xl bg-zinc-950 aspect-square">
+                    <img src="${prod.imagen[0]}" alt="${prod.nombre}" class="w-full h-full object-cover cursor-pointer transition-transform duration-500 group-hover:scale-105" onclick="abrirModal(${prod.id})">
+                </div>
+                <div class="mt-3 flex-grow flex flex-col justify-between">
+                    <div>
+                        <span class="text-[9px] bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded uppercase font-bold tracking-wider">${prod.marca}</span>
+                        <h3 class="font-bold text-xs text-zinc-100 mt-1.5 line-clamp-2 h-8">${prod.nombre}</h3>
+                    </div>
+                    <div class="mt-2.5">
+                        <div class="flex justify-between items-baseline text-[11px]">
+                            <span class="text-zinc-500">Menudeo:</span>
+                            <span class="text-emerald-400 font-bold">$${prod.precioMenudeo.toLocaleString()}</span>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="abrirModal(${prod.id})" class="mt-3 w-full bg-zinc-100 hover:bg-zinc-200 text-black font-bold py-2 rounded-xl text-[11px] transition-colors" type="button">
+                    Ver Detalles
+                </button>
+            </div>
+        `;
+    });
 }
 
 // === AQUÍ EN LA LÍNEA 360 LA PEGAS ===
@@ -512,7 +551,24 @@ document.getElementById('carrito-contador').innerText = totalPiezas;
 }
 
         renderizarProductos(productos);
-    
+    // El IntersectionObserver activa el trigger al scrollear hacia abajo
+const observadorPantalla = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+        paginaActual++;
+        mostrarProductosPorBloque();
+    }
+}, {
+    rootMargin: "0px 0px 300px 0px" // Carga el bloque de forma anticipada para mantener la fluidez
+});
+
+// Arrancar procesos principales al cargar el documento
+document.addEventListener("DOMContentLoaded", () => {
+    const centinela = document.getElementById('centinela-scroll');
+    if (centinela) observadorPantalla.observe(centinela);
+
+    // Ejecutamos tus filtros por primera vez para clonar el inventario inicial
+    aplicarFiltrosCruzados();
+});
     </script>
 </body>
 </html>
