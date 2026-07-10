@@ -202,4 +202,28 @@
         ]
         
             },
+            // Función para buscar por nombre (que ya incluye tus códigos 0001, 0002, etc.)
+function buscarPrenda(texto) {
+    const busqueda = texto.toLowerCase().trim();
+    
+    // Si el buscador está vacío, mostramos todo normal
+    if (busqueda === "") {
+        if (typeof aplicarFiltrosCruzados === 'function') {
+            aplicarFiltrosCruzados(); 
+        }
+        mostrarProductosPorBloque(true); 
+        return;
+    }
+    
+    // Filtramos el catálogo buscando SOLO en el nombre
+    productosFiltrados = productos.filter(prod => {
+        const nombre = prod.nombre ? String(prod.nombre).toLowerCase() : '';
+        
+        // Si el cliente escribe "0010" o "Sueter", lo va a encontrar aquí:
+        return nombre.includes(busqueda);
+    });
+    
+    // Dibujamos las prendas encontradas
+    mostrarProductosPorBloque(true);
+}
         ];
