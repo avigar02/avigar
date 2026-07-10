@@ -428,15 +428,20 @@ function mostrarProductosPorBloque(reiniciar = false) {
 
 // === AQUÍ EN LA LÍNEA 360 LA PEGAS ===
 function cambiarCantidadCarrito(idUnico, cambio) {
-    const item = carrito.find(p => p.idUnico === idUnico);
+    // 1. Buscamos el producto convirtiendo ambos IDs a texto para que coincidan perfecto
+    const item = carrito.find(p => String(p.idUnico) === String(idUnico));
+    
     if (!item) return;
 
+    // 2. Sumamos o restamos
     item.cantidad += cambio;
 
+    // 3. Si llega a cero, lo borramos (también comparando como texto)
     if (item.cantidad <= 0) {
-        carrito = carrito.filter(p => p.idUnico !== idUnico);
+        carrito = carrito.filter(p => String(p.idUnico) !== String(idUnico));
     }
 
+    // 4. Guardamos y refrescamos
     localStorage.setItem("carritoAvigar", JSON.stringify(carrito));
     actualizarInterfazCarrito();
 }
@@ -481,7 +486,6 @@ document.getElementById('carrito-contador').innerText = totalPiezas;
                             <option value="M" ${item.talla === 'M' ? 'selected' : ''}>M</option>
                             <option value="L" ${item.talla === 'L' ? 'selected' : ''}>L</option>
                             <option value="XL" ${item.talla === 'XL' ? 'selected' : ''}>XL</option>
-                            <option value="Unitalla" ${item.talla === 'Unitalla' ? 'selected' : ''}>Unitalla</option>
                         </select>
 
                         <select onchange="actualizarAtributoCarrito('${item.idUnico}', 'color', this.value)" class="bg-zinc-950 text-zinc-300 text-[10px] border border-zinc-800 rounded px-1 py-0.5 outline-none cursor-pointer">
