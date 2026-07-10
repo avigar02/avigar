@@ -1,4 +1,4 @@
- const productos = [
+ let productos = [
              {
                 id: 1,
                 nombre: "Chaqueta de mezclilla Chrome hearts 0002",
@@ -202,12 +202,13 @@
         ]
         
             },
-            // Función para buscar por nombre (que ya incluye tus códigos 0001, 0002, etc.)
-function buscarPrenda(texto) {
-    const busqueda = texto.toLowerCase().trim();
+          function ejecutarBusqueda() {
+    const input = document.getElementById('inputBuscador');
+    if (!input) return;
     
-    // Si el buscador está vacío, mostramos todo normal
-    if (busqueda === "") {
+    const texto = input.value.toLowerCase().trim();
+    
+    if (texto === "") {
         if (typeof aplicarFiltrosCruzados === 'function') {
             aplicarFiltrosCruzados(); 
         }
@@ -215,15 +216,13 @@ function buscarPrenda(texto) {
         return;
     }
     
-    // Filtramos el catálogo buscando SOLO en el nombre
+    // Filtramos usando el nombre donde están tus códigos
     productosFiltrados = productos.filter(prod => {
         const nombre = prod.nombre ? String(prod.nombre).toLowerCase() : '';
-        
-        // Si el cliente escribe "0010" o "Sueter", lo va a encontrar aquí:
-        return nombre.includes(busqueda);
+        return nombre.includes(texto);
     });
     
-    // Dibujamos las prendas encontradas
     mostrarProductosPorBloque(true);
 }
+
         ];
