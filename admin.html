@@ -49,15 +49,16 @@
             
             <!-- CALCULADORA DE COSTOS KAKOBUY -->
             <div class="md:col-span-2 bg-emerald-900/20 border border-emerald-500/30 rounded-xl p-4 my-2">
-                <h3 class="text-emerald-400 font-bold mb-3 text-sm">🧮 Calculadora de Costo Real (Kakobuy a 17.5 MXN)</h3>
+                <h3 class="text-emerald-400 font-bold mb-3 text-sm">🧮 Calculadora de Costo Real y Precios</h3>
                 <div class="grid grid-cols-2 gap-4 mb-4">
                     <div>
                         <label class="block text-xs text-emerald-200/70 mb-1">Costo Pieza (USD)</label>
                         <input type="number" id="calcUsd" oninput="calcularCostos()" placeholder="Ej: 20" class="w-full bg-zinc-950 border border-emerald-900 p-2 rounded-lg focus:border-emerald-500 outline-none text-emerald-100">
                     </div>
                     <div>
-                        <label class="block text-xs text-emerald-200/70 mb-1">Peso (Gramos)</label>
-                        <input type="number" id="calcGramos" oninput="calcularCostos()" placeholder="Ej: 500" class="w-full bg-zinc-950 border border-emerald-900 p-2 rounded-lg focus:border-emerald-500 outline-none text-emerald-100">
+                        <label class="block text-xs text-emerald-200/70 mb-1">Peso (Gramos reales)</label>
+                        <input type="number" id="calcGramos" oninput="calcularCostos()" placeholder="Ej: 400" class="w-full bg-zinc-950 border border-emerald-900 p-2 rounded-lg focus:border-emerald-500 outline-none text-emerald-100">
+                        <span id="pesoRedondeado" class="text-[10px] text-emerald-400/80 mt-1 block h-3"></span>
                     </div>
                 </div>
                 <!-- Resultados del cálculo -->
@@ -81,22 +82,23 @@
                 </div>
             </div>
 
-            <!-- Precios de Venta -->
+            <!-- Precios de Venta (Se autocompletan solos) -->
             <div>
-                <label class="block text-xs text-zinc-400 mb-1">Precio Menudeo (Venta)</label>
-                <input type="number" id="pMenudeo" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
+                <label class="block text-xs text-indigo-300 mb-1 font-bold">Precio Menudeo (Automático)</label>
+                <input type="number" id="pMenudeo" class="w-full bg-indigo-950/30 border border-indigo-900/50 p-3 rounded-xl focus:border-indigo-500 outline-none text-indigo-100 font-bold">
             </div>
             <div>
-                <label class="block text-xs text-zinc-400 mb-1">Precio Mayoreo (Venta)</label>
-                <input type="number" id="pMayoreo" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
+                <label class="block text-xs text-indigo-300 mb-1 font-bold">Precio Mayoreo (Automático)</label>
+                <input type="number" id="pMayoreo" class="w-full bg-indigo-950/30 border border-indigo-900/50 p-3 rounded-xl focus:border-indigo-500 outline-none text-indigo-100 font-bold">
             </div>
             <div>
-                <label class="block text-xs text-zinc-400 mb-1">Precio Distribuidor (Venta)</label>
-                <input type="number" id="pDist" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
+                <label class="block text-xs text-indigo-300 mb-1 font-bold">Precio Distribuidor (Automático)</label>
+                <input type="number" id="pDist" class="w-full bg-indigo-950/30 border border-indigo-900/50 p-3 rounded-xl focus:border-indigo-500 outline-none text-indigo-100 font-bold">
             </div>
+            <div></div> <!-- Espacio en blanco para cuadrar el grid -->
 
             <!-- Tallas (con botones rápidos) -->
-            <div class="md:col-span-2">
+            <div class="md:col-span-2 mt-2">
                 <label class="block text-xs text-zinc-400 mb-1">Tallas</label>
                 <div class="flex gap-2 mb-2">
                     <button onclick="add('tallas', 's')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700">S</button>
@@ -134,57 +136,81 @@
     </div>
 
     <script>
-        // Función de Calculadora Matemática (Exactamente con tus reglas)
+        // Función de Calculadora Matemática (Redondeos + Precios)
         function calcularCostos() {
             const usd = parseFloat(document.getElementById('calcUsd').value) || 0;
-            const gramos = parseFloat(document.getElementById('calcGramos').value) || 0;
+            const gramosRaw = parseFloat(document.getElementById('calcGramos').value) || 0;
 
-            // Regla de 3: 2000g = 35 USD (Envío) y 2000g = 3.2 USD (Ensayo)
-            const envioUsd = (gramos / 2000) * 35;
-            const ensayoUsd = (gramos / 2000) * 3.2;
+            // Redondear gramos a bloques de 500 (Ej: 100g -> 500g, 600g -> 1000g)
+            let gramosRedondeados = 0;
+            if (gramosRaw > 0) {
+                gramosRedondeados = Math.ceil(gramosRaw / 500) * 500;
+                document.getElementById('pesoRedondeado').innerText = `Se calculará envío de: ${gramosRedondeados}g`;
+            } else {
+                document.getElementById('pesoRedondeado').innerText = '';
+            }
+
+            // Regla: 500g equivalen a 8.75 USD de envío y 0.8 USD de ensayo
+            const envioUsd = (gramosRedondeados / 500) * 8.75;
+            const ensayoUsd = (gramosRedondeados / 500) * 0.8;
 
             const subtotalUsd = usd + envioUsd + ensayoUsd;
+            
             // + 4% de comisión (Kakobuy 3% + 1% de colchón)
             const totalUsdConComision = subtotalUsd * 1.04;
-            // Dólar a 17.5 MXN
+            
+            // Dólar fijo a 17.5 MXN
             const costoNetoMxn = totalUsdConComision * 17.5;
 
-            // Mostrar en pantalla
+            // Pintar resultados
             document.getElementById('resEnvio').innerText = `$${envioUsd.toFixed(2)}`;
             document.getElementById('resEnsayo').innerText = `$${ensayoUsd.toFixed(2)}`;
             document.getElementById('resTotalUsd').innerText = `$${totalUsdConComision.toFixed(2)}`;
             
             if(costoNetoMxn > 0) {
                 document.getElementById('resMxn').innerText = `$${costoNetoMxn.toFixed(2)} MXN`;
+
+                // --- AUTOMATIZACIÓN DE PRECIOS ---
+                // Menudeo = Le ganamos el 50% (Multiplicar costo por 1.5)
+                const pMen = Math.ceil(costoNetoMxn * 1.5);
+                // Mayoreo = Menudeo menos 100 pesos
+                const pMay = pMen - 100;
+                // Distribuidor = Ganamos 1/8. Fórmula: Costo * (8/7)
+                const pDis = Math.ceil(costoNetoMxn * (8/7));
+
+                // Rellenar cajas automáticamente
+                document.getElementById('pMenudeo').value = pMen;
+                document.getElementById('pMayoreo').value = pMay;
+                document.getElementById('pDist').value = pDis;
+
             } else {
                 document.getElementById('resMxn').innerText = `---`;
+                // Limpiar si borran los datos
+                document.getElementById('pMenudeo').value = "";
+                document.getElementById('pMayoreo').value = "";
+                document.getElementById('pDist').value = "";
             }
         }
 
-        // --- SISTEMA DE TURNOS Y CONSECUTIVOS (Aarón, Elías, Simao) ---
+        // --- SISTEMA DE TURNOS Y CONSECUTIVOS ---
         function actualizarSugerencia() {
             const prefijo = document.getElementById('usuarioAdmin').value; // 0, 1 o 2
-            const base = parseInt(prefijo) * 1000; // Aarón: 0, Elías: 1000, Simao: 2000
+            const base = parseInt(prefijo) * 1000; 
             
-            // Buscar si ya guardaron uno antes en este celular
             const ultimoLocal = localStorage.getItem('lastCode_serie_' + prefijo);
             let sugerenciaNum = base; 
 
             if (ultimoLocal) {
-                sugerenciaNum = parseInt(ultimoLocal) + 1; // Siguiente número
+                sugerenciaNum = parseInt(ultimoLocal) + 1; 
             }
 
-            // Convertir a texto con ceros a la izquierda (ej: 0 -> 0000, 1 -> 0001)
             const sugerenciaTexto = sugerenciaNum.toString().padStart(4, '0');
-
             document.getElementById('labelUltimo').innerText = sugerenciaTexto;
             document.getElementById('codigo').value = sugerenciaTexto; 
         }
 
-        // Ejecutar al cargar la página
         actualizarSugerencia();
 
-        // Botones rápidos para agregar texto
         function add(id, val) {
             const input = document.getElementById(id);
             input.value = input.value ? input.value + ", " + val : val;
@@ -193,10 +219,8 @@
         const formatoArray = (str) => JSON.stringify(str.split(',').map(s => s.trim().toLowerCase()).filter(s => s));
 
         async function empaquetar() {
-            // El código lo sacamos de la caja de texto (ya trae los ceros si hace falta)
             const codigoString = document.getElementById('codigo').value.trim();
             const prefijo = document.getElementById('usuarioAdmin').value;
-            
             const nombre = document.getElementById('nombre').value.toLowerCase();
             const marca = document.getElementById('marca').value.toLowerCase();
             const cat = formatoArray(document.getElementById('categoria').value);
@@ -210,7 +234,6 @@
             
             if(!codigoString || files.length === 0) return alert("¡Faltan datos o fotos!");
 
-            // Guardar el código numérico limpio para la próxima vez
             localStorage.setItem('lastCode_serie_' + prefijo, parseInt(codigoString));
 
             const zip = new JSZip();
