@@ -319,10 +319,6 @@ function seleccionarCategoria(nombreCategoria, elementoBoton) {
     abrirCarrito();
 }
 
-        function eliminarDelCarrito(idUnico) {
-            carrito = carrito.filter(item => item.idUnico !== idUnico);
-            actualizarInterfazCarrito();
-        }
         // Función para cambiar de inmediato la talla o el color dentro del carrito
 function actualizarAtributoCarrito(idUnico, atributo, nuevoValor) {
     // 1. Buscamos el índice de la prenda exacta usando su idUnico (convertido a String por seguridad)
@@ -359,10 +355,12 @@ function duplicarEnCarrito(idUnico) {
         actualizarInterfazCarrito();
     }
 }
-        // ... tus otras funciones anteriores ...
-
-function eliminarDelCarrito(idUnico) {
-    carrito = carrito.filter(item => item.idUnico !== idUnico);
+      function eliminarDelCarrito(idUnico) {
+    // Convertimos ambos a String para que la comparación sea infalible
+    carrito = carrito.filter(item => String(item.idUnico) !== String(idUnico));
+    
+    // Guardamos los cambios en la memoria y refrescamos la pantalla
+    localStorage.setItem("carritoAvigar", JSON.stringify(carrito));
     actualizarInterfazCarrito();
 }
 
@@ -466,10 +464,17 @@ document.getElementById('carrito-contador').innerText = totalPiezas;
             contenedorItems.innerHTML = "";
             let totMenudeo = 0, totMayoreo = 0, totDist = 0;
 
-          carrito.forEach(item => {
+         carrito.forEach(item => {
         totMenudeo += item.pMenudeo * item.cantidad;
         totMayoreo += item.pMayoreo * item.cantidad;
         totDist += item.pDistribuidor * item.cantidad;
+
+        // BUSQUEDA DIRECTA EN TU INVENTARIO MASTER:
+        // Buscamos la prenda original para saber qué colores y tallas tiene asignados originalmente
+        const prodOriginal = productos.find(p => String(p.id) === String(item.idBase));
+        
+        // Detecta automáticamente si tu inventario usa .colores o .color, si no, deja el que ya tiene
+        const coloresReales = prodOriginal ? (prodOriginal.colores || prodOriginal.color || [item.color]) : [item.color];
 
         contenedorItems.innerHTML += `
             <div class="flex items-start gap-3 bg-zinc-900/40 p-3 border border-zinc-950 rounded-xl text-xs relative mb-2">
@@ -490,15 +495,13 @@ document.getElementById('carrito-contador').innerText = totalPiezas;
                             <option value="XL" ${item.talla === 'XL' ? 'selected' : ''}>XL</option>
                         </select>
 
-                        <select onchange="actualizarAtributoCarrito('${item.idUnico}', 'color', this.value)" class="bg-zinc-950 text-zinc-300 text-[10px] border border-zinc-800 rounded px-1 py-0.5 outline-none cursor-pointer w-20 truncate">
-    ${
-        (item.coloresDisponibles && Array.isArray(item.coloresDisponibles)) 
-        ? item.coloresDisponibles.map(c => 
-            `<option value="${c}" ${item.color === c ? 'selected' : ''}>${c}</option>`
-          ).join('')
-        : `<option value="${item.color}" selected>${item.color || 'Color'}</option>`
-    }
-</select>
+                        <select onchange="actualributoCarrito('${item.idUnico}', 'color', this.value)" class="bg-zinc-950 text-zinc-300 text-[10px] border border-zinc-800 rounded px-1 py-0.5 outline-none cursor-pointer max-w-[100px] truncate">
+                            ${
+                                coloresReales.map(c => 
+                                    `<option value="${c}" ${item.color === c ? 'selected' : ''}>${c}</option>`
+                                ).join('')
+                            }
+                        </select>
 
                         <button onclick="duplicarEnCarrito('${item.idUnico}')" class="ml-auto text-indigo-400 hover:bg-indigo-500/10 text-[10px] px-2 py-0.5 rounded transition-colors font-medium">
                             + Duplicar
@@ -565,6 +568,9 @@ document.getElementById('carrito-contador').innerText = totalPiezas;
 
     const linkFinal = `https://wa.me/${MI_WHATSAPP}?text=${encodeURIComponent(textoMensaje)}`;
     window.open(linkFinal, '_blank');
+    carrito = []; // Limpia el array en tiempo real
+    localStorage.setItem("carritoAvigar", JSON.stringify(carrito)); // Borra la memoria del navegador
+    actualizarInterfazCarrito(); // Refresca la pantalla para que el carrito se muestre vacío
 }
 
         renderizarProductos(productos);
