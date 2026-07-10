@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Panel Admin Avigar</title>
+    <title>Admin Avigar PRO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
@@ -10,25 +10,44 @@
 <body class="bg-zinc-950 text-zinc-100 p-4 md:p-10">
 
     <div class="max-w-2xl mx-auto bg-zinc-900 p-8 rounded-2xl border border-zinc-800 shadow-xl">
-        <h2 class="text-2xl font-bold mb-6 text-white text-center">⚙️ Cargar Producto Nuevo</h2>
+        <h2 class="text-2xl font-bold mb-6 text-white text-center">📦 Panel de Admin Avigar</h2>
         
+        <!-- Selector de Usuario -->
+        <div class="mb-6 p-4 bg-zinc-950 border border-zinc-800 rounded-xl">
+            <label class="block text-sm font-bold text-emerald-400 mb-2">¿Quién está subiendo el producto?</label>
+            <select id="usuarioAdmin" onchange="actualizarSugerencia()" class="w-full bg-zinc-900 border border-zinc-700 p-3 rounded-xl focus:border-emerald-500 outline-none text-white cursor-pointer">
+                <option value="1">Yo (Serie 1000)</option>
+                <option value="2">Mi Hermano (Serie 2000)</option>
+                <option value="3">Socio 3 (Serie 3000)</option>
+            </select>
+        </div>
+
+        <!-- Sugerencia de código -->
+        <div class="bg-indigo-900/20 p-3 rounded-lg mb-6 border border-indigo-500/30 text-center flex items-center justify-between px-6">
+            <p class="text-xs text-indigo-300">Siguiente código sugerido para esta serie:</p>
+            <span id="labelUltimo" class="text-xl font-mono font-bold text-indigo-400">---</span>
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Campos de texto -->
             <div>
-                <label class="block text-xs text-zinc-400 mb-1">Código (Ej: 0004)</label>
-                <input type="text" id="codigo" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
+                <label class="block text-xs text-zinc-400 mb-1">Código</label>
+                <input type="number" id="codigo" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none text-lg font-bold text-center">
             </div>
             <div>
-                <label class="block text-xs text-zinc-400 mb-1">Nombre</label>
-                <input type="text" id="nombre" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
+                <label class="block text-xs text-zinc-400 mb-1">Nombre (Ej: chamarra reversible...)</label>
+                <input type="text" id="nombre" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none lowercase">
             </div>
             <div>
-                <label class="block text-xs text-zinc-400 mb-1">Marca (sin espacios, ej: chrome-hearts)</label>
-                <input type="text" id="marca" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
+                <label class="block text-xs text-zinc-400 mb-1">Marca (Ej: chrome-hearts)</label>
+                <input type="text" id="marca" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none lowercase" placeholder="chrome-hearts">
             </div>
             <div>
-                <label class="block text-xs text-zinc-400 mb-1">Categorías (separadas por coma)</label>
-                <input type="text" id="categoria" placeholder="chamarras, mezclilla" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
+                <label class="block text-xs text-zinc-400 mb-1">Categorías (Ej: chamarras, mezclilla)</label>
+                <input type="text" id="categoria" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none lowercase" placeholder="chamarras, mezclilla">
             </div>
+            
+            <!-- Precios -->
             <div>
                 <label class="block text-xs text-zinc-400 mb-1">Precio Menudeo</label>
                 <input type="number" id="pMenudeo" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
@@ -41,65 +60,105 @@
                 <label class="block text-xs text-zinc-400 mb-1">Precio Distribuidor</label>
                 <input type="number" id="pDist" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
             </div>
-            <div>
-                <label class="block text-xs text-zinc-400 mb-1">Tallas (separadas por coma)</label>
-                <input type="text" id="tallas" placeholder="S, M, L, XL" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
-            </div>
+
+            <!-- Tallas (con botones rápidos) -->
             <div class="md:col-span-2">
-                <label class="block text-xs text-zinc-400 mb-1">Colores (separados por coma)</label>
-                <input type="text" id="colores" placeholder="Negro, Gris" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
+                <label class="block text-xs text-zinc-400 mb-1">Tallas</label>
+                <div class="flex gap-2 mb-2">
+                    <button onclick="add('tallas', 's')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700">S</button>
+                    <button onclick="add('tallas', 'm')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700">M</button>
+                    <button onclick="add('tallas', 'l')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700">L</button>
+                    <button onclick="add('tallas', 'xl')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700">XL</button>
+                </div>
+                <input type="text" id="tallas" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none lowercase">
             </div>
+
+            <!-- Colores (con botones rápidos) -->
+            <div class="md:col-span-2">
+                <label class="block text-xs text-zinc-400 mb-1">Colores</label>
+                <div class="flex gap-2 mb-2 flex-wrap">
+                    <button onclick="add('colores', 'negro')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700">Negro</button>
+                    <button onclick="add('colores', 'gris')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700">Gris</button>
+                    <button onclick="add('colores', 'blanco')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700">Blanco</button>
+                </div>
+                <input type="text" id="colores" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none lowercase">
+            </div>
+
             <div class="md:col-span-2">
                 <label class="block text-xs text-zinc-400 mb-1">Descripción</label>
-                <textarea id="desc" rows="3" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none"></textarea>
+                <textarea id="desc" rows="3" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none lowercase"></textarea>
             </div>
             <div class="md:col-span-2">
                 <label class="block text-xs text-zinc-400 mb-1">Imágenes</label>
-                <input type="file" id="fotos" multiple accept="image/*" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl">
+                <input type="file" id="fotos" multiple accept="image/*" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl text-sm">
             </div>
         </div>
 
         <button onclick="empaquetar()" class="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 transition py-4 rounded-xl font-bold text-white shadow-lg">
-            Generar y Descargar Paquete (.zip)
+            Generar Paquete (.zip)
         </button>
     </div>
 
     <script>
-        // Función para convertir "A, B, C" en ["A", "B", "C"]
-        const formatoArray = (str) => JSON.stringify(str.split(',').map(s => s.trim()));
+        // Función para calcular y sugerir el próximo código según la serie
+        function actualizarSugerencia() {
+            const prefijo = document.getElementById('usuarioAdmin').value; // 1, 2 o 3
+            const base = parseInt(prefijo) * 1000; // 1000, 2000, 3000
+            const ultimoLocal = localStorage.getItem('lastCode_serie_' + prefijo);
+            
+            let sugerencia = base; // Si nunca han subido nada, empieza en su base (ej. 2000)
+
+            if (ultimoLocal) {
+                sugerencia = parseInt(ultimoLocal) + 1; // Le suma 1 al último que subieron
+            }
+
+            document.getElementById('labelUltimo').innerText = sugerencia;
+            document.getElementById('codigo').value = sugerencia; // Lo escribe directo en la caja
+        }
+
+        // Ejecutar al cargar la página
+        actualizarSugerencia();
+
+        // Botones rápidos para agregar texto
+        function add(id, val) {
+            const input = document.getElementById(id);
+            input.value = input.value ? input.value + ", " + val : val;
+        }
+
+        const formatoArray = (str) => JSON.stringify(str.split(',').map(s => s.trim().toLowerCase()));
 
         async function empaquetar() {
             const codigo = document.getElementById('codigo').value;
-            const nombre = document.getElementById('nombre').value;
-            const marca = document.getElementById('marca').value;
+            const prefijo = document.getElementById('usuarioAdmin').value;
+            const nombre = document.getElementById('nombre').value.toLowerCase();
+            const marca = document.getElementById('marca').value.toLowerCase();
             const cat = formatoArray(document.getElementById('categoria').value);
             const pMen = document.getElementById('pMenudeo').value;
             const pMay = document.getElementById('pMayoreo').value;
             const pDist = document.getElementById('pDist').value;
             const tallas = formatoArray(document.getElementById('tallas').value);
             const colores = formatoArray(document.getElementById('colores').value);
-            const desc = document.getElementById('desc').value;
+            const desc = document.getElementById('desc').value.toLowerCase();
             const files = document.getElementById('fotos').files;
             
             if(!codigo || files.length === 0) return alert("¡Faltan datos o fotos!");
 
+            // Guardar el código que acaban de usar en la memoria local de ESA serie
+            localStorage.setItem('lastCode_serie_' + prefijo, codigo);
+
             const zip = new JSZip();
             let rutas = [];
 
-            // 1. Meter fotos al ZIP
             for(let i = 0; i < files.length; i++) {
-                const nombreArchivo = `${i + 1}.jpeg`; // Renombra a 1, 2, 3...
+                const nombreArchivo = `${i + 100}.jpeg`; 
                 zip.file(nombreArchivo, files[i]);
-                // Ajusta esta ruta a tu estructura real: productos/marca/codigo/imagen
                 rutas.push(`'productos/${marca}/${codigo}/${nombreArchivo}'`);
             }
 
-            // 2. Crear archivo de texto con el código JS formateado
             const codigoJS = `{
-    id: ${Date.now()},
-    codigo: '${codigo}',
-    nombre: '${nombre}',
-    marca: '${marca}',
+    id: ${parseInt(codigo)},
+    nombre: "${nombre}",
+    marca: "${marca}",
     categoria: ${cat},
     precioMenudeo: ${pMen},
     precioMayoreo: ${pMay},
@@ -111,10 +170,10 @@
 },`;
             zip.file("codigo_para_pegar.txt", codigoJS);
 
-            // 3. Descargar
             const contenido = await zip.generateAsync({type:"blob"});
             saveAs(contenido, `producto_${codigo}.zip`);
-            alert("¡Listo! Ya tienes el zip con el código y las fotos.");
+            alert("¡Listo! Paquete generado.");
+            location.reload(); 
         }
     </script>
 </body>
