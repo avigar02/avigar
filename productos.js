@@ -205,36 +205,25 @@
        
 
         ];
-          // === FUNCIÓN DE BÚSQUEDA BLINDADA ===
-window.ejecutarBusqueda = function() {
+    function ejecutarBusqueda() {
     const input = document.getElementById('inputBuscador');
-    if (!input) return; // Si no encuentra la barra, no hace nada
+    if (!input) return;
     
     const texto = input.value.toLowerCase().trim();
     
     if (texto === "") {
-        // Si borraste lo que escribiste, regresamos todas las prendas
-        productosFiltrados = [...productos];
-        
-        // Reiniciamos a la página 1 (por si usas paginación)
-        if (typeof paginaActual !== 'undefined') {
-            paginaActual = 1;
+        if (typeof aplicarFiltrosCruzados === 'function') {
+            aplicarFiltrosCruzados(); 
         }
-        
-        mostrarProductosPorBloque(); // Pintamos todo de nuevo
+        mostrarProductosPorBloque(true); 
         return;
     }
     
-    // Filtramos buscando en el nombre (ej. "0003", "Sueter")
+    // Filtramos usando el nombre donde están tus códigos
     productosFiltrados = productos.filter(prod => {
         const nombre = prod.nombre ? String(prod.nombre).toLowerCase() : '';
         return nombre.includes(texto);
     });
     
-    // Reiniciamos a la página 1 y pintamos los resultados
-    if (typeof paginaActual !== 'undefined') {
-        paginaActual = 1;
-    }
-    
-    mostrarProductosPorBloque(); 
-};
+    mostrarProductosPorBloque(true);
+}
