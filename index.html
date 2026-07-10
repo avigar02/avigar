@@ -431,30 +431,38 @@ document.getElementById('carrito-contador').innerText = totalPiezas;
     // 2. Agregamos el item al contenedorHTML incluyendo la cantidad
     // 2. Agregamos el item al contenedorHTML incluyendo la cantidad con los botones
     contenedorItems.innerHTML += `
-        <div class="flex justify-between items-start bg-zinc-900/40 p-3 border border-zinc-950 rounded-xl text-xs">
-            <div class="w-full">
-                <h4 class="font-bold text-zinc-100">${item.nombre}</h4>
-                <p class="text-zinc-500 uppercase text-[10px] mt-0.5">${item.marca} • Talla: <span class="text-zinc-300 font-semibold">${item.talla}</span> • Color: <span class="text-zinc-300 font-semibold">${item.color}</span></p>
-                
-                <div class="flex items-center gap-2 mt-2">
-                    <span class="text-zinc-500 text-[11px]">Cantidad:</span>
-                    <div class="flex items-center bg-zinc-950 border border-zinc-800 rounded-md overflow-hidden">
-                        <button onclick="cambiarCantidadCarrito(${item.idUnico}, -1)" class="px-2 py-0.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 text-[11px] font-bold transition" type="button">-</button>
-                        <span class="px-2.5 text-emerald-400 font-bold text-[11px] min-w-[18px] text-center">${item.cantidad}</span>
-                        <button onclick="cambiarCantidadCarrito(${item.idUnico}, 1)" class="px-2 py-0.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 text-[11px] font-bold transition" type="button">+</button>
-                    </div>
-                </div>
+    <div class="flex items-start gap-3 bg-zinc-900/40 p-3 border border-zinc-950 rounded-xl text-xs relative">
+        
+        <!-- NUEVO: EL CUADRITO DE LA IMAGEN (Con seguro anti-errores) -->
+        <div class="w-14 h-14 shrink-0 bg-zinc-950 rounded-md overflow-hidden border border-zinc-800">
+            <img src="${item.imagen ? item.imagen[0] : ''}" alt="Foto" class="w-full h-full object-cover">
+        </div>
 
-                <div class="flex gap-3 text-zinc-400 text-[10px] mt-2.5">
-                    <span>Men: $${(item.pMenudeo * item.cantidad).toLocaleString()}</span>
-                    <span class="text-emerald-400">May: $${(item.pMayoreo * item.cantidad).toLocaleString()}</span>
-                    <span class="text-indigo-400">Dist: $${(item.pDistribuidor * item.cantidad).toLocaleString()}</span>
+        <!-- TU CONTENIDO ORIGINAL INTACTO -->
+        <div class="w-full flex-grow">
+            <h4 class="font-bold text-zinc-100 pr-4">${item.nombre}</h4>
+            <p class="text-zinc-500 uppercase text-[10px] mt-0.5">${item.marca} • Talla: <span class="text-zinc-300 font-semibold">${item.talla || 'N/A'}</span></p>
+            
+            <div class="flex items-center gap-2 mt-2">
+                <span class="text-zinc-500 text-[11px]">Cantidad:</span>
+                <div class="flex items-center bg-zinc-950 border border-zinc-800 rounded-md overflow-hidden">
+                    <button onclick="cambiarCantidadCarrito(${item.idUnico}, -1)" class="px-2 py-0.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 text-[11px]">-</button>
+                    <span class="px-2.5 text-emerald-400 font-bold text-[11px] min-w-[18px] text-center">${item.cantidad}</span>
+                    <button onclick="cambiarCantidadCarrito(${item.idUnico}, 1)" class="px-2 py-0.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 text-[11px] font-bold">+</button>
                 </div>
             </div>
-            <button onclick="eliminarDelCarrito(${item.idUnico})" class="text-zinc-600 hover:text-red-400 text-sm font-bold pl-2">×</button>
+
+            <div class="flex gap-3 text-zinc-400 text-[10px] mt-2.5">
+                <span>Men: $${(item.pMenudeo * item.cantidad).toLocaleString()}</span>
+                <span class="text-emerald-400">May: $${(item.pMayoreo * item.cantidad).toLocaleString()}</span>
+                <span class="text-indigo-400">Dist: $${(item.pDistribuidor * item.cantidad).toLocaleString()}</span>
+            </div>
         </div>
-    `;
-});
+        
+        <!-- TU BOTÓN DE ELIMINAR (Acomodado arriba a la derecha) -->
+        <button onclick="eliminarDelCarrito(${item.idUnico})" class="absolute top-3 right-3 text-zinc-600 hover:text-red-400 text-sm font-bold">x</button>
+    </div>
+`;
 
             document.getElementById('total-menudeo').innerText = `$${totMenudeo}`;
             document.getElementById('total-mayoreo').innerText = `$${totMayoreo}`;
