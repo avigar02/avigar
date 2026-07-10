@@ -202,7 +202,10 @@
         ]
         
             },
-         // === FUNCIÓN DE BÚSQUEDA BLINDADA ===
+       
+
+        ];
+          // === FUNCIÓN DE BÚSQUEDA BLINDADA ===
 window.ejecutarBusqueda = function() {
     const input = document.getElementById('inputBuscador');
     if (!input) return; // Si no encuentra la barra, no hace nada
@@ -234,6 +237,4 @@ window.ejecutarBusqueda = function() {
     }
     
     mostrarProductosPorBloque(); 
-}
-
-        ];
+};
