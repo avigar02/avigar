@@ -2,58 +2,83 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Avigar - Paquetizador</title>
+    <title>Panel Admin Avigar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-
-    <script>
-        const CLAVE = "Avigar123"; // <--- CAMBIA ESTA CLAVE POR LA TUYA
-        const password = prompt("Introduce la clave de administración:");
-        if (password !== CLAVE) {
-            alert("Acceso denegado");
-            window.location.href = "https://google.com";
-        }
-    </script>
 </head>
-<body class="bg-zinc-950 text-zinc-100 min-h-screen flex items-center justify-center p-4">
+<body class="bg-zinc-950 text-zinc-100 p-4 md:p-10">
 
-    <div class="max-w-xl w-full bg-zinc-900 p-8 rounded-2xl border border-zinc-800 shadow-2xl">
-        <h2 class="text-2xl font-bold mb-6 text-center text-white">📦 Panel de Admin Avigar</h2>
+    <div class="max-w-2xl mx-auto bg-zinc-900 p-8 rounded-2xl border border-zinc-800 shadow-xl">
+        <h2 class="text-2xl font-bold mb-6 text-white text-center">⚙️ Cargar Producto Nuevo</h2>
         
-        <div class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-                <label class="block text-xs text-zinc-400 mb-1">Código del producto (Ej: 0005)</label>
-                <input type="text" id="codigo" placeholder="0005" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
+                <label class="block text-xs text-zinc-400 mb-1">Código (Ej: 0004)</label>
+                <input type="text" id="codigo" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
             </div>
-            
             <div>
-                <label class="block text-xs text-zinc-400 mb-1">Nombre del producto</label>
-                <input type="text" id="nombre" placeholder="Chamarra..." class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
+                <label class="block text-xs text-zinc-400 mb-1">Nombre</label>
+                <input type="text" id="nombre" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
             </div>
-            
+            <div>
+                <label class="block text-xs text-zinc-400 mb-1">Marca (sin espacios, ej: chrome-hearts)</label>
+                <input type="text" id="marca" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
+            </div>
+            <div>
+                <label class="block text-xs text-zinc-400 mb-1">Categorías (separadas por coma)</label>
+                <input type="text" id="categoria" placeholder="chamarras, mezclilla" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
+            </div>
             <div>
                 <label class="block text-xs text-zinc-400 mb-1">Precio Menudeo</label>
-                <input type="number" id="precio" placeholder="1500" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
+                <input type="number" id="pMenudeo" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
             </div>
-            
             <div>
-                <label class="block text-xs text-zinc-400 mb-1">Seleccionar fotos</label>
-                <input type="file" id="fotos" multiple accept="image/*" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl text-sm file:mr-4 file:rounded-full file:border-0 file:bg-indigo-600 file:text-white hover:file:bg-indigo-700">
+                <label class="block text-xs text-zinc-400 mb-1">Precio Mayoreo</label>
+                <input type="number" id="pMayoreo" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
             </div>
-
-            <button onclick="empaquetar()" class="w-full bg-indigo-600 hover:bg-indigo-700 transition py-4 rounded-xl font-bold text-white shadow-lg mt-4">
-                Generar y Descargar Paquete (.zip)
-            </button>
+            <div>
+                <label class="block text-xs text-zinc-400 mb-1">Precio Distribuidor</label>
+                <input type="number" id="pDist" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
+            </div>
+            <div>
+                <label class="block text-xs text-zinc-400 mb-1">Tallas (separadas por coma)</label>
+                <input type="text" id="tallas" placeholder="S, M, L, XL" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-xs text-zinc-400 mb-1">Colores (separados por coma)</label>
+                <input type="text" id="colores" placeholder="Negro, Gris" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none">
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-xs text-zinc-400 mb-1">Descripción</label>
+                <textarea id="desc" rows="3" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none"></textarea>
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-xs text-zinc-400 mb-1">Imágenes</label>
+                <input type="file" id="fotos" multiple accept="image/*" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl">
+            </div>
         </div>
+
+        <button onclick="empaquetar()" class="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 transition py-4 rounded-xl font-bold text-white shadow-lg">
+            Generar y Descargar Paquete (.zip)
+        </button>
     </div>
 
     <script>
+        // Función para convertir "A, B, C" en ["A", "B", "C"]
+        const formatoArray = (str) => JSON.stringify(str.split(',').map(s => s.trim()));
+
         async function empaquetar() {
             const codigo = document.getElementById('codigo').value;
             const nombre = document.getElementById('nombre').value;
-            const precio = document.getElementById('precio').value;
+            const marca = document.getElementById('marca').value;
+            const cat = formatoArray(document.getElementById('categoria').value);
+            const pMen = document.getElementById('pMenudeo').value;
+            const pMay = document.getElementById('pMayoreo').value;
+            const pDist = document.getElementById('pDist').value;
+            const tallas = formatoArray(document.getElementById('tallas').value);
+            const colores = formatoArray(document.getElementById('colores').value);
+            const desc = document.getElementById('desc').value;
             const files = document.getElementById('fotos').files;
             
             if(!codigo || files.length === 0) return alert("¡Faltan datos o fotos!");
@@ -63,17 +88,25 @@
 
             // 1. Meter fotos al ZIP
             for(let i = 0; i < files.length; i++) {
-                const nombreArchivo = `${i + 1}.jpeg`;
+                const nombreArchivo = `${i + 1}.jpeg`; // Renombra a 1, 2, 3...
                 zip.file(nombreArchivo, files[i]);
-                rutas.push(`'productos/${codigo}/${nombreArchivo}'`);
+                // Ajusta esta ruta a tu estructura real: productos/marca/codigo/imagen
+                rutas.push(`'productos/${marca}/${codigo}/${nombreArchivo}'`);
             }
 
-            // 2. Crear archivo de texto con el código
+            // 2. Crear archivo de texto con el código JS formateado
             const codigoJS = `{
     id: ${Date.now()},
     codigo: '${codigo}',
     nombre: '${nombre}',
-    precioMenudeo: ${precio},
+    marca: '${marca}',
+    categoria: ${cat},
+    precioMenudeo: ${pMen},
+    precioMayoreo: ${pMay},
+    precioDistribuidor: ${pDist},
+    tallas: ${tallas},
+    colores: ${colores},
+    descripcion: "${desc}",
     imagen: [${rutas.join(', ')}]
 },`;
             zip.file("codigo_para_pegar.txt", codigoJS);
@@ -81,7 +114,7 @@
             // 3. Descargar
             const contenido = await zip.generateAsync({type:"blob"});
             saveAs(contenido, `producto_${codigo}.zip`);
-            alert("¡Paquete listo! Búscalo en tus descargas.");
+            alert("¡Listo! Ya tienes el zip con el código y las fotos.");
         }
     </script>
 </body>
