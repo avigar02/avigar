@@ -305,8 +305,10 @@ function seleccionarCategoria(nombreCategoria, elementoBoton) {
             pMayoreo: productoSeleccionadoActual.precioMayoreo,
             pDistribuidor: productoSeleccionadoActual.precioDistribuidor,
             cantidad: 1, // <--- Aquí empieza nuestro contador de piezas
-            imagen: productoSeleccionadoActual.imagen
+            imagen: productoSeleccionadoActual.imagen,
+            coloresDisponibles: productoSeleccionadoActual.color
         };
+
         carrito.push(item);
     }
 
@@ -488,14 +490,15 @@ document.getElementById('carrito-contador').innerText = totalPiezas;
                             <option value="XL" ${item.talla === 'XL' ? 'selected' : ''}>XL</option>
                         </select>
 
-                        <select onchange="actualizarAtributoCarrito('${item.idUnico}', 'color', this.value)" class="bg-zinc-950 text-zinc-300 text-[10px] border border-zinc-800 rounded px-1 py-0.5 outline-none cursor-pointer">
-                            <option value="${item.color}" selected>${item.color || 'Color'}</option>
-                            <option value="Negro">Negro</option>
-                            <option value="Blanco">Blanco</option>
-                            <option value="Gris">Gris</option>
-                            <option value="Azul">Azul</option>
-                            <option value="Rojo">Rojo</option>
-                        </select>
+                        <select onchange="actualizarAtributoCarrito('${item.idUnico}', 'color', this.value)" class="bg-zinc-950 text-zinc-300 text-[10px] border border-zinc-800 rounded px-1 py-0.5 outline-none cursor-pointer w-20 truncate">
+    ${
+        (item.coloresDisponibles && Array.isArray(item.coloresDisponibles)) 
+        ? item.coloresDisponibles.map(c => 
+            `<option value="${c}" ${item.color === c ? 'selected' : ''}>${c}</option>`
+          ).join('')
+        : `<option value="${item.color}" selected>${item.color || 'Color'}</option>`
+    }
+</select>
 
                         <button onclick="duplicarEnCarrito('${item.idUnico}')" class="ml-auto text-indigo-400 hover:bg-indigo-500/10 text-[10px] px-2 py-0.5 rounded transition-colors font-medium">
                             + Duplicar
