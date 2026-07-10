@@ -321,6 +321,42 @@ function seleccionarCategoria(nombreCategoria, elementoBoton) {
             carrito = carrito.filter(item => item.idUnico !== idUnico);
             actualizarInterfazCarrito();
         }
+        // Función para cambiar de inmediato la talla o el color dentro del carrito
+function actualizarAtributoCarrito(idUnico, atributo, nuevoValor) {
+    // 1. Buscamos el índice de la prenda exacta usando su idUnico (convertido a String por seguridad)
+    const index = carrito.findIndex(prod => String(prod.idUnico) === String(idUnico));
+    
+    if (index !== -1) {
+        // 2. Modificamos el atributo (ya sea 'talla' o 'color') con el nuevo valor seleccionado
+        carrito[index][atributo] = nuevoValor;
+        
+        // 3. Guardamos silenciosamente en la memoria para que no se pierda al recargar
+        localStorage.setItem("carritoAvigar", JSON.stringify(carrito));
+    }
+}
+
+// Función para clonar una prenda en el carrito
+function duplicarEnCarrito(idUnico) {
+    // 1. Encontramos la prenda original que el usuario quiere duplicar
+    const itemOriginal = carrito.find(prod => String(prod.idUnico) === String(idUnico));
+    
+    if (itemOriginal) {
+        // 2. Hacemos una copia idéntica del objeto
+        const nuevoItem = { ...itemOriginal };
+        
+        // 3. ¡EL TRUCO CLAVE!: Le asignamos un idUnico totalmente nuevo basado en milisegundos (Date.now())
+        // Esto evita que se ligue a la prenda original y permite cambiarle el color al clon por separado
+        nuevoItem.idUnico = Date.now(); 
+        
+        // 4. Hacemos que el clon empiece con cantidad 1
+        nuevoItem.cantidad = 1;
+        
+        // 5. Lo empujamos al carrito, guardamos en memoria y refrescamos el diseño del carrito
+        carrito.push(nuevoItem);
+        localStorage.setItem("carritoAvigar", JSON.stringify(carrito));
+        actualizarInterfazCarrito();
+    }
+}
         // ... tus otras funciones anteriores ...
 
 function eliminarDelCarrito(idUnico) {
@@ -423,48 +459,65 @@ document.getElementById('carrito-contador').innerText = totalPiezas;
             contenedorItems.innerHTML = "";
             let totMenudeo = 0, totMayoreo = 0, totDist = 0;
 
-           carrito.forEach(item => {
-    // 1. Multiplicamos cada precio por la cantidad de piezas de la variante
-    totMenudeo += item.pMenudeo * item.cantidad;
-    totMayoreo += item.pMayoreo * item.cantidad;
-    totDist += item.pDistribuidor * item.cantidad;
+          carrito.forEach(item => {
+        totMenudeo += item.pMenudeo * item.cantidad;
+        totMayoreo += item.pMayoreo * item.cantidad;
+        totDist += item.pDistribuidor * item.cantidad;
 
-    // 2. Agregamos el item al contenedorHTML incluyendo la cantidad
-    // 2. Agregamos el item al contenedorHTML incluyendo la cantidad con los botones
-    contenedorItems.innerHTML += `
-    <div class="flex items-start gap-3 bg-zinc-900/40 p-3 border border-zinc-950 rounded-xl text-xs relative">
-        
-        <!-- NUEVO: EL CUADRITO DE LA IMAGEN (Con seguro anti-errores) -->
-        <div class="w-14 h-14 shrink-0 bg-zinc-950 rounded-md overflow-hidden border border-zinc-800">
-            <img src="${item.imagen ? item.imagen[0] : ''}" alt="Foto" class="w-full h-full object-cover">
-        </div>
-
-        <!-- TU CONTENIDO ORIGINAL INTACTO -->
-        <div class="w-full flex-grow">
-            <h4 class="font-bold text-zinc-100 pr-4">${item.nombre}</h4>
-            <p class="text-zinc-500 uppercase text-[10px] mt-0.5">${item.marca} • Talla: <span class="text-zinc-300 font-semibold">${item.talla || 'N/A'}</span></p>
-            
-            <div class="flex items-center gap-2 mt-2">
-                <span class="text-zinc-500 text-[11px]">Cantidad:</span>
-                <div class="flex items-center bg-zinc-950 border border-zinc-800 rounded-md overflow-hidden">
-                    <button onclick="cambiarCantidadCarrito(${item.idUnico}, -1)" class="px-2 py-0.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 text-[11px]">-</button>
-                    <span class="px-2.5 text-emerald-400 font-bold text-[11px] min-w-[18px] text-center">${item.cantidad}</span>
-                    <button onclick="cambiarCantidadCarrito(${item.idUnico}, 1)" class="px-2 py-0.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 text-[11px] font-bold">+</button>
+        contenedorItems.innerHTML += `
+            <div class="flex items-start gap-3 bg-zinc-900/40 p-3 border border-zinc-950 rounded-xl text-xs relative mb-2">
+                
+                <div class="w-14 h-14 shrink-0 bg-zinc-950 rounded-md overflow-hidden border border-zinc-800/60">
+                    <img src="${item.imagen ? item.imagen[0] : ''}" alt="Foto" class="w-full h-full object-cover">
                 </div>
-            </div>
 
-            <div class="flex gap-3 text-zinc-400 text-[10px] mt-2.5">
-                <span>Men: $${(item.pMenudeo * item.cantidad).toLocaleString()}</span>
-                <span class="text-emerald-400">May: $${(item.pMayoreo * item.cantidad).toLocaleString()}</span>
-                <span class="text-indigo-400">Dist: $${(item.pDistribuidor * item.cantidad).toLocaleString()}</span>
+                <div class="w-full flex-grow">
+                    <h4 class="font-bold text-zinc-100 pr-6 line-clamp-1">${item.nombre}</h4>
+                    <p class="text-zinc-500 uppercase text-[10px] mt-0.5">${item.marca}</p>
+                    
+                    <div class="flex items-center gap-2 mt-1.5">
+                        <select onchange="actualizarAtributoCarrito('${item.idUnico}', 'talla', this.value)" class="bg-zinc-950 text-zinc-300 text-[10px] border border-zinc-800 rounded px-1 py-0.5 outline-none cursor-pointer">
+                            <option value="S" ${item.talla === 'S' ? 'selected' : ''}>S</option>
+                            <option value="M" ${item.talla === 'M' ? 'selected' : ''}>M</option>
+                            <option value="L" ${item.talla === 'L' ? 'selected' : ''}>L</option>
+                            <option value="XL" ${item.talla === 'XL' ? 'selected' : ''}>XL</option>
+                            <option value="Unitalla" ${item.talla === 'Unitalla' ? 'selected' : ''}>Unitalla</option>
+                        </select>
+
+                        <select onchange="actualizarAtributoCarrito('${item.idUnico}', 'color', this.value)" class="bg-zinc-950 text-zinc-300 text-[10px] border border-zinc-800 rounded px-1 py-0.5 outline-none cursor-pointer">
+                            <option value="${item.color}" selected>${item.color || 'Color'}</option>
+                            <option value="Negro">Negro</option>
+                            <option value="Blanco">Blanco</option>
+                            <option value="Gris">Gris</option>
+                            <option value="Azul">Azul</option>
+                            <option value="Rojo">Rojo</option>
+                        </select>
+
+                        <button onclick="duplicarEnCarrito('${item.idUnico}')" class="ml-auto text-indigo-400 hover:bg-indigo-500/10 text-[10px] px-2 py-0.5 rounded transition-colors font-medium">
+                            + Duplicar
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center gap-2 mt-2">
+                        <span class="text-zinc-500 text-[11px]">Cantidad:</span>
+                        <div class="flex items-center bg-zinc-950 border border-zinc-800 rounded-md overflow-hidden">
+                            <button onclick="cambiarCantidadCarrito('${item.idUnico}', -1)" class="px-2 py-0.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 text-[11px]">-</button>
+                            <span class="px-2.5 text-emerald-400 font-bold text-[11px] min-w-[18px] text-center">${item.cantidad}</span>
+                            <button onclick="cambiarCantidadCarrito('${item.idUnico}', 1)" class="px-2 py-0.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 text-[11px] font-bold">+</button>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3 text-zinc-400 text-[10px] mt-2.5">
+                        <span>Men: $${(item.pMenudeo * item.cantidad).toLocaleString()}</span>
+                        <span class="text-emerald-400">May: $${(item.pMayoreo * item.cantidad).toLocaleString()}</span>
+                        <span class="text-indigo-400">Dist: $${(item.pDistribuidor * item.cantidad).toLocaleString()}</span>
+                    </div>
+                </div>
+                
+                <button onclick="eliminarDelCarrito('${item.idUnico}')" class="absolute top-3 right-3 text-zinc-600 hover:text-red-400 text-sm font-bold">x</button>
             </div>
-        </div>
-        
-        <!-- TU BOTÓN DE ELIMINAR (Acomodado arriba a la derecha) -->
-        <button onclick="eliminarDelCarrito(${item.idUnico})" class="absolute top-3 right-3 text-zinc-600 hover:text-red-400 text-sm font-bold">x</button>
-    </div>
-`;
-           });
+        `;
+    });
 
             document.getElementById('total-menudeo').innerText = `$${totMenudeo}`;
             document.getElementById('total-mayoreo').innerText = `$${totMayoreo}`;
