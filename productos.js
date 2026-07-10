@@ -202,6 +202,25 @@
         ]
         
             },
+            {
+    id: 0,
+    codigo: "0000",
+    nombre: "caguamo",
+    marca: "adidas",
+    categoria: ["chamarra","azul"],
+    precioMenudeo: 590,
+    precioMayoreo: 490,
+    precioDistribuidor: 450,
+    tallas: ["xs","s","m","l","xl","2xl"],
+    colores: ["negro","blanco","gris"],
+    descripcion: "playera caguamo de color zul. etc etc",
+    imagen: [
+        'productos/adidas/0000/100.jpeg',
+        'productos/adidas/0000/101.jpeg',
+        'productos/adidas/0000/102.jpeg',
+        'productos/adidas/0000/103.jpeg'
+    ]
+},
        
 
         ];
