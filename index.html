@@ -152,7 +152,14 @@
 
                     <div class="grid grid-cols-2 gap-3 my-4">
                         <div>
-                            <label class="block text-[11px] font-bold uppercase text-zinc-500 mb-1">Talla</label>
+                          <div class="flex justify-between items-center mb-1">
+    <label class="block text-[11px] font-bold uppercase text-zinc-500">Talla</label>
+    <!-- Este es el botón nuevo -->
+    <button id="btn-guia-tallas" onclick="abrirGuiaTallas()" class="hidden text-[11px] font-bold text-indigo-400 hover:text-indigo-300 underline">
+        Ver Guía de Tallas 📏
+    </button>
+</div>
+<!-- Aquí abajo sigue tu <select id="selector-talla"> normalito -->
                             <select id="selector-talla" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-zinc-500"></select>
                         </div>
                         <div>
@@ -278,7 +285,13 @@ function seleccionarCategoria(nombreCategoria, elementoBoton) {
             const prod = productos.find(p => p.id === id);
             if(!prod) return;
             productoSeleccionadoActual = prod;
-
+// Mostrar u ocultar el botón de Guía de Tallas
+    const btnGuia = document.getElementById('btn-guia-tallas');
+    if (prod.guiaTallas) {
+        btnGuia.classList.remove('hidden'); // Lo mostramos
+    } else {
+        btnGuia.classList.add('hidden'); // Lo escondemos
+    }
             document.getElementById('modal-nombre').innerText = prod.nombre;
             document.getElementById('modal-marca').innerText = prod.marca;
             document.getElementById('modal-descripcion').innerText = prod.descripcion;
@@ -744,5 +757,18 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         </div>
     </div>
+    <!-- MODAL DE GUÍA DE TALLAS -->
+<div id="modalGuiaTallas" style="display: none;" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-[99999] items-center justify-center p-4">
+    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl max-w-md w-full relative shadow-2xl">
+        <button onclick="cerrarGuiaTallas()" class="absolute top-3 right-3 bg-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-full w-8 h-8 flex items-center justify-center transition-colors">✕</button>
+        <div class="p-4 border-b border-zinc-800">
+            <h3 class="font-bold text-white text-center text-sm">Guía de Tallas</h3>
+        </div>
+        <div class="p-4 flex justify-center">
+            <!-- Aquí cargará la imagen -->
+            <img id="img-guia-tallas" src="" alt="Guía de medidas" class="max-w-full h-auto rounded-lg">
+        </div>
+    </div>
+</div>
 </body>
 </html>

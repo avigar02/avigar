@@ -254,4 +254,15 @@ window.cambiarImagenSegunColor = function() {
             document.getElementById('modal-foto-principal').src = variante.imagen;
         }
     }
+};window.abrirGuiaTallas = function() {
+    // Si no hay producto o no tiene guía, no hace nada
+    if (!productoSeleccionadoActual || !productoSeleccionadoActual.guiaTallas) return;
+    
+    // Le pasamos la foto al modal y lo abrimos
+    document.getElementById('img-guia-tallas').src = productoSeleccionadoActual.guiaTallas;
+    document.getElementById('modalGuiaTallas').style.display = 'flex';
+};
+
+window.cerrarGuiaTallas = function() {
+    document.getElementById('modalGuiaTallas').style.display = 'none';
 };
