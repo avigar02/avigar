@@ -208,7 +208,30 @@
         ]
         
             },
-    
+    {
+    id: 22,
+    codigo: "0002",
+    nombre: "lalalala",
+    marca: "lala",
+    categoria: ["lala"],
+    precioMenudeo: 1070,
+    precioMayoreo: 970,
+    precioDistribuidor: 820,
+    tallas: ["s","m","xl"],
+    colores: ["negro","blanco","gris","beige"],
+    descripcion: "lalalalalalalalalalala",
+    imagen: [
+        'productos/lala/0002/1.jpeg',
+        'productos/lala/0002/2.jpeg',
+        'productos/lala/0002/3.jpeg',
+        'productos/lala/0002/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/lala/0002/3.jpeg" },
+        { nombre: "gris", imagen: "productos/lala/0002/4.jpeg" }
+    ],
+    guiaTallas: "productos/lala/0002/guia.jpeg"
+},
        
 
         ];
