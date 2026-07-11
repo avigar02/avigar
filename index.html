@@ -44,6 +44,23 @@
             </svg>
         </button>
     </div>
+    <!-- BOTÓN DE INFO DE ENVÍO -->
+    <div class="px-4 mb-4">
+        <button onclick="abrirModalEnvio()" class="w-full bg-zinc-900/80 border border-zinc-800 hover:border-indigo-500 transition-all rounded-2xl p-4 flex items-center justify-between text-left group shadow-lg">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-500/20 p-2 rounded-lg text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                </div>
+                <div>
+                    <h3 class="text-indigo-400 font-bold text-sm group-hover:text-indigo-300 transition-colors">✈️ ¿Cómo funciona el envío directo?</h3>
+                    <p class="text-zinc-400 text-[11px] mt-0.5">Tiempos de entrega (aprox. 15 días hábiles), fotos QC y proceso.</p>
+                </div>
+            </div>
+            <div class="text-zinc-600 group-hover:text-indigo-400 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </div>
+        </button>
+    </div>
     <div class="flex flex-wrap justify-center gap-2">
         <button class="btn-marca px-4 py-2 rounded-full text-xs md:text-sm bg-white text-black font-semibold transition" onclick="seleccionarMarca('todos', this)">Todos</button>
         <button class="btn-marca px-4 py-2 rounded-full text-xs md:text-sm bg-zinc-900 text-zinc-400 border border-zinc-800 transition" onclick="seleccionarMarca('chrome-hearts', this)">Chrome Hearts</button>
@@ -596,7 +613,18 @@ const observadorPantalla = new IntersectionObserver((entries) => {
 }, {
     rootMargin: "0px 0px 300px 0px" // Carga el bloque de forma anticipada para mantener la fluidez
 });
+// Lógica del modal de envío
+    function abrirModalEnvio() {
+        const modal = document.getElementById('modalEnvio');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
 
+    function cerrarModalEnvio() {
+        const modal = document.getElementById('modalEnvio');
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    }
 // Arrancar procesos principales al cargar el documento
 document.addEventListener("DOMContentLoaded", () => {
     const centinela = document.getElementById('centinela-scroll');
@@ -606,5 +634,80 @@ document.addEventListener("DOMContentLoaded", () => {
     aplicarFiltrosCruzados();
 });
     </script>
+    <!-- MODAL DE ENVÍO (Oculto por defecto) -->
+    <div id="modalEnvio" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4 transition-opacity">
+        <div class="bg-zinc-900 border border-zinc-800 rounded-3xl max-w-md w-full max-h-[85vh] overflow-y-auto shadow-2xl relative">
+            
+            <!-- Encabezado fijo -->
+            <div class="sticky top-0 bg-zinc-900/95 backdrop-blur px-6 py-4 border-b border-zinc-800 flex justify-between items-center z-10">
+                <h3 class="font-bold text-white text-lg">Proceso de Envío ✈️</h3>
+                <button onclick="cerrarModalEnvio()" class="text-zinc-500 hover:text-white bg-zinc-800 hover:bg-zinc-700 rounded-full p-1.5 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <div class="p-6">
+                <p class="text-xs text-zinc-400 mb-6 leading-relaxed">
+                    Nuestros envíos demoran un aproximado de <strong class="text-indigo-400">15 días hábiles</strong>. Trabajamos directo con fábricas internacionales para darte la mejor calidad. Así funciona nuestro proceso:
+                </p>
+
+                <!-- Línea de tiempo -->
+                <div class="relative pl-5 border-l border-zinc-700 space-y-6 mb-8">
+                    
+                    <div class="relative">
+                        <div class="absolute -left-[25px] bg-indigo-500 w-3.5 h-3.5 rounded-full border-[3px] border-zinc-900"></div>
+                        <h4 class="text-sm font-bold text-white">1. Pedido y Control de Calidad (QC)</h4>
+                        <p class="text-[11px] text-zinc-400 mt-1 leading-relaxed">Una vez liquidado, solicitamos tu artículo. En aprox. <strong>2 días</strong> te enviamos fotos reales (QC) para tu aprobación. <br><span class="italic text-zinc-500">*Nota: Puede variar según la carga de trabajo de la fábrica o disponibilidad del stock.</span></p>
+                    </div>
+
+                    <div class="relative">
+                        <div class="absolute -left-[25px] bg-indigo-500 w-3.5 h-3.5 rounded-full border-[3px] border-zinc-900"></div>
+                        <h4 class="text-sm font-bold text-white">2. Ensayo y Empaque</h4>
+                        <p class="text-[11px] text-zinc-400 mt-1 leading-relaxed">Al aprobar tus fotos, procedemos a realizar el ensayo (empaque seguro) de tu paquete. Esto demora de <strong>1 a 2 días</strong>.</p>
+                    </div>
+
+                    <div class="relative">
+                        <div class="absolute -left-[25px] bg-indigo-500 w-3.5 h-3.5 rounded-full border-[3px] border-zinc-900"></div>
+                        <h4 class="text-sm font-bold text-white">3. Rastreo y Tránsito Internacional</h4>
+                        <p class="text-[11px] text-zinc-400 mt-1 leading-relaxed">Se paga la guía directa hacia México y te la proporcionamos para tu rastreo. Tarda entre <strong>3 a 4 días</strong> en procesarse en almacenes internacionales antes de volar.</p>
+                    </div>
+
+                    <div class="relative">
+                        <div class="absolute -left-[25px] bg-indigo-500 w-3.5 h-3.5 rounded-full border-[3px] border-zinc-900"></div>
+                        <h4 class="text-sm font-bold text-white">4. Llegada y Aduana</h4>
+                        <p class="text-[11px] text-zinc-400 mt-1 leading-relaxed">El vuelo y revisión toma aprox. <strong>9 días</strong>. <br><span class="text-indigo-300">Dato importante:</span> Aduanas no labora fines de semana. Si tu paquete llega en viernes, la revisión termina martes/miércoles y se entrega generalmente en jueves.</p>
+                    </div>
+
+                </div>
+
+                <!-- Formulario requerido según la imagen -->
+                <div class="bg-zinc-950 p-4 rounded-2xl border border-zinc-800">
+                    <h4 class="text-sm font-bold text-emerald-400 mb-3 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        Datos para tu envío directo
+                    </h4>
+                    <p class="text-[11px] text-zinc-400 mb-2">Para garantizar la entrega en tu domicilio, al hacer tu pedido necesitaremos:</p>
+                    <ul class="text-[11px] text-zinc-300 space-y-1.5 mb-4 grid grid-cols-2">
+                        <li>• Nombre(s) y Apellido</li>
+                        <li>• País, Estado y Ciudad</li>
+                        <li>• Dirección (Calle, No.)</li>
+                        <li>• Número de teléfono</li>
+                        <li class="col-span-2 font-bold text-white">• Código Postal</li>
+                    </ul>
+                    
+                    <!-- Advertencia exacta de tu captura -->
+                    <div class="bg-red-950/30 border border-red-900/50 p-3 rounded-xl">
+                        <p class="text-[10px] text-red-400 font-bold text-center">
+                            ¡Por favor, confirme nuevamente si el código postal y la dirección coinciden con precisión, de lo contrario causará un fracaso en la entrega!
+                        </p>
+                    </div>
+                </div>
+
+                <button onclick="cerrarModalEnvio()" class="w-full mt-6 bg-zinc-100 hover:bg-white text-zinc-950 font-bold py-3 rounded-xl transition-colors">
+                    Entendido
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
