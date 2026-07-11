@@ -46,7 +46,7 @@
     </div>
     <!-- BOTÓN DE INFO DE ENVÍO -->
     <div class="px-4 mb-4">
-        <button onclick="abrirModalEnvio()" class="w-full bg-zinc-900/80 border border-zinc-800 hover:border-indigo-500 transition-all rounded-2xl p-4 flex items-center justify-between text-left group shadow-lg">
+        <button onclick="abrirModalEnvio(event)" class="w-full bg-zinc-900/80 border border-zinc-800 hover:border-indigo-500 transition-all rounded-2xl p-4 flex items-center justify-between text-left group shadow-lg">
             <div class="flex items-center gap-3">
                 <div class="bg-indigo-500/20 p-2 rounded-lg text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
@@ -701,17 +701,7 @@ document.getElementById('carrito-contador').innerText = totalPiezas;
         localStorage.setItem("carritoAvigar", JSON.stringify(carrito)); 
         actualizarInterfazCarrito(); 
     }
-function abrirModalEnvio() {
-        const modal = document.getElementById('modalEnvio');
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-    }
 
-    function cerrarModalEnvio() {
-        const modal = document.getElementById('modalEnvio');
-        modal.classList.remove('flex');
-        modal.classList.add('hidden');
-    }
         renderizarProductos(productos);
     // El IntersectionObserver activa el trigger al scrollear hacia abajo
 const observadorPantalla = new IntersectionObserver((entries) => {
