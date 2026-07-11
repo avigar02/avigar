@@ -139,7 +139,13 @@
                 <input type="file" id="fotos" multiple accept="image/*" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl text-sm">
             </div>
         </div>
-
+<!-- SECCIÓN DIDÁCTICA -->
+<div id="seccionVinculacion" class="md:col-span-2 border border-zinc-800 p-4 rounded-xl bg-zinc-950 mt-4 hidden">
+    <label class="block text-sm font-bold text-indigo-400 mb-2">Vincular Colores con Fotos</label>
+    <div id="botonesColores" class="flex gap-2 flex-wrap mb-3"></div>
+    <div id="botonesFotos" class="flex gap-2 flex-wrap"></div>
+    <div id="listaVinculos" class="text-xs text-zinc-500 mt-3 font-mono"></div>
+</div>
         <button onclick="empaquetar()" class="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 transition py-4 rounded-xl font-bold text-white shadow-lg">
             Generar Paquete (.zip)
         </button>
@@ -243,7 +249,7 @@
             let rutas = [];
 
             for(let i = 0; i < files.length; i++) {
-                const nombreArchivo = `${i + 100}.jpeg`; 
+                const nombreArchivo = `${i + 1}.jpeg`; 
                 // Guardamos la foto ADENTRO de la carpeta que acabamos de crear
                 carpetaFotos.file(nombreArchivo, files[i]);
                 rutas.push(`'productos/${marca}/${codigoString}/${nombreArchivo}'`);
