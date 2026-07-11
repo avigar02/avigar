@@ -223,62 +223,51 @@
 
         const formatoArray = (str) => JSON.stringify(str.split(',').map(s => s.trim().toLowerCase()).filter(s => s));
 
-        async function empaquetar() {
-            const codigoString = document.getElementById('codigo').value.trim();
-            const prefijo = document.getElementById('usuarioAdmin').value;
-            const nombre = document.getElementById('nombre').value.toLowerCase();
-            const marca = document.getElementById('marca').value.toLowerCase();
-            const cat = formatoArray(document.getElementById('categoria').value);
-            const pMen = document.getElementById('pMenudeo').value;
-            const pMay = document.getElementById('pMayoreo').value;
-            const pDist = document.getElementById('pDist').value;
-            const tallas = formatoArray(document.getElementById('tallas').value);
-            const colores = formatoArray(document.getElementById('colores').value);
-            const desc = document.getElementById('desc').value.toLowerCase();
-            const files = document.getElementById('fotos').files;
-            
-            if(!codigoString || files.length === 0) return alert("¡Faltan datos o fotos!");
+       async function empaquetar() {
+    const codigoString = document.getElementById('codigo').value.trim();
+    const marca = document.getElementById('marca').value.toLowerCase();
+    const files = document.getElementById('fotos').files;
+    
+    if(!codigoString || files.length === 0) return alert("¡Faltan datos!");
 
-            localStorage.setItem('lastCode_serie_' + prefijo, parseInt(codigoString));
+    const zip = new JSZip();
+    const carpetaFotos = zip.folder(codigoString);
+    let rutas = [];
 
-            const zip = new JSZip();
-            
-            // MAGIA AQUÍ: Creamos la carpeta con el nombre del código dentro del ZIP
-            const carpetaFotos = zip.folder(codigoString);
-            
-            let rutas = [];
+    for(let i = 0; i < files.length; i++) {
+        const nombreArchivo = `${i + 1}.jpeg`; // Ahora empiezan en 1.jpeg
+        carpetaFotos.file(nombreArchivo, files[i]);
+        rutas.push(`'productos/${marca}/${codigoString}/${nombreArchivo}'`);
+    }
 
-            for(let i = 0; i < files.length; i++) {
-                const nombreArchivo = `${i + 1}.jpeg`; 
-                // Guardamos la foto ADENTRO de la carpeta que acabamos de crear
-                carpetaFotos.file(nombreArchivo, files[i]);
-                rutas.push(`'productos/${marca}/${codigoString}/${nombreArchivo}'`);
-            }
+    // Convertimos tus selecciones visuales en el formato de variantes
+    const variantes = Object.keys(vinculosSeleccionados).map(color => {
+        const num = vinculosSeleccionados[color];
+        return `{ nombre: "${color}", imagen: "productos/${marca}/${codigoString}/${num}.jpeg" }`;
+    }).join(',\n        ');
 
-            const codigoJS = `{
+    const codigoJS = `{
     id: ${parseInt(codigoString)},
-    codigo: "${codigoString}",
-    nombre: "${nombre}",
+    nombre: "${document.getElementById('nombre').value.toLowerCase()}",
     marca: "${marca}",
-    categoria: ${cat},
-    precioMenudeo: ${pMen},
-    precioMayoreo: ${pMay},
-    precioDistribuidor: ${pDist},
-    tallas: ${tallas},
-    colores: ${colores},
-    descripcion: "${desc}",
-    imagen: [
-        ${rutas.join(',\n        ')}
-    ]
+    categoria: ${formatoArray(document.getElementById('categoria').value)},
+    precioMenudeo: ${document.getElementById('pMenudeo').value},
+    precioMayoreo: ${document.getElementById('pMayoreo').value},
+    precioDistribuidor: ${document.getElementById('pDist').value},
+    tallas: ${formatoArray(document.getElementById('tallas').value)},
+    colores: ${formatoArray(document.getElementById('colores').value)},
+    descripcion: "${document.getElementById('desc').value.toLowerCase()}",
+    imagen: [${rutas.join(',\n        ')}],
+    variantes: [${variantes}],
+    guiaTallas: "productos/${marca}/${codigoString}/guia.jpeg"
 },`;
-            // El .txt se queda en la raíz (afuera de la carpeta de fotos)
-            zip.file("codigo_para_pegar.txt", codigoJS);
 
-            const contenido = await zip.generateAsync({type:"blob"});
-            saveAs(contenido, `producto_${codigoString}.zip`);
-            alert("¡Listo! Paquete generado.");
-            location.reload(); 
-        }
+    zip.file("codigo_para_pegar.txt", codigoJS);
+    const contenido = await zip.generateAsync({type:"blob"});
+    saveAs(contenido, `producto_${codigoString}.zip`);
+    alert("¡Listo! Paquete generado.");
+    location.reload(); 
+}
     </script>
 </body>
 </html>
