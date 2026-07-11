@@ -174,13 +174,69 @@
                     </button>
                 </div>
             </div>
+            <!-- MODAL DE ENVÍO -->
+    <div id="modalEnvio" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4 transition-opacity">
+        <div class="bg-zinc-900 border border-zinc-800 rounded-3xl max-w-md w-full max-h-[85vh] overflow-y-auto shadow-2xl relative">
+            
+            <div class="sticky top-0 bg-zinc-900/95 backdrop-blur px-6 py-4 border-b border-zinc-800 flex justify-between items-center z-10">
+                <h3 class="font-bold text-white text-lg">Proceso de Envío ✈️</h3>
+                <button onclick="cerrarModalEnvio()" class="text-zinc-500 hover:text-white bg-zinc-800 hover:bg-zinc-700 rounded-full p-1.5 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <div class="p-6">
+                <p class="text-xs text-zinc-400 mb-6 leading-relaxed">
+                    Nuestros envíos demoran un aproximado de <strong class="text-indigo-400">15 días hábiles</strong> desde que realizas tu pago hasta que el paquete llega a la puerta de tu casa. Así funciona el proceso:
+                </p>
+
+                <div class="relative pl-5 border-l border-zinc-700 space-y-6 mb-8">
+                    <div class="relative">
+                        <div class="absolute -left-[25px] bg-indigo-500 w-3.5 h-3.5 rounded-full border-[3px] border-zinc-900"></div>
+                        <h4 class="text-sm font-bold text-white">1. Pedido y Control de Calidad (QC)</h4>
+                        <p class="text-[11px] text-zinc-400 mt-1 leading-relaxed">Una vez liquidado, solicitamos tu artículo. En aprox. <strong>2 días</strong> te enviamos fotos reales (QC) para tu aprobación.<br><span class="text-emerald-400/80 font-bold">*¿Qué pasa si se agota en fábrica?</span> Te damos a elegir entre seleccionar otro artículo o la devolución íntegra de tu dinero.</p>
+                    </div>
+
+                    <div class="relative">
+                        <div class="absolute -left-[25px] bg-indigo-500 w-3.5 h-3.5 rounded-full border-[3px] border-zinc-900"></div>
+                        <h4 class="text-sm font-bold text-white">2. Ensayo y Empaque</h4>
+                        <p class="text-[11px] text-zinc-400 mt-1 leading-relaxed">Al aprobar tus fotos, procedemos a realizar el ensayo (empaque seguro) de tu paquete. Esto demora de <strong>1 a 2 días</strong>.</p>
+                    </div>
+
+                    <div class="relative">
+                        <div class="absolute -left-[25px] bg-indigo-500 w-3.5 h-3.5 rounded-full border-[3px] border-zinc-900"></div>
+                        <h4 class="text-sm font-bold text-white">3. Rastreo y Procesamiento</h4>
+                        <p class="text-[11px] text-zinc-400 mt-1 leading-relaxed">Se te envía la guía de rastreo y, en lo que se procesa en los almacenes y sale para el envío internacional, demora de <strong>3 a 4 días</strong>.</p>
+                    </div>
+
+                    <div class="relative">
+                        <div class="absolute -left-[25px] bg-indigo-500 w-3.5 h-3.5 rounded-full border-[3px] border-zinc-900"></div>
+                        <h4 class="text-sm font-bold text-white">4. Llegada y Aduana</h4>
+                        <p class="text-[11px] text-zinc-400 mt-1 leading-relaxed">El vuelo toma únicamente <strong>7 días</strong>. Al <strong>8vo día</strong> está en aduanas y al <strong>9no día</strong> se entrega en tu domicilio.<br><span class="text-indigo-300">Nota:</span> Aduanas no labora fines de semana.</p>
+                    </div>
+                </div>
+
+                <button onclick="cerrarModalEnvio()" class="w-full bg-zinc-100 hover:bg-white text-zinc-950 font-bold py-3 rounded-xl transition-colors">
+                    Entendido
+                </button>
+            </div>
+        </div>
+    </div>
         </div>
     </div>
 <script src="productos.js"></script>
     <script>
         // TU TELÉFONO DE WHATSAPP OFICIAL YA CONFIGURADO
         const MI_WHATSAPP = "525536387646"; 
+function abrirModalEnvio() {
+        document.getElementById('modalEnvio').classList.remove('hidden');
+        document.getElementById('modalEnvio').classList.add('flex');
+    }
 
+    function cerrarModalEnvio() {
+        document.getElementById('modalEnvio').classList.remove('flex');
+        document.getElementById('modalEnvio').classList.add('hidden');
+    }
         // INVENTARIO DE MUESTRA (Modifica aquí tus productos, tallas y colores)
        
 let productosPorPagina = 6;            // Bloques de 6 en 6 como TikTok
