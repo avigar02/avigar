@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Panel Admin Avigars</title>
+    <title>Panel Admin Avigars Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
@@ -12,7 +12,6 @@
     <div class="max-w-2xl mx-auto bg-zinc-900 p-8 rounded-2xl border border-zinc-800 shadow-xl">
         <h2 class="text-2xl font-bold mb-6 text-white text-center">📦 Panel de Admin Avigar</h2>
         
-        <!-- Selector de Usuario -->
         <div class="mb-6 p-4 bg-zinc-950 border border-zinc-800 rounded-xl">
             <label class="block text-sm font-bold text-indigo-400 mb-2">¿Quién está subiendo el producto?</label>
             <select id="usuarioAdmin" onchange="actualizarSugerencia()" class="w-full bg-zinc-900 border border-zinc-700 p-3 rounded-xl focus:border-indigo-500 outline-none text-white cursor-pointer">
@@ -22,252 +21,278 @@
             </select>
         </div>
 
-        <!-- Sugerencia de código -->
         <div class="bg-indigo-900/20 p-3 rounded-lg mb-6 border border-indigo-500/30 text-center flex items-center justify-between px-6">
             <p class="text-xs text-indigo-300">Siguiente código para esta serie:</p>
             <span id="labelUltimo" class="text-xl font-mono font-bold text-indigo-400">---</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Campos de texto -->
             <div>
                 <label class="block text-xs text-zinc-400 mb-1">Código</label>
-                <input type="text" id="codigo" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none text-lg font-bold text-center">
+                <input type="text" id="codigo" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl outline-none text-lg font-bold text-center">
             </div>
             <div>
-                <label class="block text-xs text-zinc-400 mb-1">Nombre (Ej: chamarra reversible...)</label>
-                <input type="text" id="nombre" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none lowercase">
+                <label class="block text-xs text-zinc-400 mb-1">Nombre</label>
+                <input type="text" id="nombre" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl outline-none lowercase">
             </div>
             <div>
-                <label class="block text-xs text-zinc-400 mb-1">Marca (Ej: chrome-hearts)</label>
-                <input type="text" id="marca" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none lowercase">
+                <label class="block text-xs text-zinc-400 mb-1">Marca</label>
+                <input type="text" id="marca" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl outline-none lowercase">
             </div>
             <div>
-                <label class="block text-xs text-zinc-400 mb-1">Categorías (Ej: chamarras, mezclilla)</label>
-                <input type="text" id="categoria" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none lowercase">
+                <label class="block text-xs text-zinc-400 mb-1">Categorías</label>
+                <input type="text" id="categoria" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl outline-none lowercase">
             </div>
             
-            <!-- CALCULADORA DE COSTOS KAKOBUY -->
             <div class="md:col-span-2 bg-emerald-900/20 border border-emerald-500/30 rounded-xl p-4 my-2">
-                <h3 class="text-emerald-400 font-bold mb-3 text-sm">🧮 Calculadora de Costo Real y Precios</h3>
+                <h3 class="text-emerald-400 font-bold mb-3 text-sm">🧮 Calculadora de Costos</h3>
                 <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label class="block text-xs text-emerald-200/70 mb-1">Costo Pieza (USD)</label>
-                        <input type="number" id="calcUsd" oninput="calcularCostos()" placeholder="Ej: 20" class="w-full bg-zinc-950 border border-emerald-900 p-2 rounded-lg focus:border-emerald-500 outline-none text-emerald-100">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-emerald-200/70 mb-1">Peso (Gramos reales)</label>
-                        <input type="number" id="calcGramos" oninput="calcularCostos()" placeholder="Ej: 400" class="w-full bg-zinc-950 border border-emerald-900 p-2 rounded-lg focus:border-emerald-500 outline-none text-emerald-100">
-                        <span id="pesoRedondeado" class="text-[10px] text-emerald-400/80 mt-1 block h-3"></span>
-                    </div>
+                    <input type="number" id="calcUsd" oninput="calcularCostos()" placeholder="Costo Pieza (USD)" class="w-full bg-zinc-950 border border-emerald-900 p-2 rounded-lg">
+                    <input type="number" id="calcGramos" oninput="calcularCostos()" placeholder="Peso (Gramos)" class="w-full bg-zinc-950 border border-emerald-900 p-2 rounded-lg">
                 </div>
-                <!-- Resultados del cálculo -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs bg-zinc-950/50 p-3 rounded-lg border border-emerald-900/50">
-                    <div class="text-center">
-                        <span class="block text-zinc-500">Envío (USD)</span>
-                        <span id="resEnvio" class="font-mono text-zinc-300">---</span>
-                    </div>
-                    <div class="text-center">
-                        <span class="block text-zinc-500">Ensayo (USD)</span>
-                        <span id="resEnsayo" class="font-mono text-zinc-300">---</span>
-                    </div>
-                    <div class="text-center">
-                        <span class="block text-zinc-500">Total + 4%</span>
-                        <span id="resTotalUsd" class="font-mono text-emerald-400">---</span>
-                    </div>
-                    <div class="text-center bg-emerald-500/10 rounded">
-                        <span class="block text-emerald-500 font-bold">COSTO NETO</span>
-                        <span id="resMxn" class="font-mono text-emerald-400 font-bold text-sm">---</span>
-                    </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs bg-zinc-950/50 p-3 rounded-lg">
+                    <div class="text-center"><span class="text-zinc-500">Envío</span><span id="resEnvio" class="block text-zinc-300">---</span></div>
+                    <div class="text-center"><span class="text-zinc-500">Ensayo</span><span id="resEnsayo" class="block text-zinc-300">---</span></div>
+                    <div class="text-center"><span class="text-zinc-500">Total+4%</span><span id="resTotalUsd" class="block text-emerald-400">---</span></div>
+                    <div class="text-center bg-emerald-500/10 rounded"><span class="text-emerald-500">NETO</span><span id="resMxn" class="block font-bold text-emerald-400">---</span></div>
                 </div>
             </div>
 
-            <!-- Precios de Venta -->
             <div>
-                <label class="block text-xs text-indigo-300 mb-1 font-bold">Precio Menudeo</label>
-                <input type="number" id="pMenudeo" class="w-full bg-indigo-950/30 border border-indigo-900/50 p-3 rounded-xl focus:border-indigo-500 outline-none text-indigo-100 font-bold">
+                <label class="block text-xs text-indigo-300 font-bold">Precio Menudeo</label>
+                <input type="number" id="pMenudeo" class="w-full bg-indigo-950/30 border border-indigo-900/50 p-3 rounded-xl text-indigo-100 font-bold">
             </div>
             <div>
-                <label class="block text-xs text-indigo-300 mb-1 font-bold">Precio Mayoreo</label>
-                <input type="number" id="pMayoreo" class="w-full bg-indigo-950/30 border border-indigo-900/50 p-3 rounded-xl focus:border-indigo-500 outline-none text-indigo-100 font-bold">
+                <label class="block text-xs text-indigo-300 font-bold">Precio Mayoreo</label>
+                <input type="number" id="pMayoreo" class="w-full bg-indigo-950/30 border border-indigo-900/50 p-3 rounded-xl text-indigo-100 font-bold">
             </div>
             <div>
-                <label class="block text-xs text-indigo-300 mb-1 font-bold">Precio Distribuidor</label>
-                <input type="number" id="pDist" class="w-full bg-indigo-950/30 border border-indigo-900/50 p-3 rounded-xl focus:border-indigo-500 outline-none text-indigo-100 font-bold">
+                <label class="block text-xs text-indigo-300 font-bold">Precio Distribuidor</label>
+                <input type="number" id="pDist" class="w-full bg-indigo-950/30 border border-indigo-900/50 p-3 rounded-xl text-indigo-100 font-bold">
             </div>
             <div></div> 
 
-            <!-- Tallas -->
-            <div class="md:col-span-2 mt-2">
+            <div class="md:col-span-2">
                 <label class="block text-xs text-zinc-400 mb-1">Tallas</label>
                 <div class="flex gap-2 mb-2">
-                    <button onclick="add('tallas', 'xs')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700">XS</button>
-                    <button onclick="add('tallas', 's')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700">S</button>
-                    <button onclick="add('tallas', 'm')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700">M</button>
-                    <button onclick="add('tallas', 'l')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700">L</button>
-                    <button onclick="add('tallas', 'xl')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700">XL</button>
-                    <button onclick="add('tallas', '2xl')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700">2XL</button>
+                    <button onclick="add('tallas', 's')" class="bg-zinc-800 px-3 py-1 rounded text-xs">S</button>
+                    <button onclick="add('tallas', 'm')" class="bg-zinc-800 px-3 py-1 rounded text-xs">M</button>
+                    <button onclick="add('tallas', 'l')" class="bg-zinc-800 px-3 py-1 rounded text-xs">L</button>
+                    <button onclick="add('tallas', 'xl')" class="bg-zinc-800 px-3 py-1 rounded text-xs">XL</button>
                 </div>
-                <input type="text" id="tallas" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none lowercase">
+                <input type="text" id="tallas" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl">
             </div>
 
-            <!-- Colores ampliados y uniformes -->
             <div class="md:col-span-2">
-                <label class="block text-xs text-zinc-400 mb-1">Colores</label>
+                <label class="block text-xs text-zinc-400 mb-1">Colores (Ej: negro, blanco)</label>
                 <div class="flex gap-2 mb-2 flex-wrap">
-                    <button onclick="add('colores', 'negro')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700 border border-zinc-700/50">Negro</button>
-                    <button onclick="add('colores', 'blanco')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700 border border-zinc-700/50">Blanco</button>
-                    <button onclick="add('colores', 'gris')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700 border border-zinc-700/50">Gris</button>
-                    <button onclick="add('colores', 'beige')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700 border border-zinc-700/50">Beige</button>
-                    <button onclick="add('colores', 'azul')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700 border border-zinc-700/50">Azul</button>
-                    <button onclick="add('colores', 'rojo')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700 border border-zinc-700/50">Rojo</button>
-                    <button onclick="add('colores', 'verde')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700 border border-zinc-700/50">Verde</button>
-                    <button onclick="add('colores', 'cafe')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700 border border-zinc-700/50">Café</button>
-                    <button onclick="add('colores', 'amarillo')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700 border border-zinc-700/50">Amarillo</button>
-                    <button onclick="add('colores', 'rosa')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700 border border-zinc-700/50">Rosa</button>
-                    <button onclick="add('colores', 'morado')" class="bg-zinc-800 px-3 py-1 rounded text-xs hover:bg-zinc-700 border border-zinc-700/50">Morado</button>
+                    <button onclick="add('colores', 'negro')" class="bg-zinc-800 px-3 py-1 rounded text-xs">Negro</button>
+                    <button onclick="add('colores', 'blanco')" class="bg-zinc-800 px-3 py-1 rounded text-xs">Blanco</button>
+                    <button onclick="add('colores', 'gris')" class="bg-zinc-800 px-3 py-1 rounded text-xs">Gris</button>
+                    <button onclick="add('colores', 'beige')" class="bg-zinc-800 px-3 py-1 rounded text-xs">Beige</button>
                 </div>
-                <input type="text" id="colores" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none lowercase">
+                <input type="text" id="colores" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl outline-none lowercase">
             </div>
 
             <div class="md:col-span-2">
                 <label class="block text-xs text-zinc-400 mb-1">Descripción</label>
-                <textarea id="desc" rows="3" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl focus:border-indigo-500 outline-none lowercase"></textarea>
+                <textarea id="desc" rows="3" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl"></textarea>
             </div>
-            <div class="md:col-span-2">
-                <label class="block text-xs text-zinc-400 mb-1">Imágenes</label>
-                <input type="file" id="fotos" multiple accept="image/*" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl text-sm">
+            
+            <!-- SECCIÓN: IMÁGENES Y GUÍA DE TALLAS -->
+            <div class="md:col-span-2 border-t border-zinc-800 pt-4 mt-2">
+                <label class="block text-xs text-zinc-400 mb-1">1. Sube todas las fotos del producto</label>
+                <input type="file" id="fotos" multiple accept="image/*" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl text-sm mb-4 cursor-pointer">
+                
+                <label class="block text-xs text-zinc-400 mb-1">2. Sube la foto de la Guía de Tallas (Opcional)</label>
+                <input type="file" id="guiaTallasFile" accept="image/*" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl text-sm mb-4 cursor-pointer">
+            </div>
+
+            <!-- SECCIÓN: VINCULACIÓN DIDÁCTICA -->
+            <div id="seccionVinculacion" class="md:col-span-2 border border-zinc-800 p-4 rounded-xl bg-zinc-950 hidden">
+                <label class="block text-sm font-bold text-indigo-400 mb-4">3. Vincular Colores con Fotos</label>
+                
+                <div id="botonesColores" class="flex gap-2 flex-wrap mb-4 items-center"></div>
+                <div id="botonesFotos" class="flex gap-2 flex-wrap mb-4 items-center"></div>
+                
+                <div class="bg-zinc-900 p-3 rounded border border-zinc-800">
+                    <span class="text-xs text-zinc-500 block mb-1">Parejas creadas:</span>
+                    <div id="listaVinculos" class="flex gap-2 flex-wrap text-xs font-mono">Ninguna todavía...</div>
+                </div>
             </div>
         </div>
-<!-- SECCIÓN DIDÁCTICA -->
-<div id="seccionVinculacion" class="md:col-span-2 border border-zinc-800 p-4 rounded-xl bg-zinc-950 mt-4 hidden">
-    <label class="block text-sm font-bold text-indigo-400 mb-2">Vincular Colores con Fotos</label>
-    <div id="botonesColores" class="flex gap-2 flex-wrap mb-3"></div>
-    <div id="botonesFotos" class="flex gap-2 flex-wrap"></div>
-    <div id="listaVinculos" class="text-xs text-zinc-500 mt-3 font-mono"></div>
-</div>
+
         <button onclick="empaquetar()" class="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 transition py-4 rounded-xl font-bold text-white shadow-lg">
             Generar Paquete (.zip)
         </button>
     </div>
 
     <script>
+        // --- 1. CALCULADORA DE COSTOS ---
         function calcularCostos() {
             const usd = parseFloat(document.getElementById('calcUsd').value) || 0;
             const gramosRaw = parseFloat(document.getElementById('calcGramos').value) || 0;
-
-            let gramosRedondeados = 0;
-            if (gramosRaw > 0) {
-                gramosRedondeados = Math.ceil(gramosRaw / 500) * 500;
-                document.getElementById('pesoRedondeado').innerText = `Se calculará envío de: ${gramosRedondeados}g`;
-            } else {
-                document.getElementById('pesoRedondeado').innerText = '';
-            }
-
-            const envioUsd = (gramosRedondeados / 500) * 8.75;
-            const ensayoUsd = (gramosRedondeados / 500) * 0.8;
-            const subtotalUsd = usd + envioUsd + ensayoUsd;
-            const totalUsdConComision = subtotalUsd * 1.04;
-            const costoNetoMxn = totalUsdConComision * 17.5;
-
-            document.getElementById('resEnvio').innerText = `$${envioUsd.toFixed(2)}`;
-            document.getElementById('resEnsayo').innerText = `$${ensayoUsd.toFixed(2)}`;
-            document.getElementById('resTotalUsd').innerText = `$${totalUsdConComision.toFixed(2)}`;
+            let gramosRedondeados = Math.ceil(gramosRaw / 500) * 500;
+            const costoNetoMxn = (usd + (gramosRedondeados / 500) * 9.55) * 1.04 * 17.5;
             
             if(costoNetoMxn > 0) {
                 document.getElementById('resMxn').innerText = `$${costoNetoMxn.toFixed(2)} MXN`;
-
-                let pMenRaw = costoNetoMxn * 1.5;
-                const pMen = Math.ceil(pMenRaw / 10) * 10;
-                
-                let pMayRaw = pMen - 100;
-                const pMay = Math.ceil(pMayRaw / 10) * 10;
-                
-                let pDisRaw = costoNetoMxn * (8/7);
-                const pDis = Math.ceil(pDisRaw / 10) * 10;
-
-                document.getElementById('pMenudeo').value = pMen;
-                document.getElementById('pMayoreo').value = pMay;
-                document.getElementById('pDist').value = pDis;
-
+                document.getElementById('pMenudeo').value = Math.ceil((costoNetoMxn * 1.5)/10)*10;
             } else {
-                document.getElementById('resMxn').innerText = `---`;
-                document.getElementById('pMenudeo').value = "";
-                document.getElementById('pMayoreo').value = "";
-                document.getElementById('pDist').value = "";
+                document.getElementById('resMxn').innerText = '---';
             }
         }
 
+        // --- 2. SUGERENCIA DE CÓDIGO ---
         function actualizarSugerencia() {
             const prefijo = document.getElementById('usuarioAdmin').value; 
-            const base = parseInt(prefijo) * 1000; 
-            
             const ultimoLocal = localStorage.getItem('lastCode_serie_' + prefijo);
-            let sugerenciaNum = base; 
-
-            if (ultimoLocal) {
-                sugerenciaNum = parseInt(ultimoLocal) + 1; 
-            }
-
-            const sugerenciaTexto = sugerenciaNum.toString().padStart(4, '0');
-            document.getElementById('labelUltimo').innerText = sugerenciaTexto;
-            document.getElementById('codigo').value = sugerenciaTexto; 
+            let sugerenciaNum = ultimoLocal ? parseInt(ultimoLocal) + 1 : parseInt(prefijo) * 1000; 
+            document.getElementById('labelUltimo').innerText = sugerenciaNum.toString().padStart(4, '0');
+            document.getElementById('codigo').value = sugerenciaNum.toString().padStart(4, '0');
         }
-
         actualizarSugerencia();
 
-        function add(id, val) {
-            const input = document.getElementById(id);
+        // --- 3. UTILIDADES ---
+        function add(id, val) { 
+            const input = document.getElementById(id); 
             input.value = input.value ? input.value + ", " + val : val;
+            if(id === 'colores') generarBotonesVinculacion(); // Actualizar botones al agregar color
         }
-
         const formatoArray = (str) => JSON.stringify(str.split(',').map(s => s.trim().toLowerCase()).filter(s => s));
 
-       async function empaquetar() {
-    const codigoString = document.getElementById('codigo').value.trim();
-    const marca = document.getElementById('marca').value.toLowerCase();
-    const files = document.getElementById('fotos').files;
-    
-    if(!codigoString || files.length === 0) return alert("¡Faltan datos!");
+        // --- 4. LÓGICA DE VINCULACIÓN DIDÁCTICA ---
+        let vinculosSeleccionados = {}; 
+        let colorActivo = null;
 
-    const zip = new JSZip();
-    const carpetaFotos = zip.folder(codigoString);
-    let rutas = [];
+        document.getElementById('fotos').addEventListener('change', generarBotonesVinculacion);
+        document.getElementById('colores').addEventListener('input', generarBotonesVinculacion);
 
-    for(let i = 0; i < files.length; i++) {
-        const nombreArchivo = `${i + 1}.jpeg`; // Ahora empiezan en 1.jpeg
-        carpetaFotos.file(nombreArchivo, files[i]);
-        rutas.push(`'productos/${marca}/${codigoString}/${nombreArchivo}'`);
-    }
+        function generarBotonesVinculacion() {
+            const fotosInput = document.getElementById('fotos');
+            const coloresInput = document.getElementById('colores');
+            const seccion = document.getElementById('seccionVinculacion');
 
-    // Convertimos tus selecciones visuales en el formato de variantes
-    const variantes = Object.keys(vinculosSeleccionados).map(color => {
-        const num = vinculosSeleccionados[color];
-        return `{ nombre: "${color}", imagen: "productos/${marca}/${codigoString}/${num}.jpeg" }`;
-    }).join(',\n        ');
+            if(fotosInput.files.length > 0 && coloresInput.value.trim() !== "") {
+                seccion.classList.remove('hidden');
 
-    const codigoJS = `{
+                // Crear botones de colores
+                const colores = coloresInput.value.split(',').map(c => c.trim()).filter(c => c);
+                const contColores = document.getElementById('botonesColores');
+                contColores.innerHTML = '<span class="text-xs text-zinc-500 mr-2 uppercase tracking-wide">Paso A. Elige Color:</span>';
+                
+                colores.forEach(c => {
+                    const btn = document.createElement('button');
+                    btn.innerText = c;
+                    btn.className = "bg-zinc-800 border border-zinc-700 px-3 py-1.5 rounded text-xs font-bold hover:bg-emerald-600 transition-colors";
+                    btn.onclick = (e) => { 
+                        e.preventDefault(); 
+                        colorActivo = c; 
+                        
+                        // Resaltar el botón activo
+                        Array.from(contColores.children).forEach(b => {
+                            if(b.tagName === 'BUTTON') b.className = "bg-zinc-800 border border-zinc-700 px-3 py-1.5 rounded text-xs font-bold hover:bg-emerald-600 transition-colors";
+                        });
+                        btn.className = "bg-emerald-600 text-white px-3 py-1.5 rounded text-xs font-bold ring-2 ring-emerald-400";
+                    };
+                    contColores.appendChild(btn);
+                });
+
+                // Crear botones de fotos (1, 2, 3...)
+                const numFotos = fotosInput.files.length;
+                const contFotos = document.getElementById('botonesFotos');
+                contFotos.innerHTML = '<span class="text-xs text-zinc-500 mr-2 uppercase tracking-wide">Paso B. Asígnale Foto:</span>';
+                
+                for(let i = 1; i <= numFotos; i++) {
+                    const btn = document.createElement('button');
+                    btn.innerText = "Foto " + i;
+                    btn.className = "bg-zinc-800 border border-zinc-700 px-3 py-1.5 rounded text-xs font-bold hover:bg-indigo-600 transition-colors";
+                    btn.onclick = (e) => {
+                        e.preventDefault();
+                        if(colorActivo) {
+                            vinculosSeleccionados[colorActivo] = i;
+                            actualizarLista();
+                        } else { 
+                            alert("¡Hey! Primero haz clic en uno de los colores arriba."); 
+                        }
+                    };
+                    contFotos.appendChild(btn);
+                }
+            } else {
+                seccion.classList.add('hidden');
+            }
+        }
+
+        function actualizarLista() {
+            const cont = document.getElementById('listaVinculos');
+            cont.innerHTML = "";
+            for(let color in vinculosSeleccionados) {
+                cont.innerHTML += `<span class="bg-emerald-900/30 text-emerald-400 border border-emerald-800 px-2 py-1 rounded">✅ ${color} ➔ Foto ${vinculosSeleccionados[color]}</span>`;
+            }
+        }
+
+        // --- 5. GENERACIÓN DEL ZIP Y CÓDIGO ---
+        async function empaquetar() {
+            const codigoString = document.getElementById('codigo').value.trim();
+            const marca = document.getElementById('marca').value.toLowerCase().trim() || "marca-desconocida";
+            const files = document.getElementById('fotos').files;
+            const guiaFile = document.getElementById('guiaTallasFile').files[0]; // Capturamos la foto de la guía
+            
+            if(!codigoString || files.length === 0) return alert("¡Faltan datos o subir las fotos principales!");
+            
+            localStorage.setItem('lastCode_serie_' + document.getElementById('usuarioAdmin').value, parseInt(codigoString));
+
+            const zip = new JSZip();
+            const carpetaFotos = zip.folder(codigoString);
+            let rutas = [];
+            
+            // 1. Guardar las fotos del producto con formato 1.jpeg, 2.jpeg...
+            for(let i = 0; i < files.length; i++) {
+                const nombreArchivo = `${i + 1}.jpeg`;
+                carpetaFotos.file(nombreArchivo, files[i]);
+                rutas.push(`'productos/${marca}/${codigoString}/${nombreArchivo}'`);
+            }
+
+            // 2. Guardar la guía de tallas si existe (como guia.jpeg)
+            let guiaPathText = "";
+            if(guiaFile) {
+                carpetaFotos.file("guia.jpeg", guiaFile);
+                guiaPathText = `\n    guiaTallas: "productos/${marca}/${codigoString}/guia.jpeg"`;
+            }
+
+            // 3. Procesar las variantes seleccionadas didácticamente
+            const variantes = Object.keys(vinculosSeleccionados).map(color => {
+                const numFoto = vinculosSeleccionados[color];
+                return `{ nombre: "${color}", imagen: "productos/${marca}/${codigoString}/${numFoto}.jpeg" }`;
+            }).join(',\n        ');
+
+            let variantesPathText = "";
+            if (variantes.length > 0) {
+                variantesPathText = `\n    variantes: [\n        ${variantes}\n    ],`;
+            }
+
+            // 4. Armar el texto para copiar
+            const codigoJS = `{
     id: ${parseInt(codigoString)},
+    codigo: "${codigoString}",
     nombre: "${document.getElementById('nombre').value.toLowerCase()}",
     marca: "${marca}",
     categoria: ${formatoArray(document.getElementById('categoria').value)},
-    precioMenudeo: ${document.getElementById('pMenudeo').value},
-    precioMayoreo: ${document.getElementById('pMayoreo').value},
-    precioDistribuidor: ${document.getElementById('pDist').value},
+    precioMenudeo: ${document.getElementById('pMenudeo').value || 0},
+    precioMayoreo: ${document.getElementById('pMayoreo').value || 0},
+    precioDistribuidor: ${document.getElementById('pDist').value || 0},
     tallas: ${formatoArray(document.getElementById('tallas').value)},
     colores: ${formatoArray(document.getElementById('colores').value)},
-    descripcion: "${document.getElementById('desc').value.toLowerCase()}",
-    imagen: [${rutas.join(',\n        ')}],
-    variantes: [${variantes}],
-    guiaTallas: "productos/${marca}/${codigoString}/guia.jpeg"
+    descripcion: "${document.getElementById('desc').value.toLowerCase().replace(/\n/g, ' ')}",
+    imagen: [\n        ${rutas.join(',\n        ')}\n    ],${variantesPathText}${guiaPathText}
 },`;
 
-    zip.file("codigo_para_pegar.txt", codigoJS);
-    const contenido = await zip.generateAsync({type:"blob"});
-    saveAs(contenido, `producto_${codigoString}.zip`);
-    alert("¡Listo! Paquete generado.");
-    location.reload(); 
-}
+            zip.file("codigo_para_pegar.txt", codigoJS);
+            const blob = await zip.generateAsync({type:"blob"});
+            saveAs(blob, `producto_${codigoString}.zip`);
+            alert("¡Listo! Paquete generado.");
+            location.reload(); 
+        }
     </script>
 </body>
 </html>
