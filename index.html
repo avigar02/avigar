@@ -102,7 +102,24 @@
                 <div class="flex justify-between text-sm text-zinc-400"><span>Subtotal Menudeo:</span><span id="total-menudeo" class="text-white font-semibold"></span></div>
                 <div class="flex justify-between text-sm text-emerald-400"><span>Subtotal Mayoreo:</span><span id="total-mayoreo" class="font-semibold"></span></div>
                 <div class="flex justify-between text-base text-indigo-400 font-bold"><span>Subtotal Distribuidor:</span><span id="total-distribuidor"></span></div>
-                
+                <!-- FORMULARIO DE ENVÍO EN EL CARRITO -->
+        <div class="mt-4 mb-4 p-4 bg-zinc-950 rounded-xl border border-zinc-800 space-y-3 text-left w-full">
+            <h4 class="text-sm font-bold text-emerald-400 border-b border-zinc-800 pb-2">📦 Datos de Envío Directo</h4>
+            
+            <input type="text" id="envioNombre" placeholder="Nombre(s) y Apellidos" class="w-full bg-zinc-900 border border-zinc-700 p-3 text-xs rounded-xl focus:border-indigo-500 outline-none text-white">
+            
+            <input type="text" id="envioUbicacion" placeholder="País, Estado y Ciudad" class="w-full bg-zinc-900 border border-zinc-700 p-3 text-xs rounded-xl focus:border-indigo-500 outline-none text-white">
+            
+            <input type="text" id="envioDireccion" placeholder="Dirección (Calle, Número, Depto)" class="w-full bg-zinc-900 border border-zinc-700 p-3 text-xs rounded-xl focus:border-indigo-500 outline-none text-white">
+            
+            <div class="grid grid-cols-2 gap-2">
+                <input type="text" id="envioCP" placeholder="Código Postal" class="w-full bg-zinc-900 border border-red-900/50 p-3 text-xs rounded-xl focus:border-indigo-500 outline-none text-white">
+                <input type="tel" id="envioTel" placeholder="Número de teléfono" class="w-full bg-zinc-900 border border-zinc-700 p-3 text-xs rounded-xl focus:border-indigo-500 outline-none text-white">
+            </div>
+            <p class="text-[9px] text-red-400 font-bold text-center mt-2 leading-tight">
+                ¡Por favor, confirme nuevamente si el código postal y la dirección coinciden con precisión, de lo contrario causará un fracaso en la entrega!
+            </p>
+        </div>
                 <button onclick="enviarPedidoWhatsApp()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl transition mt-2 text-sm">
                     Enviar Lista Completa por WhatsApp
                 </button>
@@ -567,41 +584,51 @@ document.getElementById('carrito-contador').innerText = totalPiezas;
         function abrirCarrito() { document.getElementById('carrito-sidebar').classList.remove('hidden'); }
         function cerrarCarrito() { document.getElementById('carrito-sidebar').classList.add('hidden'); }
 
-        function enviarPedidoWhatsApp() {
-    if (carrito.length === 0) return;
+       function enviarPedidoWhatsApp() {
+        // 1. Recopilar datos del formulario de envío
+        const nombre = document.getElementById('envioNombre').value.trim();
+        const ubicacion = document.getElementById('envioUbicacion').value.trim();
+        const direccion = document.getElementById('envioDireccion').value.trim();
+        const cp = document.getElementById('envioCP').value.trim();
+        const tel = document.getElementById('envioTel').value.trim();
 
-    let textoMensaje = "*NUEVO PEDIDO DE COMPRA - AVIGAR*\n";
-    textoMensaje += "──────────────────────────────────\n\n";
+        // 2. Validar que no falten datos
+        if(!nombre || !ubicacion || !direccion || !cp || !tel) {
+            alert("⚠️ Por favor, llena todos tus datos de envío antes de confirmar el pedido.");
+            return; // Detiene la función para que no se envíe vacío
+        }
 
-    let subMenudeo = 0, subMayoreo = 0, subDistribuidor = 0;
+        let textoMensaje = "Hola Avigar, quiero realizar este pedido:%0A%0A";
+        
+        carrito.forEach((prod, index) => {
+            textoMensaje += `*${index + 1}.* ${prod.nombre} (Cód: ${prod.codigo})%0A`;
+            textoMensaje += `  - Talla: ${prod.tallaSeleccionada} | Color: ${prod.colorSeleccionado}%0A`;
+            textoMensaje += `  - Precio: $${prod.precio.toLocaleString()}%0A%0A`;
+        });
 
-    carrito.forEach((item, index) => {
-        subMenudeo += item.pMenudeo * item.cantidad;
-        subMayoreo += item.pMayoreo * item.cantidad;
-        subDistribuidor += item.pDistribuidor * item.cantidad;
+        // 3. Añadir subtotales y datos de envío al mensaje
+        textoMensaje += "_______________________________________%0A";
+        textoMensaje += "*SUBTOTALES SEGÚN TU VOLUMEN:*%0A";
+        textoMensaje += `* Total Menudeo (1 pza): *$${subMenudeo.toLocaleString()}%0A`;
+        textoMensaje += `* Total Mayoreo (> $4k): *$${subMayoreo.toLocaleString()}%0A`;
+        textoMensaje += `* Total Distribuidor (> $8k): *$${subDistribuidor.toLocaleString()}%0A%0A`;
+        
+        textoMensaje += "📦 *DATOS DE ENVÍO:*%0A";
+        textoMensaje += `*Nombre:* ${nombre}%0A`;
+        textoMensaje += `*Ubicación:* ${ubicacion}%0A`;
+        textoMensaje += `*Dirección:* ${direccion}%0A`;
+        textoMensaje += `*C.P.:* ${cp}%0A`;
+        textoMensaje += `*Teléfono:* ${tel}%0A`;
+        textoMensaje += "_______________________________________%0A";
+        textoMensaje += "_Quedo a la espera de los datos de depósito._";
 
-        textoMensaje += `*${index + 1}.* ${item.nombre}\n`;
-        textoMensaje += `    • Marca: ${item.marca.toUpperCase()}\n`;
-        textoMensaje += `    • Talla: ${item.talla}\n`;
-        textoMensaje += `    • Modelo/Color: ${item.color}\n`;
-        textoMensaje += `    • Cantidad: *${item.cantidad} pza(s)*\n`;
-        // === LÍNEA CORREGIDA CON DISTRIBUIDOR INCLUIDO ===
-        textoMensaje += `    • Subtotal: (Men: $${(item.pMenudeo * item.cantidad).toLocaleString()} | May: $${(item.pMayoreo * item.cantidad).toLocaleString()} | Dist: $${(item.pDistribuidor * item.cantidad).toLocaleString()})\n\n`;
-    });
-
-    textoMensaje += "──────────────────────────────────\n";
-    textoMensaje += "*SUBTOTALES SEGÚN TU VOLUMEN:*\n";
-    textoMensaje += `* Total Menudeo (1 pza): *$${subMenudeo.toLocaleString()}*\n`;
-    textoMensaje += `* Total Mayoreo (> $4k): *$${subMayoreo.toLocaleString()}*\n`;
-    textoMensaje += `* Total Distribuidor (> $8k): *$${subDistribuidor.toLocaleString()}*\n\n`;
-    textoMensaje += "_Quedo a la espera de los datos de depósito._";
-
-    const linkFinal = `https://wa.me/${MI_WHATSAPP}?text=${encodeURIComponent(textoMensaje)}`;
-    window.open(linkFinal, '_blank');
-    carrito = []; // Limpia el array en tiempo real
-    localStorage.setItem("carritoAvigar", JSON.stringify(carrito)); // Borra la memoria del navegador
-    actualizarInterfazCarrito(); // Refresca la pantalla para que el carrito se muestre vacío
-}
+        const linkFinal = `https://wa.me/521XXXXXXXXXX?text=${textoMensaje}`; // Asegúrate de poner tu número
+        window.open(linkFinal, '_blank');
+        
+        carrito = []; 
+        localStorage.setItem("carritoAvigar", JSON.stringify(carrito)); 
+        actualizarInterfazCarrito(); 
+    }
 
         renderizarProductos(productos);
     // El IntersectionObserver activa el trigger al scrollear hacia abajo
@@ -613,18 +640,7 @@ const observadorPantalla = new IntersectionObserver((entries) => {
 }, {
     rootMargin: "0px 0px 300px 0px" // Carga el bloque de forma anticipada para mantener la fluidez
 });
-// Lógica del modal de envío
-    function abrirModalEnvio() {
-        const modal = document.getElementById('modalEnvio');
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-    }
 
-    function cerrarModalEnvio() {
-        const modal = document.getElementById('modalEnvio');
-        modal.classList.remove('flex');
-        modal.classList.add('hidden');
-    }
 // Arrancar procesos principales al cargar el documento
 document.addEventListener("DOMContentLoaded", () => {
     const centinela = document.getElementById('centinela-scroll');
@@ -634,11 +650,10 @@ document.addEventListener("DOMContentLoaded", () => {
     aplicarFiltrosCruzados();
 });
     </script>
-    <!-- MODAL DE ENVÍO (Oculto por defecto) -->
+    <!-- MODAL DE ENVÍO ACTUALIZADO -->
     <div id="modalEnvio" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4 transition-opacity">
         <div class="bg-zinc-900 border border-zinc-800 rounded-3xl max-w-md w-full max-h-[85vh] overflow-y-auto shadow-2xl relative">
             
-            <!-- Encabezado fijo -->
             <div class="sticky top-0 bg-zinc-900/95 backdrop-blur px-6 py-4 border-b border-zinc-800 flex justify-between items-center z-10">
                 <h3 class="font-bold text-white text-lg">Proceso de Envío ✈️</h3>
                 <button onclick="cerrarModalEnvio()" class="text-zinc-500 hover:text-white bg-zinc-800 hover:bg-zinc-700 rounded-full p-1.5 transition-colors">
@@ -648,7 +663,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             <div class="p-6">
                 <p class="text-xs text-zinc-400 mb-6 leading-relaxed">
-                    Nuestros envíos demoran un aproximado de <strong class="text-indigo-400">15 días hábiles</strong>. Trabajamos directo con fábricas internacionales para darte la mejor calidad. Así funciona nuestro proceso:
+                    Nuestros envíos demoran un aproximado de <strong class="text-indigo-400">15 días hábiles</strong> desde que realizas tu pago hasta que el paquete llega a la puerta de tu casa. Así funciona el proceso:
                 </p>
 
                 <!-- Línea de tiempo -->
@@ -657,7 +672,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="relative">
                         <div class="absolute -left-[25px] bg-indigo-500 w-3.5 h-3.5 rounded-full border-[3px] border-zinc-900"></div>
                         <h4 class="text-sm font-bold text-white">1. Pedido y Control de Calidad (QC)</h4>
-                        <p class="text-[11px] text-zinc-400 mt-1 leading-relaxed">Una vez liquidado, solicitamos tu artículo. En aprox. <strong>2 días</strong> te enviamos fotos reales (QC) para tu aprobación. <br><span class="italic text-zinc-500">*Nota: Puede variar según la carga de trabajo de la fábrica o disponibilidad del stock.</span></p>
+                        <p class="text-[11px] text-zinc-400 mt-1 leading-relaxed">Una vez liquidado, solicitamos tu artículo. En aprox. <strong>2 días</strong> te enviamos fotos reales (QC) para tu aprobación.<br><span class="text-emerald-400/80 font-bold">*¿Qué pasa si se agota en fábrica?</span> Te damos a elegir entre seleccionar otro artículo o la devolución íntegra de tu dinero.</p>
                     </div>
 
                     <div class="relative">
@@ -668,39 +683,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     <div class="relative">
                         <div class="absolute -left-[25px] bg-indigo-500 w-3.5 h-3.5 rounded-full border-[3px] border-zinc-900"></div>
-                        <h4 class="text-sm font-bold text-white">3. Rastreo y Tránsito Internacional</h4>
-                        <p class="text-[11px] text-zinc-400 mt-1 leading-relaxed">Se paga la guía directa hacia México y te la proporcionamos para tu rastreo. Tarda entre <strong>3 a 4 días</strong> en procesarse en almacenes internacionales antes de volar.</p>
+                        <h4 class="text-sm font-bold text-white">3. Rastreo y Procesamiento</h4>
+                        <p class="text-[11px] text-zinc-400 mt-1 leading-relaxed">Se te envía la guía de rastreo y, en lo que se procesa en los almacenes y sale para el envío internacional, demora de <strong>3 a 4 días</strong>.</p>
                     </div>
 
                     <div class="relative">
                         <div class="absolute -left-[25px] bg-indigo-500 w-3.5 h-3.5 rounded-full border-[3px] border-zinc-900"></div>
                         <h4 class="text-sm font-bold text-white">4. Llegada y Aduana</h4>
-                        <p class="text-[11px] text-zinc-400 mt-1 leading-relaxed">El vuelo y revisión toma aprox. <strong>9 días</strong>. <br><span class="text-indigo-300">Dato importante:</span> Aduanas no labora fines de semana. Si tu paquete llega en viernes, la revisión termina martes/miércoles y se entrega generalmente en jueves.</p>
+                        <p class="text-[11px] text-zinc-400 mt-1 leading-relaxed">El vuelo toma únicamente <strong>7 días</strong>. Al <strong>8vo día</strong> está en aduanas y al <strong>9no día</strong> se entrega en tu domicilio.<br><span class="text-indigo-300">Nota:</span> Aduanas no labora fines de semana. Si tu 8vo día cae en viernes, sábado o domingo, el proceso se pausa y continúa el siguiente día hábil.</p>
                     </div>
 
                 </div>
 
-                <!-- Formulario requerido según la imagen -->
-                <div class="bg-zinc-950 p-4 rounded-2xl border border-zinc-800">
-                    <h4 class="text-sm font-bold text-emerald-400 mb-3 flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        Datos para tu envío directo
-                    </h4>
-                    <p class="text-[11px] text-zinc-400 mb-2">Para garantizar la entrega en tu domicilio, al hacer tu pedido necesitaremos:</p>
-                    <ul class="text-[11px] text-zinc-300 space-y-1.5 mb-4 grid grid-cols-2">
-                        <li>• Nombre(s) y Apellido</li>
-                        <li>• País, Estado y Ciudad</li>
-                        <li>• Dirección (Calle, No.)</li>
-                        <li>• Número de teléfono</li>
-                        <li class="col-span-2 font-bold text-white">• Código Postal</li>
-                    </ul>
-                    
-                    <!-- Advertencia exacta de tu captura -->
-                    <div class="bg-red-950/30 border border-red-900/50 p-3 rounded-xl">
-                        <p class="text-[10px] text-red-400 font-bold text-center">
-                            ¡Por favor, confirme nuevamente si el código postal y la dirección coinciden con precisión, de lo contrario causará un fracaso en la entrega!
-                        </p>
-                    </div>
+                <!-- Aviso para ir al carrito -->
+                <div class="bg-zinc-950 p-4 rounded-2xl border border-zinc-800 text-center">
+                    <h4 class="text-sm font-bold text-emerald-400 mb-2">Llena tus datos en el Carrito 🛒</h4>
+                    <p class="text-[11px] text-zinc-400">Para garantizar tu entrega, te pediremos tus datos exactos de envío (Dirección, C.P., Teléfono) justo antes de confirmar tu pedido en el carrito.</p>
                 </div>
 
                 <button onclick="cerrarModalEnvio()" class="w-full mt-6 bg-zinc-100 hover:bg-white text-zinc-950 font-bold py-3 rounded-xl transition-colors">
