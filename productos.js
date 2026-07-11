@@ -187,7 +187,7 @@
                 nombre: "Sueter Chrome hearts 0010",
                 marca: "chrome-hearts",
                 categoria: ["sueters"],
-                precioMenudeo: 810,
+                precioMenudeo: 1070,
                 precioMayoreo: 970,
                 precioDistribuidor: 810,
                 tallas: ["S", "M", "L", "XL"],
