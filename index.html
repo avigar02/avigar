@@ -103,6 +103,7 @@
                 <div class="flex justify-between text-sm text-emerald-400"><span>Subtotal Mayoreo:</span><span id="total-mayoreo" class="font-semibold"></span></div>
                 <div class="flex justify-between text-base text-indigo-400 font-bold"><span>Subtotal Distribuidor:</span><span id="total-distribuidor"></span></div>
                 <!-- FORMULARIO DE ENVÍO EN EL CARRITO -->
+       <!-- FORMULARIO DE ENVÍO EN EL CARRITO -->
         <div class="mt-4 mb-4 p-4 bg-zinc-950 rounded-xl border border-zinc-800 space-y-3 text-left w-full">
             <h4 class="text-sm font-bold text-emerald-400 border-b border-zinc-800 pb-2">📦 Datos de Envío Directo</h4>
             
@@ -113,11 +114,12 @@
             <input type="text" id="envioDireccion" placeholder="Dirección (Calle, Número, Depto)" class="w-full bg-zinc-900 border border-zinc-700 p-3 text-xs rounded-xl focus:border-indigo-500 outline-none text-white">
             
             <div class="grid grid-cols-2 gap-2">
-                <input type="text" id="envioCP" placeholder="Código Postal" class="w-full bg-zinc-900 border border-red-900/50 p-3 text-xs rounded-xl focus:border-indigo-500 outline-none text-white">
+                <!-- Ya no tiene el borde rojo, ahora es border-zinc-700 como los demás -->
+                <input type="text" id="envioCP" placeholder="Código Postal" class="w-full bg-zinc-900 border border-zinc-700 p-3 text-xs rounded-xl focus:border-indigo-500 outline-none text-white">
                 <input type="tel" id="envioTel" placeholder="Número de teléfono" class="w-full bg-zinc-900 border border-zinc-700 p-3 text-xs rounded-xl focus:border-indigo-500 outline-none text-white">
             </div>
-            <p class="text-[9px] text-red-400 font-bold text-center mt-2 leading-tight">
-                ¡Por favor, confirme nuevamente si el código postal y la dirección coinciden con precisión, de lo contrario causará un fracaso en la entrega!
+            <p class="text-[10px] text-amber-400 font-bold text-center mt-2 leading-tight">
+                ¡Por favor, verifica que tu información sea correcta! Una vez enviado el paquete la dirección no puede ser cambiada y, de haber un error, tendrás que recogerlo directamente en el centro de paquetería.
             </p>
         </div>
                 <button onclick="enviarPedidoWhatsApp()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-3 rounded-xl transition mt-2 text-sm">
@@ -584,7 +586,9 @@ document.getElementById('carrito-contador').innerText = totalPiezas;
         function abrirCarrito() { document.getElementById('carrito-sidebar').classList.remove('hidden'); }
         function cerrarCarrito() { document.getElementById('carrito-sidebar').classList.add('hidden'); }
 
-       function enviarPedidoWhatsApp() {
+      function enviarPedidoWhatsApp() {
+        if (carrito.length === 0) return;
+
         // 1. Recopilar datos del formulario de envío
         const nombre = document.getElementById('envioNombre').value.trim();
         const ubicacion = document.getElementById('envioUbicacion').value.trim();
@@ -598,33 +602,45 @@ document.getElementById('carrito-contador').innerText = totalPiezas;
             return; // Detiene la función para que no se envíe vacío
         }
 
-        let textoMensaje = "Hola Avigar, quiero realizar este pedido:%0A%0A";
+        // 3. Matemáticas del carrito (ESTO ERA LO QUE FALTABA Y ROMPÍA TODO)
+        let subMenudeo = 0, subMayoreo = 0, subDistribuidor = 0;
+        let textoMensaje = "*NUEVO PEDIDO DE COMPRA - AVIGAR*\n";
+        textoMensaje += "_______________________________________\n\n";
         
-        carrito.forEach((prod, index) => {
-            textoMensaje += `*${index + 1}.* ${prod.nombre} (Cód: ${prod.codigo})%0A`;
-            textoMensaje += `  - Talla: ${prod.tallaSeleccionada} | Color: ${prod.colorSeleccionado}%0A`;
-            textoMensaje += `  - Precio: $${prod.precio.toLocaleString()}%0A%0A`;
+        carrito.forEach((item, index) => {
+            subMenudeo += item.pMenudeo * item.cantidad;
+            subMayoreo += item.pMayoreo * item.cantidad;
+            subDistribuidor += item.pDistribuidor * item.cantidad;
+
+            textoMensaje += `*${index + 1}.* ${item.nombre}\n`;
+            textoMensaje += `  • Marca: ${item.marca.toUpperCase()}\n`;
+            textoMensaje += `  • Talla: ${item.talla}\n`;
+            textoMensaje += `  • Color: ${item.color}\n`;
+            textoMensaje += `  • Cantidad: *${item.cantidad} pza(s)*\n`;
+            textoMensaje += `  • Subtotal (Men): $${(item.pMenudeo * item.cantidad).toLocaleString()}\n\n`;
         });
 
-        // 3. Añadir subtotales y datos de envío al mensaje
-        textoMensaje += "_______________________________________%0A";
-        textoMensaje += "*SUBTOTALES SEGÚN TU VOLUMEN:*%0A";
-        textoMensaje += `* Total Menudeo (1 pza): *$${subMenudeo.toLocaleString()}%0A`;
-        textoMensaje += `* Total Mayoreo (> $4k): *$${subMayoreo.toLocaleString()}%0A`;
-        textoMensaje += `* Total Distribuidor (> $8k): *$${subDistribuidor.toLocaleString()}%0A%0A`;
+        // 4. Añadir subtotales y datos de envío al mensaje
+        textoMensaje += "_______________________________________\n";
+        textoMensaje += "*SUBTOTALES SEGÚN TU VOLUMEN:*\n";
+        textoMensaje += `* Total Menudeo (1 pza): *$${subMenudeo.toLocaleString()}\n`;
+        textoMensaje += `* Total Mayoreo (> $4k): *$${subMayoreo.toLocaleString()}\n`;
+        textoMensaje += `* Total Distribuidor (> $8k): *$${subDistribuidor.toLocaleString()}\n\n`;
         
-        textoMensaje += "📦 *DATOS DE ENVÍO:*%0A";
-        textoMensaje += `*Nombre:* ${nombre}%0A`;
-        textoMensaje += `*Ubicación:* ${ubicacion}%0A`;
-        textoMensaje += `*Dirección:* ${direccion}%0A`;
-        textoMensaje += `*C.P.:* ${cp}%0A`;
-        textoMensaje += `*Teléfono:* ${tel}%0A`;
-        textoMensaje += "_______________________________________%0A";
+        textoMensaje += "📦 *DATOS DE ENVÍO:*\n";
+        textoMensaje += `*Nombre:* ${nombre}\n`;
+        textoMensaje += `*Ubicación:* ${ubicacion}\n`;
+        textoMensaje += `*Dirección:* ${direccion}\n`;
+        textoMensaje += `*C.P.:* ${cp}\n`;
+        textoMensaje += `*Teléfono:* ${tel}\n`;
+        textoMensaje += "_______________________________________\n";
         textoMensaje += "_Quedo a la espera de los datos de depósito._";
 
-        const linkFinal = `https://wa.me/525536387646?text=${textoMensaje}`; // Asegúrate de poner tu número
+        // 5. Generar enlace y abrir WhatsApp
+        const linkFinal = `https://wa.me/525536387646?text=${encodeURIComponent(textoMensaje)}`; 
         window.open(linkFinal, '_blank');
         
+        // 6. Vaciar carrito después de enviar
         carrito = []; 
         localStorage.setItem("carritoAvigar", JSON.stringify(carrito)); 
         actualizarInterfazCarrito(); 
