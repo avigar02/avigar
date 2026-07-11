@@ -157,7 +157,7 @@
                         </div>
                         <div>
                             <label class="block text-[11px] font-bold uppercase text-zinc-500 mb-1">Color / Modelo</label>
-                            <select id="selector-color" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-zinc-500"></select>
+                           <select id="selector-color" onchange="cambiarImagenSegunColor()" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-indigo-500"></select>
                         </div>
                     </div>
 
@@ -341,22 +341,33 @@ function seleccionarCategoria(nombreCategoria, elementoBoton) {
         // Si ya está en el carrito, SOLO le sumamos 1 a la cantidad de piezas
         productoExistente.cantidad += 1;
     } else {
-        // Si NO existe, creamos el elemento agregándole la propiedad 'cantidad: 1'
-        const item = {
-            idUnico: Date.now(), // Sigue sirviendo para borrarlo individualmente
-            idBase: productoSeleccionadoActual.id, // Guardamos el ID del inventario para comparar
-            nombre: productoSeleccionadoActual.nombre,
-            marca: productoSeleccionadoActual.marca,
-            talla: tallaSeleccionada,
-            color: colorSeleccionado,
-            pMenudeo: productoSeleccionadoActual.precioMenudeo,
-            pMayoreo: productoSeleccionadoActual.precioMayoreo,
-            pDistribuidor: productoSeleccionadoActual.precioDistribuidor,
-            cantidad: 1, // <--- Aquí empieza nuestro contador de piezas
-            imagen: productoSeleccionadoActual.imagen,
-            coloresDisponibles: productoSeleccionadoActual.color
-        };
+       // Si NO existe, creamos el elemento agregándole la propiedad 'cantidad: 1'
+    
+    // 1. Buscamos la foto vinculada al color que eligió el cliente
+    let fotoParaCarrito = productoSeleccionadoActual.imagen[0]; // Foto por defecto (por si es un producto viejo)
+    if (productoSeleccionadoActual.variantes) {
+        const variante = productoSeleccionadoActual.variantes.find(v => v.nombre === colorSeleccionado);
+        if (variante && variante.imagen) {
+            fotoParaCarrito = variante.imagen;
+        }
+    }
 
+    // 2. Armamos el paquete para el carrito
+    const item = {
+        idUnico: Date.now(), 
+        idBase: productoSeleccionadoActual.id, 
+        nombre: productoSeleccionadoActual.nombre,
+        marca: productoSeleccionadoActual.marca,
+        talla: tallaSeleccionada,
+        color: colorSeleccionado,
+        pMenudeo: productoSeleccionadoActual.precioMenudeo,
+        pMayoreo: productoSeleccionadoActual.precioMayoreo,
+        pDistribuidor: productoSeleccionadoActual.precioDistribuidor,
+        cantidad: 1, 
+        // Lo guardamos entre corchetes [ ] para que el carrito no se rompa si esperaba una lista de fotos
+        imagen: [fotoParaCarrito], 
+        coloresDisponibles: productoSeleccionadoActual.color
+    };
         carrito.push(item);
     }
 

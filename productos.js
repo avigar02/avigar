@@ -79,18 +79,18 @@
             "productos/chrome-hearts/0004/104.jpg"
         ]
             },
-            {
-                id: 5,
-                nombre: "cardigan Chrome hearts 0005",
-                marca: "chrome-hearts",
-                categoria: ["cardigan"],
-                precioMenudeo: 1150,
-                precioMayoreo: 1050,
-                precioDistribuidor: 850,
-                tallas: ["S", "M", "L", "XL"],
-                colores: ["negro", "gris", "beige"],
-                descripcion: "Cardigan con 2 bolsas. Botones con el diseño de la marca. Parches de piel con relieve y diseño de la marca. Costuras de excelente calidad, con etiquetas internas y externas de la marca y bolsa chrome hearts.",
-                    imagen: [
+          {
+        id: 5,
+        nombre: "Cardigan Chrome hearts 0005",
+        marca: "chrome-hearts",
+        categoria: ["cardigan"],
+        precioMenudeo: 1150,
+        precioMayoreo: 1050,
+        precioDistribuidor: 850,
+        tallas: ["S", "M", "L", "XL"],
+        colores: ["negro", "gris", "beige"],
+        descripcion: "Cardigan con 2 bolsas. Botones con el diseño de la marca. Parches de piel con relieve y diseño de la marca. Costuras de excelente calidad, con etiquetas internas y externas de la marca.",
+        imagen: [
             "productos/chrome-hearts/0005/1.jpeg",
             "productos/chrome-hearts/0005/2.jpeg",
             "productos/chrome-hearts/0005/3.jpeg",
@@ -99,9 +99,14 @@
             "productos/chrome-hearts/0005/6.jpeg",
             "productos/chrome-hearts/0005/7.jpeg",
             "productos/chrome-hearts/0005/8.jpeg"
-            
+        ],
+        // ✨ AQUÍ ESTÁ LA MAGIA NUEVA (LAS PAREJITAS) ✨
+        variantes: [
+            { nombre: "negro", imagen: "productos/chrome-hearts/0005/1.jpeg" },
+            { nombre: "beige", imagen: "productos/chrome-hearts/0005/5.jpeg" },
+            { nombre: "gris",  imagen: "productos/chrome-hearts/0005/7.jpeg" }
         ]
-            },
+    },
              {
                 id: 6,
                 nombre: "Playera Chrome hearts 0006",
@@ -228,3 +233,25 @@
     
     mostrarProductosPorBloque(true);
 }
+// Variable global para recordar qué producto tenemos abierto en el modal
+let productoActual = null;
+
+// Esta es la función que conectamos al HTML
+// Esta es la función que conectamos al HTML
+window.cambiarImagenSegunColor = function() {
+    // 1. Usamos tu variable real (productoSeleccionadoActual)
+    if (!productoSeleccionadoActual) return;
+
+    // 2. Obtenemos el color que el usuario eligió
+    const colorSeleccionado = document.getElementById('selector-color').value;
+    
+    // 3. Buscamos la foto vinculada (funcionará con la nueva estructura del Admin)
+    if (productoSeleccionadoActual.variantes) {
+        const variante = productoSeleccionadoActual.variantes.find(v => v.nombre === colorSeleccionado);
+        
+        if (variante && variante.imagen) {
+            // 4. Usamos el ID real de tu foto (modal-foto-principal)
+            document.getElementById('modal-foto-principal').src = variante.imagen;
+        }
+    }
+};
