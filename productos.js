@@ -105,7 +105,8 @@
             { nombre: "negro", imagen: "productos/chrome-hearts/0005/1.jpeg" },
             { nombre: "beige", imagen: "productos/chrome-hearts/0005/5.jpeg" },
             { nombre: "gris",  imagen: "productos/chrome-hearts/0005/7.jpeg" }
-        ]
+        ],
+        guiaTallas: "productos/chrome-hearts/0005/9.png"
     },
              {
                 id: 6,
