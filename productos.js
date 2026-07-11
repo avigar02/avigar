@@ -232,7 +232,38 @@
     ],
     guiaTallas: "productos/lala/0002/guia.jpeg"
 },
-       
+       {
+    id: 14,
+    codigo: "0003",
+    nombre: "qerttjghfwe 0003",
+    marca: "general",
+    categoria: ["general"],
+    precioMenudeo: 1190,
+    precioMayoreo: 1090,
+    precioDistribuidor: 910,
+    tallas: ["xs","s","m","l","xl","2xl"],
+    colores: ["1","2","3","4","5","6","7","8"],
+    descripcion: "chamarrrararararararar",
+    imagen: [
+        'productos/general/0003/1.jpeg',
+        'productos/general/0003/2.jpeg',
+        'productos/general/0003/3.jpeg',
+        'productos/general/0003/4.jpeg',
+        'productos/general/0003/5.jpeg',
+        'productos/general/0003/6.jpeg',
+        'productos/general/0003/7.jpeg'
+    ],
+    variantes: [
+        { nombre: "1", imagen: "productos/general/0003/1.jpeg" },
+        { nombre: "2", imagen: "productos/general/0003/2.jpeg" },
+        { nombre: "3", imagen: "productos/general/0003/3.jpeg" },
+        { nombre: "4", imagen: "productos/general/0003/4.jpeg" },
+        { nombre: "5", imagen: "productos/general/0003/5.jpeg" },
+        { nombre: "6", imagen: "productos/general/0003/6.jpeg" },
+        { nombre: "7", imagen: "productos/general/0003/7.jpeg" }
+    ],
+    guiaTallas: "productos/general/0003/guia.jpeg"
+},
 
         ];
     function ejecutarBusqueda() {
