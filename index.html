@@ -701,7 +701,17 @@ document.getElementById('carrito-contador').innerText = totalPiezas;
         localStorage.setItem("carritoAvigar", JSON.stringify(carrito)); 
         actualizarInterfazCarrito(); 
     }
+function abrirModalEnvio() {
+        const modal = document.getElementById('modalEnvio');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
 
+    function cerrarModalEnvio() {
+        const modal = document.getElementById('modalEnvio');
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    }
         renderizarProductos(productos);
     // El IntersectionObserver activa el trigger al scrollear hacia abajo
 const observadorPantalla = new IntersectionObserver((entries) => {
