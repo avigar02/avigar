@@ -1,0 +1,25 @@
+{
+    id: 28,
+    codigo: "0028",
+    nombre: "supreme logo waist bag fw23 0028",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 510,
+    precioMayoreo: 460,
+    precioDistribuidor: 390,
+    tallas: [],
+    colores: ["negro","gris","rojo","azul"],
+    descripcion: "supreme logo waist bag fw23 de materiales de nylon ripstop cordura® con base laminada x-pac®, de 3 litros de capacidad, con 5 cierres y un compartimento principal que incluye bolsillos organizadores internos.",
+    imagen: [
+        'productos/0028/1.jpeg',
+        'productos/0028/2.jpeg',
+        'productos/0028/3.jpeg',
+        'productos/0028/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0028/1.jpeg" },
+        { nombre: "gris", imagen: "productos/0028/2.jpeg" },
+        { nombre: "rojo", imagen: "productos/0028/3.jpeg" },
+        { nombre: "azul", imagen: "productos/0028/4.jpeg" }
+    ],
+},

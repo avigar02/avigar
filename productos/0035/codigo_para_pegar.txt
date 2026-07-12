@@ -1,0 +1,26 @@
+{
+    id: 35,
+    codigo: "0035",
+    nombre: "supreme backpack fw21 0035",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 900,
+    precioMayoreo: 800,
+    precioDistribuidor: 700,
+    tallas: [],
+    colores: ["negro","morado","naranja","verde"],
+    descripcion: "supreme backpack fw21 de materiales de nailon cordura ripstop, de 20 litros y capacidad de laptop de 15 pulgadas, con 3 cierres y 4 compartimentos",
+    imagen: [
+        'productos/0035/1.jpeg',
+        'productos/0035/2.jpeg',
+        'productos/0035/3.jpeg',
+        'productos/0035/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0035/1.jpeg" },
+        { nombre: "morado", imagen: "productos/0035/2.jpeg" },
+        { nombre: "naranja", imagen: "productos/0035/3.jpeg" },
+        { nombre: "verde", imagen: "productos/0035/4.jpeg" }
+    ],
+    guiaTallas: "productos/0011/guia.jpeg"
+},

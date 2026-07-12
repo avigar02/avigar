@@ -1,5 +1,6 @@
- let productos = [
-             {
+// ARCHIVO GENERADO AUTOMÁTICAMENTE - NO EDITAR A MANO
+const productos = [
+{
                 id: 1,
                 nombre: "Chaqueta de mezclilla Chrome hearts 0002",
                 marca: "chrome-hearts",
@@ -11,13 +12,13 @@
                 colores: ["Mezclilla azul"],
                 descripcion: "Chaqueta de mezclilla con 2 bolsas en el pecho. Botones con el diseño de la marca. Parches de piel con relieve y diseño de la marca. Costuras de excelente calidad, con etiquetas internas y externas de la marca y bolsa chrome hearts.",
                     imagen: [
-            "productos/chrome-hearts/0001/100.jpg",
-            "productos/chrome-hearts/0001/101.jpg",
-            "productos/chrome-hearts/0001/102.jpg",
-            "productos/chrome-hearts/0001/103.jpg",
-            "productos/chrome-hearts/0001/104.jpg",
-            "productos/chrome-hearts/0001/105.jpg",
-            "productos/chrome-hearts/0001/106.jpg",
+            "productos/0001/100.jpg",
+            "productos/0001/101.jpg",
+            "productos/0001/102.jpg",
+            "productos/0001/103.jpg",
+            "productos/0001/104.jpg",
+            "productos/0001/105.jpg",
+            "productos/0001/106.jpg",
             
         ]
             },
@@ -33,12 +34,12 @@
                 colores: ["Mezclilla negra"],
                 descripcion: "Chaqueta de mezclilla con 2 bolsas en el pecho. Botones con el diseño de la marca. Parches de mezclilla con relieve y diseño de la marca. Costuras de excelente calidad, con etiquetas internas y externas de la marca y bolsa chrome hearts",
                     imagen: [
-            "productos/chrome-hearts/0002/100.jpg",
-            "productos/chrome-hearts/0002/101.jpg",
-            "productos/chrome-hearts/0002/102.jpg",
-            "productos/chrome-hearts/0002/103.jpg",
-            "productos/chrome-hearts/0002/104.jpg",
-            "productos/chrome-hearts/0002/105.jpg"
+            "productos/0002/100.jpg",
+            "productos/0002/101.jpg",
+            "productos/0002/102.jpg",
+            "productos/0002/103.jpg",
+            "productos/0002/104.jpg",
+            "productos/0002/105.jpg"
         ]
             },
             {
@@ -53,10 +54,10 @@
                 colores: ["Mezclilla negra"],
                 descripcion: "Chaqueta de mezclilla con 2 bolsas en el pecho. Botones con el diseño de la marca. Parches piel con relieve del diseño de la marca y simbolos. Costuras de excelente calidad, con etiquetas internas y externas de la marca y bolsa chrome hearts",
                     imagen: [
-            "productos/chrome-hearts/0003/100.jpg",
-            "productos/chrome-hearts/0003/101.jpg",
-            "productos/chrome-hearts/0003/102.jpg",
-            "productos/chrome-hearts/0003/103.jpg"
+            "productos/0003/100.jpg",
+            "productos/0003/101.jpg",
+            "productos/0003/102.jpg",
+            "productos/0003/103.jpg"
         ]
         
             },
@@ -72,11 +73,11 @@
                 colores: ["Gris reversible a negra"],
                 descripcion: "Chamarra de algodon reversible. cierre con el diseño de la marca. el lado revercible tiene la tela holograma de la marca. Costuras de excelente calidad, con etiquetas internas y externas de la marca y bolsa chrome hearts",
                     imagen: [
-            "productos/chrome-hearts/0004/100.jpg",
-            "productos/chrome-hearts/0004/101.jpg",
-            "productos/chrome-hearts/0004/102.jpg",
-            "productos/chrome-hearts/0004/103.jpg",
-            "productos/chrome-hearts/0004/104.jpg"
+            "productos/0004/100.jpg",
+            "productos/0004/101.jpg",
+            "productos/0004/102.jpg",
+            "productos/0004/103.jpg",
+            "productos/0004/104.jpg"
         ]
             },
           {
@@ -91,14 +92,14 @@
         colores: ["negro", "gris", "beige"],
         descripcion: "Cardigan con 2 bolsas. Botones con el diseño de la marca. Parches de piel con relieve y diseño de la marca. Costuras de excelente calidad, con etiquetas internas y externas de la marca.",
         imagen: [
-            "productos/chrome-hearts/0005/1.jpeg",
-            "productos/chrome-hearts/0005/2.jpeg",
-            "productos/chrome-hearts/0005/3.jpeg",
-            "productos/chrome-hearts/0005/4.jpeg",
-            "productos/chrome-hearts/0005/5.jpeg",
-            "productos/chrome-hearts/0005/6.jpeg",
-            "productos/chrome-hearts/0005/7.jpeg",
-            "productos/chrome-hearts/0005/8.jpeg"
+            "productos/0005/1.jpeg",
+            "productos/0005/2.jpeg",
+            "productos/0005/3.jpeg",
+            "productos/0005/4.jpeg",
+            "productos/0005/5.jpeg",
+            "productos/0005/6.jpeg",
+            "productos/0005/7.jpeg",
+            "productos/0005/8.jpeg"
         ],
         // ✨ AQUÍ ESTÁ LA MAGIA NUEVA (LAS PAREJITAS) ✨
         variantes: [
@@ -120,13 +121,13 @@
                 colores: ["negro", "gris"],
                 descripcion: "Playera de textura tipo waffle. Botones con el diseño de la marca. Parches de piel con relieve y diseño de la marca. Costuras de excelente calidad, con etiquetas internas y externas de la marca y bolsa chrome hearts",
                     imagen: [
-            "productos/chrome-hearts/0006/1.jpeg",
-            "productos/chrome-hearts/0006/2.jpeg",
-            "productos/chrome-hearts/0006/3.jpeg",
-            "productos/chrome-hearts/0006/4.jpeg",
-            "productos/chrome-hearts/0006/5.jpeg",
-            "productos/chrome-hearts/0006/6.jpeg",
-            "productos/chrome-hearts/0006/7.jpeg"
+            "productos/0006/1.jpeg",
+            "productos/0006/2.jpeg",
+            "productos/0006/3.jpeg",
+            "productos/0006/4.jpeg",
+            "productos/0006/5.jpeg",
+            "productos/0006/6.jpeg",
+            "productos/0006/7.jpeg"
         ]
             },
             {
@@ -141,11 +142,11 @@
                 colores: ["negro"],
                 descripcion: "Chamarra de tipo punto con 2 bolsas enfrente. cierre con el diseño de la marca. Parches piel con relieve del diseño de la marca y simbolos. Costuras de excelente calidad, con etiquetas internas y externas de la marca y bolsa chrome hearts",
                     imagen: [
-            "productos/chrome-hearts/0007/1.jpeg",
-            "productos/chrome-hearts/0007/2.jpeg",
-            "productos/chrome-hearts/0007/3.jpeg",
-            "productos/chrome-hearts/0007/4.jpeg",
-            "productos/chrome-hearts/0007/5.jpeg"
+            "productos/0007/1.jpeg",
+            "productos/0007/2.jpeg",
+            "productos/0007/3.jpeg",
+            "productos/0007/4.jpeg",
+            "productos/0007/5.jpeg"
         ]
         
             },
@@ -161,10 +162,10 @@
                 colores: ["negro"],
                 descripcion: "sueter punto. diseño de bocas en las mangas del sueter. En la parte tracera lleva cosidos parches de cuero de cruces rojas y el logo de la marca. Costuras de excelente calidad, con etiquetas internas y externas de la marca y bolsa chrome hearts",
                     imagen: [
-            "productos/chrome-hearts/0008/1.jpeg",
-            "productos/chrome-hearts/0008/2.jpeg",
-            "productos/chrome-hearts/0008/3.jpeg",
-            "productos/chrome-hearts/0008/4.jpeg"
+            "productos/0008/1.jpeg",
+            "productos/0008/2.jpeg",
+            "productos/0008/3.jpeg",
+            "productos/0008/4.jpeg"
         ]
 
             },
@@ -180,11 +181,11 @@
                 colores: ["negro"],
                 descripcion: "Sueter de punto con diseño de cruces y logos de la marca. Costuras de excelente calidad, con etiquetas internas y externas de la marca y bolsa chrome hearts",
                     imagen: [
-            "productos/chrome-hearts/0009/1.jpg",
-            "productos/chrome-hearts/0009/2.jpeg",
-            "productos/chrome-hearts/0009/3.jpeg",
-            "productos/chrome-hearts/0009/4.jpeg",
-            "productos/chrome-hearts/0009/5.jpeg"
+            "productos/0009/1.jpg",
+            "productos/0009/2.jpeg",
+            "productos/0009/3.jpeg",
+            "productos/0009/4.jpeg",
+            "productos/0009/5.jpeg"
         ]
         
             },
@@ -200,12 +201,504 @@
                 colores: ["negro"],
                 descripcion: "sueter de tipo punto. Parches piel roja con relieve del diseño de la marca y simbolos. Costuras de excelente calidad, con etiquetas internas y externas de la marca y bolsa chrome hearts",
                     imagen: [
-            "productos/chrome-hearts/0010/1.jpeg",
-            "productos/chrome-hearts/0010/2.jpeg",
-            "productos/chrome-hearts/0010/3.jpeg",
-            "productos/chrome-hearts/0010/4.jpeg",
-            "productos/chrome-hearts/0010/5.jpeg"
+            "productos/0010/1.jpeg",
+            "productos/0010/2.jpeg",
+            "productos/0010/3.jpeg",
+            "productos/0010/4.jpeg",
+            "productos/0010/5.jpeg"
         ]
         
             },
-      ];
+{
+    id: 12,
+    codigo: "0012",
+    nombre: "supreme backpack ss20 0012",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 870,
+    precioMayoreo: 770,
+    precioDistribuidor: 670,
+    tallas: [],
+    colores: ["negro","rojo","azul"],
+    descripcion: "supreme backpack ss20 de materiales de tela cordura de 610d y malla de pvc, de 25 litros y capacidad de laptop de 13 pulgadas, con 4 cierres y 4 compartimentos básicos",
+    imagen: [
+        'productos/0012/1.jpeg',
+        'productos/0012/2.jpeg',
+        'productos/0012/3.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0012/1.jpeg" },
+        { nombre: "rojo", imagen: "productos/0012/2.jpeg" },
+        { nombre: "azul", imagen: "productos/0012/3.jpeg" }
+    ],
+    guiaTallas: "productos/0012/guia.jpeg"
+},
+{
+    id: 13,
+    codigo: "0013",
+    nombre: "supreme shoulder bag fw22 0013",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 460,
+    precioMayoreo: 410,
+    precioDistribuidor: 360,
+    tallas: [],
+    colores: ["negro","verde","rojo","gris"],
+    descripcion: "supreme shoulder bag fw22 de materiales de lona y nailon resistente al agua (cordura recor), de 1.5 litros de capacidad, con 2 cierres y 4 compartimentos.",
+    imagen: [
+        'productos/0013/1.jpeg',
+        'productos/0013/2.jpeg',
+        'productos/0013/3.jpeg',
+        'productos/0013/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0013/1.jpeg" },
+        { nombre: "verde", imagen: "productos/0013/2.jpeg" },
+        { nombre: "rojo", imagen: "productos/0013/3.jpeg" },
+        { nombre: "gris", imagen: "productos/0013/4.jpeg" }
+    ],
+},
+{
+    id: 14,
+    codigo: "0014",
+    nombre: "supreme mesh zip tote ss20 0014",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 800,
+    precioMayoreo: 700,
+    precioDistribuidor: 610,
+    tallas: [],
+    colores: ["negro","azul","rojo","gris"],
+    descripcion: "supreme mesh zip tote ss20 de materiales de nylon y malla, de 25 litros y capacidad de laptop de hasta 15 pulgadas, con 1 cierre principal y 4 compartimentos",
+    imagen: [
+        'productos/0014/1.jpeg',
+        'productos/0014/2.jpeg',
+        'productos/0014/3.jpeg',
+        'productos/0014/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0014/1.jpeg" },
+        { nombre: "azul", imagen: "productos/0014/2.jpeg" },
+        { nombre: "rojo", imagen: "productos/0014/3.jpeg" },
+        { nombre: "gris", imagen: "productos/0014/4.jpeg" }
+    ],
+},
+{
+    id: 15,
+    codigo: "0015",
+    nombre: "supreme waist bag ss20 0015",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 540,
+    precioMayoreo: 440,
+    precioDistribuidor: 410,
+    tallas: [],
+    colores: ["negro","rojo","amarillo","azul"],
+    descripcion: "supreme waist bag ss20 de materiales de lona cordura y malla con recubrimiento de pvc, de 6 litros de capacidad, con un logotipo reflectante de 3m, 2 hebillas frontales ajustables y 4 compartimentos",
+    imagen: [
+        'productos/0015/1.jpeg',
+        'productos/0015/2.jpeg',
+        'productos/0015/3.jpeg',
+        'productos/0015/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0015/1.jpeg" },
+        { nombre: "rojo", imagen: "productos/0015/2.jpeg" },
+        { nombre: "amarillo", imagen: "productos/0015/3.jpeg" },
+        { nombre: "azul", imagen: "productos/0015/4.jpeg" }
+    ],
+},
+{
+    id: 16,
+    codigo: "0016",
+    nombre: "supreme mini duffle bag ss24 0016",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 570,
+    precioMayoreo: 470,
+    precioDistribuidor: 430,
+    tallas: [],
+    colores: ["negro","azul","verde","naranja"],
+    descripcion: "supreme mini duffle bag ss24 de materiales de nylon cordura 500d y rejilla poli ripstop reflectante 3m, de 5.5 litros de capacidad, con 3 cierres de cremallera y 4 compartimentos externos principales",
+    imagen: [
+        'productos/0016/1.jpeg',
+        'productos/0016/2.jpeg',
+        'productos/0016/3.jpeg',
+        'productos/0016/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0016/1.jpeg" },
+        { nombre: "azul", imagen: "productos/0016/2.jpeg" },
+        { nombre: "verde", imagen: "productos/0016/3.jpeg" },
+        { nombre: "naranja", imagen: "productos/0016/4.jpeg" }
+    ],
+},
+{
+    id: 17,
+    codigo: "0017",
+    nombre: "supreme backpack fw18 0017",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 840,
+    precioMayoreo: 740,
+    precioDistribuidor: 640,
+    tallas: [],
+    colores: ["negro","morado","rojo","amarillo"],
+    descripcion: "supreme backpack fw18 de materiales de nailon cordura resistente al agua y malla, de 24 litros y capacidad de laptop de 15 pulgadas, con 3 cierres y 4 compartimentos.",
+    imagen: [
+        'productos/0017/1.jpeg',
+        'productos/0017/2.jpeg',
+        'productos/0017/3.jpeg',
+        'productos/0017/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0017/1.jpeg" },
+        { nombre: "morado", imagen: "productos/0017/2.jpeg" },
+        { nombre: "rojo", imagen: "productos/0017/3.jpeg" },
+        { nombre: "amarillo", imagen: "productos/0017/4.jpeg" }
+    ],
+},
+{
+    id: 18,
+    codigo: "0018",
+    nombre: "supreme backpack ss19 0018",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 860,
+    precioMayoreo: 760,
+    precioDistribuidor: 660,
+    tallas: [],
+    colores: ["negro","verde","rojo","aqua"],
+    descripcion: "supreme backpack ss19 de materiales de nailon cordura con diseño jacquard, de 25 litros y capacidad de laptop de 15.6 pulgadas, con 3 cierres principales y 4 compartimentos internos y externos",
+    imagen: [
+        'productos/0018/1.jpeg',
+        'productos/0018/2.jpeg',
+        'productos/0018/3.jpeg',
+        'productos/0018/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0018/1.jpeg" },
+        { nombre: "verde", imagen: "productos/0018/2.jpeg" },
+        { nombre: "rojo", imagen: "productos/0018/3.jpeg" },
+        { nombre: "aqua", imagen: "productos/0018/4.jpeg" }
+    ],
+},
+{
+    id: 19,
+    codigo: "0019",
+    nombre: "backpack supreme x the north face fw20 0019",
+    marca: "supreme, north-face",
+    categoria: ["mochilas"],
+    precioMenudeo: 860,
+    precioMayoreo: 760,
+    precioDistribuidor: 650,
+    tallas: [],
+    colores: ["negro"],
+    descripcion: "mochila supreme x the north face fw20 de materiales de nylon cordura 630d resistente al agua, de 30 litros de capacidad, con 2 bolsillos laterales con cierre y 1 compartimento principal amplio.",
+    imagen: [
+        'productos/0019/1.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0019/1.jpeg" }
+    ],
+},
+{
+    id: 20,
+    codigo: "0020",
+    nombre: "supreme backpack ss24 0020",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 860,
+    precioMayoreo: 760,
+    precioDistribuidor: 650,
+    tallas: [],
+    colores: ["negro","azul","camuflaje","naranja"],
+    descripcion: "supreme backpack ss24 de materiales de nylon cordura 500d y poliéster reflectante 3m ripstop resistente al agua, de 23 litros y compartimento principal con funda sencilla para laptop, con 4 cierres exteriores principales",
+    imagen: [
+        'productos/0020/1.jpeg',
+        'productos/0020/2.jpeg',
+        'productos/0020/3.jpeg',
+        'productos/0020/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0020/1.jpeg" },
+        { nombre: "azul", imagen: "productos/0020/2.jpeg" },
+        { nombre: "camuflaje", imagen: "productos/0020/3.jpeg" },
+        { nombre: "naranja", imagen: "productos/0020/4.jpeg" }
+    ],
+},
+{
+    id: 21,
+    codigo: "0021",
+    nombre: "supreme backpack fw21 0021",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 860,
+    precioMayoreo: 760,
+    precioDistribuidor: 650,
+    tallas: [],
+    colores: ["negro","rojo","blanco","verde"],
+    descripcion: "supreme backpack fw21 de materiales de nylon ripstop reciclado y cordura resistente al agua, de 20 litros y capacidad de laptop de hasta 15 pulgadas o 16 pulgadas, con 3 cierres principales externos y 4 compartimentos ",
+    imagen: [
+        'productos/0021/1.jpeg',
+        'productos/0021/2.jpeg',
+        'productos/0021/3.jpeg',
+        'productos/0021/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0021/1.jpeg" },
+        { nombre: "rojo", imagen: "productos/0021/2.jpeg" },
+        { nombre: "blanco", imagen: "productos/0021/3.jpeg" },
+        { nombre: "verde", imagen: "productos/0021/4.jpeg" }
+    ],
+},
+{
+    id: 22,
+    codigo: "0022",
+    nombre: "supreme backpack ss22 0022",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 860,
+    precioMayoreo: 760,
+    precioDistribuidor: 650,
+    tallas: [],
+    colores: ["negro","gris","rojo"],
+    descripcion: "supreme backpack ss22 de materiales de nylon ripstop reciclado y malla cordura resistente al agua, de 23 litros y capacidad de laptop con funda de una sola capa, con 2 cierres principales y 3 compartimentos",
+    imagen: [
+        'productos/0022/1.jpeg',
+        'productos/0022/2.jpeg',
+        'productos/0022/3.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0022/1.jpeg" },
+        { nombre: "gris", imagen: "productos/0022/2.jpeg" },
+        { nombre: "rojo", imagen: "productos/0022/3.jpeg" }
+    ],
+},
+{
+    id: 23,
+    codigo: "0023",
+    nombre: "mochila supreme ss22 reign 23 0023",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 860,
+    precioMayoreo: 760,
+    precioDistribuidor: 650,
+    tallas: [],
+    colores: ["negro","blanco","rosa","cafe"],
+    descripcion: "mochila supreme ss22 reign 23 de materiales de nailon cordura® y malla, de 22 litros y capacidad de laptop de 15 pulgadas, con 3 cierres y 3 compartimentos principales más bolsillos organizadores internos y red exterior.",
+    imagen: [
+        'productos/0023/1.jpeg',
+        'productos/0023/2.jpeg',
+        'productos/0023/3.jpeg',
+        'productos/0023/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0023/1.jpeg" },
+        { nombre: "blanco", imagen: "productos/0023/2.jpeg" },
+        { nombre: "rosa", imagen: "productos/0023/3.jpeg" },
+        { nombre: "cafe", imagen: "productos/0023/4.jpeg" }
+    ],
+},
+{
+    id: 24,
+    codigo: "0024",
+    nombre: "supreme leather backpack fw24 0024",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 880,
+    precioMayoreo: 780,
+    precioDistribuidor: 670,
+    tallas: [],
+    colores: ["cafe","negro","rojo","verde"],
+    descripcion: "supreme leather backpack fw24 de materiales de piel de vacuno con forro de satén, de 22 litros y capacidad de laptop de 15 pulgadas, con 3 cierres y 4 compartimentos",
+    imagen: [
+        'productos/0024/1.jpeg',
+        'productos/0024/2.jpeg',
+        'productos/0024/3.jpeg',
+        'productos/0024/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "cafe", imagen: "productos/0024/1.jpeg" },
+        { nombre: "negro", imagen: "productos/0024/2.jpeg" },
+        { nombre: "rojo", imagen: "productos/0024/3.jpeg" },
+        { nombre: "verde", imagen: "productos/0024/4.jpeg" }
+    ],
+},
+{
+    id: 25,
+    codigo: "0025",
+    nombre: "mochila supreme x the north face 0025",
+    marca: "supreme, north-face",
+    categoria: ["mochilas"],
+    precioMenudeo: 920,
+    precioMayoreo: 820,
+    precioDistribuidor: 700,
+    tallas: [],
+    colores: ["negro","azul","rosa","verde"],
+    descripcion: "mochila supreme x the north face summit series rescue chugach 16 de materiales de nylon reciclado 420d y nylon balístico 840d, de 16 litros y compartimento interno para laptop, con parches reflectantes 3m, 3 cierres principales y organizador interno.",
+    imagen: [
+        'productos/0025/1.jpeg',
+        'productos/0025/2.jpeg',
+        'productos/0025/3.jpeg',
+        'productos/0025/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0025/1.jpeg" },
+        { nombre: "azul", imagen: "productos/0025/2.jpeg" },
+        { nombre: "rosa", imagen: "productos/0025/3.jpeg" },
+        { nombre: "verde", imagen: "productos/0025/4.jpeg" }
+    ],
+},
+{
+    id: 26,
+    codigo: "0026",
+    nombre: "supreme waist bag ss18 0026",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 510,
+    precioMayoreo: 460,
+    precioDistribuidor: 390,
+    tallas: [],
+    colores: ["negro","rojo","cafe","azul"],
+    descripcion: "supreme waist bag ss18 de materiales de lona cordura® ripstop y nylon, de 4 litros de capacidad, con 2 cierres y 2 compartimentos.",
+    imagen: [
+        'productos/0026/1.jpeg',
+        'productos/0026/2.jpeg',
+        'productos/0026/3.jpeg',
+        'productos/0026/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0026/1.jpeg" },
+        { nombre: "rojo", imagen: "productos/0026/2.jpeg" },
+        { nombre: "cafe", imagen: "productos/0026/3.jpeg" },
+        { nombre: "azul", imagen: "productos/0026/4.jpeg" }
+    ],
+},
+{
+    id: 27,
+    codigo: "0027",
+    nombre: "supreme leather shoulder bag fw24 0027",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 510,
+    precioMayoreo: 460,
+    precioDistribuidor: 390,
+    tallas: [],
+    colores: ["negro","rojo","cafe","verde"],
+    descripcion: "supreme leather shoulder bag fw24 de materiales de piel vacuna y forro de poliéster, de dimensiones compactas (18 cm x 23 cm) ideales para esenciales diarios, con 2 cierres y 2 compartimentos principales.",
+    imagen: [
+        'productos/0027/1.jpeg',
+        'productos/0027/2.jpeg',
+        'productos/0027/3.jpeg',
+        'productos/0027/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0027/1.jpeg" },
+        { nombre: "rojo", imagen: "productos/0027/2.jpeg" },
+        { nombre: "cafe", imagen: "productos/0027/3.jpeg" },
+        { nombre: "verde", imagen: "productos/0027/4.jpeg" }
+    ],
+},
+{
+    id: 28,
+    codigo: "0028",
+    nombre: "supreme logo waist bag fw23 0028",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 510,
+    precioMayoreo: 460,
+    precioDistribuidor: 390,
+    tallas: [],
+    colores: ["negro","gris","rojo","azul"],
+    descripcion: "supreme logo waist bag fw23 de materiales de nylon ripstop cordura® con base laminada x-pac®, de 3 litros de capacidad, con 5 cierres y un compartimento principal que incluye bolsillos organizadores internos.",
+    imagen: [
+        'productos/0028/1.jpeg',
+        'productos/0028/2.jpeg',
+        'productos/0028/3.jpeg',
+        'productos/0028/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0028/1.jpeg" },
+        { nombre: "gris", imagen: "productos/0028/2.jpeg" },
+        { nombre: "rojo", imagen: "productos/0028/3.jpeg" },
+        { nombre: "azul", imagen: "productos/0028/4.jpeg" }
+    ],
+},
+{
+    id: 29,
+    codigo: "0029",
+    nombre: "supreme waist bag fw24 0029",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 510,
+    precioMayoreo: 410,
+    precioDistribuidor: 390,
+    tallas: [],
+    colores: ["negro","rojo","azul","cafe"],
+    descripcion: "supreme waist bag fw24 de materiales de nylon cordura y malla, de 7 litros de capacidad, con tira reflectante superior, 2 cierres externos y correa ajustable para la cintura.",
+    imagen: [
+        'productos/0029/1.jpeg',
+        'productos/0029/2.jpeg',
+        'productos/0029/3.jpeg',
+        'productos/0029/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0029/1.jpeg" },
+        { nombre: "rojo", imagen: "productos/0029/2.jpeg" },
+        { nombre: "azul", imagen: "productos/0029/3.jpeg" },
+        { nombre: "cafe", imagen: "productos/0029/4.jpeg" }
+    ],
+},
+{
+    id: 30,
+    codigo: "0030",
+    nombre: "mochila supreme logo fw24 0030",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 860,
+    precioMayoreo: 760,
+    precioDistribuidor: 650,
+    tallas: [],
+    colores: ["negro","rojo","azul","beige"],
+    descripcion: "mochila supreme logo fw24 de materiales de lona de nailon y paneles de malla, de 24 litros y capacidad de laptop de hasta 14 pulgadas, con cierre de cincha superior ajustable, 2 correas de compresión frontales y múltiples compartimentos internos organizadores.",
+    imagen: [
+        'productos/0030/1.jpeg',
+        'productos/0030/2.jpeg',
+        'productos/0030/3.jpeg',
+        'productos/0030/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0030/1.jpeg" },
+        { nombre: "rojo", imagen: "productos/0030/2.jpeg" },
+        { nombre: "azul", imagen: "productos/0030/3.jpeg" },
+        { nombre: "beige", imagen: "productos/0030/4.jpeg" }
+    ],
+},
+{
+    id: 35,
+    codigo: "0035",
+    nombre: "supreme backpack fw21 0035",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 900,
+    precioMayoreo: 800,
+    precioDistribuidor: 700,
+    tallas: [],
+    colores: ["negro","morado","naranja","verde"],
+    descripcion: "supreme backpack fw21 de materiales de nailon cordura ripstop, de 20 litros y capacidad de laptop de 15 pulgadas, con 3 cierres y 4 compartimentos",
+    imagen: [
+        'productos/0035/1.jpeg',
+        'productos/0035/2.jpeg',
+        'productos/0035/3.jpeg',
+        'productos/0035/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0035/1.jpeg" },
+        { nombre: "morado", imagen: "productos/0035/2.jpeg" },
+        { nombre: "naranja", imagen: "productos/0035/3.jpeg" },
+        { nombre: "verde", imagen: "productos/0035/4.jpeg" }
+    ],
+    guiaTallas: "productos/0011/guia.jpeg"
+},
+];

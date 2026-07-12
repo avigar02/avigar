@@ -1,0 +1,25 @@
+{
+    id: 26,
+    codigo: "0026",
+    nombre: "supreme waist bag ss18 0026",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 510,
+    precioMayoreo: 460,
+    precioDistribuidor: 390,
+    tallas: [],
+    colores: ["negro","rojo","cafe","azul"],
+    descripcion: "supreme waist bag ss18 de materiales de lona cordura® ripstop y nylon, de 4 litros de capacidad, con 2 cierres y 2 compartimentos.",
+    imagen: [
+        'productos/0026/1.jpeg',
+        'productos/0026/2.jpeg',
+        'productos/0026/3.jpeg',
+        'productos/0026/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0026/1.jpeg" },
+        { nombre: "rojo", imagen: "productos/0026/2.jpeg" },
+        { nombre: "cafe", imagen: "productos/0026/3.jpeg" },
+        { nombre: "azul", imagen: "productos/0026/4.jpeg" }
+    ],
+},

@@ -1,0 +1,24 @@
+{
+    id: 12,
+    codigo: "0012",
+    nombre: "supreme backpack ss20 0012",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 870,
+    precioMayoreo: 770,
+    precioDistribuidor: 670,
+    tallas: [],
+    colores: ["negro","rojo","azul"],
+    descripcion: "supreme backpack ss20 de materiales de tela cordura de 610d y malla de pvc, de 25 litros y capacidad de laptop de 13 pulgadas, con 4 cierres y 4 compartimentos básicos",
+    imagen: [
+        'productos/0012/1.jpeg',
+        'productos/0012/2.jpeg',
+        'productos/0012/3.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0012/1.jpeg" },
+        { nombre: "rojo", imagen: "productos/0012/2.jpeg" },
+        { nombre: "azul", imagen: "productos/0012/3.jpeg" }
+    ],
+    guiaTallas: "productos/0012/guia.jpeg"
+},

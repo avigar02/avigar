@@ -1,0 +1,25 @@
+{
+    id: 13,
+    codigo: "0013",
+    nombre: "supreme shoulder bag fw22 0013",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 460,
+    precioMayoreo: 410,
+    precioDistribuidor: 360,
+    tallas: [],
+    colores: ["negro","verde","rojo","gris"],
+    descripcion: "supreme shoulder bag fw22 de materiales de lona y nailon resistente al agua (cordura recor), de 1.5 litros de capacidad, con 2 cierres y 4 compartimentos.",
+    imagen: [
+        'productos/0013/1.jpeg',
+        'productos/0013/2.jpeg',
+        'productos/0013/3.jpeg',
+        'productos/0013/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0013/1.jpeg" },
+        { nombre: "verde", imagen: "productos/0013/2.jpeg" },
+        { nombre: "rojo", imagen: "productos/0013/3.jpeg" },
+        { nombre: "gris", imagen: "productos/0013/4.jpeg" }
+    ],
+},

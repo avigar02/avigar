@@ -1,0 +1,25 @@
+{
+    id: 14,
+    codigo: "0014",
+    nombre: "supreme mesh zip tote ss20 0014",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 800,
+    precioMayoreo: 700,
+    precioDistribuidor: 610,
+    tallas: [],
+    colores: ["negro","azul","rojo","gris"],
+    descripcion: "supreme mesh zip tote ss20 de materiales de nylon y malla, de 25 litros y capacidad de laptop de hasta 15 pulgadas, con 1 cierre principal y 4 compartimentos",
+    imagen: [
+        'productos/0014/1.jpeg',
+        'productos/0014/2.jpeg',
+        'productos/0014/3.jpeg',
+        'productos/0014/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0014/1.jpeg" },
+        { nombre: "azul", imagen: "productos/0014/2.jpeg" },
+        { nombre: "rojo", imagen: "productos/0014/3.jpeg" },
+        { nombre: "gris", imagen: "productos/0014/4.jpeg" }
+    ],
+},

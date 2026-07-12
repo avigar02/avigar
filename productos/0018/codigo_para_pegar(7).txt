@@ -1,0 +1,25 @@
+{
+    id: 18,
+    codigo: "0018",
+    nombre: "supreme backpack ss19 0018",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 860,
+    precioMayoreo: 760,
+    precioDistribuidor: 660,
+    tallas: [],
+    colores: ["negro","verde","rojo","aqua"],
+    descripcion: "supreme backpack ss19 de materiales de nailon cordura con diseño jacquard, de 25 litros y capacidad de laptop de 15.6 pulgadas, con 3 cierres principales y 4 compartimentos internos y externos",
+    imagen: [
+        'productos/0018/1.jpeg',
+        'productos/0018/2.jpeg',
+        'productos/0018/3.jpeg',
+        'productos/0018/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0018/1.jpeg" },
+        { nombre: "verde", imagen: "productos/0018/2.jpeg" },
+        { nombre: "rojo", imagen: "productos/0018/3.jpeg" },
+        { nombre: "aqua", imagen: "productos/0018/4.jpeg" }
+    ],
+},
