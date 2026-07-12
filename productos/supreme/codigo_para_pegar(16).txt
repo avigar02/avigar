@@ -1,0 +1,25 @@
+{
+    id: 27,
+    codigo: "0027",
+    nombre: "supreme leather shoulder bag fw24 0027",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 510,
+    precioMayoreo: 460,
+    precioDistribuidor: 390,
+    tallas: [],
+    colores: ["negro","rojo","cafe","verde"],
+    descripcion: "supreme leather shoulder bag fw24 de materiales de piel vacuna y forro de poliéster, de dimensiones compactas (18 cm x 23 cm) ideales para esenciales diarios, con 2 cierres y 2 compartimentos principales.",
+    imagen: [
+        'productos/supreme/0027/1.jpeg',
+        'productos/supreme/0027/2.jpeg',
+        'productos/supreme/0027/3.jpeg',
+        'productos/supreme/0027/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/supreme/0027/1.jpeg" },
+        { nombre: "rojo", imagen: "productos/supreme/0027/2.jpeg" },
+        { nombre: "cafe", imagen: "productos/supreme/0027/3.jpeg" },
+        { nombre: "verde", imagen: "productos/supreme/0027/4.jpeg" }
+    ],
+},

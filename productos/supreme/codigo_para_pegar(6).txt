@@ -1,0 +1,25 @@
+{
+    id: 17,
+    codigo: "0017",
+    nombre: "supreme backpack fw18 0017",
+    marca: "supreme",
+    categoria: ["mochilas"],
+    precioMenudeo: 840,
+    precioMayoreo: 740,
+    precioDistribuidor: 640,
+    tallas: [],
+    colores: ["negro","morado","rojo","amarillo"],
+    descripcion: "supreme backpack fw18 de materiales de nailon cordura resistente al agua y malla, de 24 litros y capacidad de laptop de 15", con 3 cierres y 4 compartimentos.",
+    imagen: [
+        'productos/supreme/0017/1.jpeg',
+        'productos/supreme/0017/2.jpeg',
+        'productos/supreme/0017/3.jpeg',
+        'productos/supreme/0017/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/supreme/0017/1.jpeg" },
+        { nombre: "morado", imagen: "productos/supreme/0017/2.jpeg" },
+        { nombre: "rojo", imagen: "productos/supreme/0017/3.jpeg" },
+        { nombre: "amarillo", imagen: "productos/supreme/0017/4.jpeg" }
+    ],
+},

@@ -1,0 +1,25 @@
+{
+    id: 25,
+    codigo: "0025",
+    nombre: "mochila supreme x the north face 0025",
+    marca: "supreme, north-face",
+    categoria: ["mochilas"],
+    precioMenudeo: 920,
+    precioMayoreo: 820,
+    precioDistribuidor: 700,
+    tallas: [],
+    colores: ["negro","azul","rosa","verde"],
+    descripcion: "mochila supreme x the north face summit series rescue chugach 16 de materiales de nylon reciclado 420d y nylon balístico 840d, de 16 litros y compartimento interno para laptop, con parches reflectantes 3m, 3 cierres principales y organizador interno.",
+    imagen: [
+        'productos/supreme, north-face/0025/1.jpeg',
+        'productos/supreme, north-face/0025/2.jpeg',
+        'productos/supreme, north-face/0025/3.jpeg',
+        'productos/supreme, north-face/0025/4.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/supreme, north-face/0025/1.jpeg" },
+        { nombre: "azul", imagen: "productos/supreme, north-face/0025/2.jpeg" },
+        { nombre: "rosa", imagen: "productos/supreme, north-face/0025/3.jpeg" },
+        { nombre: "verde", imagen: "productos/supreme, north-face/0025/4.jpeg" }
+    ],
+},
