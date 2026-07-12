@@ -318,20 +318,20 @@
             for(let i = 0; i < files.length; i++) {
                 const nombreArchivo = `${i + 1}.jpeg`; // Empiezan en 1.jpeg
                 carpetaFotos.file(nombreArchivo, files[i]);
-                rutas.push(`'productos/${marca}/${codigoString}/${nombreArchivo}'`);
+                rutas.push(`'productos/${codigoString}/${nombreArchivo}'`);
             }
 
             // Guardar guía de tallas
             let guiaPathText = "";
             if(guiaFile) {
                 carpetaFotos.file("guia.jpeg", guiaFile);
-                guiaPathText = `\n    guiaTallas: "productos/${marca}/${codigoString}/guia.jpeg"`;
+                guiaPathText = `\n    guiaTallas: "productos/${codigoString}/guia.jpeg"`;
             }
 
             // Formatear las variantes
             const variantes = Object.keys(vinculosSeleccionados).map(color => {
                 const numFoto = vinculosSeleccionados[color];
-                return `{ nombre: "${color}", imagen: "productos/${marca}/${codigoString}/${numFoto}.jpeg" }`;
+                return `{ nombre: "${color}", imagen: "productos/${codigoString}/${numFoto}.jpeg" }`;
             }).join(',\n        ');
 
             let variantesPathText = "";
