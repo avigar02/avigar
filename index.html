@@ -338,10 +338,13 @@ function seleccionarCategoria(nombreCategoria, elementoBoton) {
     const colorSeleccionado = document.getElementById('selector-color').value;
 
     // VALIDACIÓN: Por si el cliente no elige talla
-    if (!tallaSeleccionada || tallaSeleccionada === "") {
-        alert("Por favor, selecciona una talla antes de agregar al carrito.");
-        return;
-    }
+    // VALIDACIÓN: Solo pedimos talla SI el producto tiene tallas configuradas
+const tieneTallas = productoSeleccionadoActual.tallas && productoSeleccionadoActual.tallas.length > 0;
+
+if (tieneTallas && (!tallaSeleccionada || tallaSeleccionada === "")) {
+    alert("Por favor, selecciona una talla antes de agregar al carrito.");
+    return;
+}
 
     // 1. Buscar si YA existe EXACTAMENTE ese mismo producto (por id del inventario, talla y color) en el carrito
     const productoExistente = carrito.find(item => 
