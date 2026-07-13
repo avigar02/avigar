@@ -1,0 +1,29 @@
+{
+    id: 1001,
+    codigo: "1001",
+    nombre: "sudadera supreme x maison margiela 1001",
+    marca: "supreme, mm6",
+    categoria: ["sudaderas"],
+    precioMenudeo: 1750,
+    precioMayoreo: 1650,
+    precioDistribuidor: 1340,
+    tallas: ["s","m","l","xl"],
+    colores: ["negro","blanco","azul"],
+    descripcion: "sudadera supreme × mm6 maison margiela, de algodón cepillado de alto gramaje y cremallera metálica ykk, con parche bordado box logo dividido por el cierre central, doble etiqueta de la colaboración en el cuello y acabado de salpicaduras de pintura blanca con efecto desgastado.",
+    imagen: [
+        'productos/1001/1.jpeg',
+        'productos/1001/2.jpeg',
+        'productos/1001/3.jpeg',
+        'productos/1001/4.jpeg',
+        'productos/1001/5.jpeg',
+        'productos/1001/6.jpeg',
+        'productos/1001/7.jpeg',
+        'productos/1001/8.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/1001/1.jpeg" },
+        { nombre: "blanco", imagen: "productos/1001/6.jpeg" },
+        { nombre: "azul", imagen: "productos/1001/8.jpeg" }
+    ],
+    guiaTallas: "productos/1001/guia.jpeg"
+},

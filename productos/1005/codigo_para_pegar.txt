@@ -1,0 +1,23 @@
+{
+    id: 1005,
+    codigo: "1005",
+    nombre: "pants supreme satin appliqué 1005",
+    marca: "supreme",
+    categoria: ["pants"],
+    precioMenudeo: 1550,
+    precioMayoreo: 1450,
+    precioDistribuidor: 1180,
+    tallas: ["s","m","l","xl"],
+    colores: ["azul","camuflaje verde","camuflaje gris"],
+    descripcion: "pants de chándal supreme satin appliqué sweatpant, de algodón grueso con forro polar interior, con letras de satén blanco bordadas verticalmente en el lateral de la pierna izquierda, cintura elástica con cordón ajustable y puños elásticos en los tobillos.",
+    imagen: [
+        'productos/1005/1.jpeg',
+        'productos/1005/2.jpeg',
+        'productos/1005/3.jpeg'
+    ],
+    variantes: [
+        { nombre: "azul", imagen: "productos/1005/1.jpeg" },
+        { nombre: "camuflaje gris", imagen: "productos/1005/3.jpeg" }
+    ],
+    guiaTallas: "productos/1005/guia.jpeg"
+},

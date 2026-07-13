@@ -1,0 +1,29 @@
+{
+    id: 1003,
+    codigo: "1003",
+    nombre: "sudadera supreme × maison margiela 1003",
+    marca: "supreme, mm6",
+    categoria: ["sudadera"],
+    precioMenudeo: 1690,
+    precioMayoreo: 1590,
+    precioDistribuidor: 1290,
+    tallas: ["s","m","l","xl"],
+    colores: ["negro","verde","gris"],
+    descripcion: "sudadera supreme × mm6 maison margiela, de algodón grueso y cremallera metálica central, con gráficos de tipografía colegial superpuestos en el pecho con el año 1994, doble etiqueta de la colaboración en el cuello, bordado numérico negro en la manga y capucha forrada con un llamativo estampado de calaveras con fuego.",
+    imagen: [
+        'productos/1003/1.jpeg',
+        'productos/1003/2.jpeg',
+        'productos/1003/3.jpeg',
+        'productos/1003/4.jpeg',
+        'productos/1003/5.jpeg',
+        'productos/1003/6.jpeg',
+        'productos/1003/7.jpeg',
+        'productos/1003/8.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/1003/1.jpeg" },
+        { nombre: "verde", imagen: "productos/1003/7.jpeg" },
+        { nombre: "gris", imagen: "productos/1003/5.jpeg" }
+    ],
+    guiaTallas: "productos/1003/guia.jpeg"
+},

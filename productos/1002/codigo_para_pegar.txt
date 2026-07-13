@@ -1,0 +1,24 @@
+{
+    id: 1002,
+    codigo: "1002",
+    nombre: "sudadera supreme gran logo en la cintura 1002",
+    marca: "supreme",
+    categoria: ["sudaderas"],
+    precioMenudeo: 1660,
+    precioMayoreo: 1560,
+    precioDistribuidor: 1270,
+    tallas: ["s","m","l","xl"],
+    colores: ["azul","negro"],
+    descripcion: "sudadera supreme big logo zip up hoodie, de algodón pesado con cierre central de cremallera, caracterizada por un enorme gráfico de supreme impreso en blanco que envuelve toda la parte inferior de la prenda, bolsillo frontal tipo canguro y cordón ajustable en la capucha.",
+    imagen: [
+        'productos/1002/1.jpeg',
+        'productos/1002/2.jpeg',
+        'productos/1002/3.jpeg',
+        'productos/1002/4.jpeg',
+        'productos/1002/5.jpeg'
+    ],
+    variantes: [
+        { nombre: "azul", imagen: "productos/1002/2.jpeg" }
+    ],
+    guiaTallas: "productos/1002/guia.jpeg"
+},

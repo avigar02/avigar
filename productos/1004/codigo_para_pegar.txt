@@ -1,0 +1,27 @@
+{
+    id: 1004,
+    codigo: "1004",
+    nombre: "sudadera supreme satin appliqué hooded sweatshirt 1004",
+    marca: "supreme",
+    categoria: ["sudaderas"],
+    precioMenudeo: 1800,
+    precioMayoreo: 1700,
+    precioDistribuidor: 1370,
+    tallas: ["s","m","l","xl"],
+    colores: ["azul","camuflaje gris","camuflaje verde"],
+    descripcion: "sudadera supreme satin appliqué hooded sweatshirt, de algodón grueso con forro polar interior, con letras de satén blanco bordadas verticalmente en la espalda y capucha, etiqueta clásica roja en el cuello, bolsillo frontal tipo canguro y una pequeña etiqueta sutil con el logo en el lateral.",
+    imagen: [
+        'productos/1004/1.jpeg',
+        'productos/1004/2.jpeg',
+        'productos/1004/3.jpeg',
+        'productos/1004/4.jpeg',
+        'productos/1004/5.jpeg',
+        'productos/1004/6.jpeg',
+        'productos/1004/7.jpeg'
+    ],
+    variantes: [
+        { nombre: "azul", imagen: "productos/1004/1.jpeg" },
+        { nombre: "camuflaje gris", imagen: "productos/1004/6.jpeg" }
+    ],
+    guiaTallas: "productos/1004/guia.jpeg"
+},

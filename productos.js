@@ -702,6 +702,138 @@ const productos = [
     guiaTallas: "productos/0035/guia.jpeg"
 },
 {
+    id: 1001,
+    codigo: "1001",
+    nombre: "sudadera supreme x maison margiela 1001",
+    marca: "supreme, mm6",
+    categoria: ["sudaderas"],
+    precioMenudeo: 1750,
+    precioMayoreo: 1650,
+    precioDistribuidor: 1340,
+    tallas: ["s","m","l","xl"],
+    colores: ["negro","blanco","azul"],
+    descripcion: "sudadera supreme × mm6 maison margiela, de algodón cepillado de alto gramaje y cremallera metálica ykk, con parche bordado box logo dividido por el cierre central, doble etiqueta de la colaboración en el cuello y acabado de salpicaduras de pintura blanca con efecto desgastado.",
+    imagen: [
+        'productos/1001/1.jpeg',
+        'productos/1001/2.jpeg',
+        'productos/1001/3.jpeg',
+        'productos/1001/4.jpeg',
+        'productos/1001/5.jpeg',
+        'productos/1001/6.jpeg',
+        'productos/1001/7.jpeg',
+        'productos/1001/8.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/1001/1.jpeg" },
+        { nombre: "blanco", imagen: "productos/1001/6.jpeg" },
+        { nombre: "azul", imagen: "productos/1001/8.jpeg" }
+    ],
+    guiaTallas: "productos/1001/guia.jpeg"
+},
+{
+    id: 1002,
+    codigo: "1002",
+    nombre: "sudadera supreme gran logo en la cintura 1002",
+    marca: "supreme",
+    categoria: ["sudaderas"],
+    precioMenudeo: 1660,
+    precioMayoreo: 1560,
+    precioDistribuidor: 1270,
+    tallas: ["s","m","l","xl"],
+    colores: ["azul","negro"],
+    descripcion: "sudadera supreme big logo zip up hoodie, de algodón pesado con cierre central de cremallera, caracterizada por un enorme gráfico de supreme impreso en blanco que envuelve toda la parte inferior de la prenda, bolsillo frontal tipo canguro y cordón ajustable en la capucha.",
+    imagen: [
+        'productos/1002/1.jpeg',
+        'productos/1002/2.jpeg',
+        'productos/1002/3.jpeg',
+        'productos/1002/4.jpeg',
+        'productos/1002/5.jpeg'
+    ],
+    variantes: [
+        { nombre: "azul", imagen: "productos/1002/2.jpeg" }
+    ],
+    guiaTallas: "productos/1002/guia.jpeg"
+},
+{
+    id: 1003,
+    codigo: "1003",
+    nombre: "sudadera supreme × maison margiela 1003",
+    marca: "supreme, mm6",
+    categoria: ["sudadera"],
+    precioMenudeo: 1690,
+    precioMayoreo: 1590,
+    precioDistribuidor: 1290,
+    tallas: ["s","m","l","xl"],
+    colores: ["negro","verde","gris"],
+    descripcion: "sudadera supreme × mm6 maison margiela, de algodón grueso y cremallera metálica central, con gráficos de tipografía colegial superpuestos en el pecho con el año 1994, doble etiqueta de la colaboración en el cuello, bordado numérico negro en la manga y capucha forrada con un llamativo estampado de calaveras con fuego.",
+    imagen: [
+        'productos/1003/1.jpeg',
+        'productos/1003/2.jpeg',
+        'productos/1003/3.jpeg',
+        'productos/1003/4.jpeg',
+        'productos/1003/5.jpeg',
+        'productos/1003/6.jpeg',
+        'productos/1003/7.jpeg',
+        'productos/1003/8.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/1003/1.jpeg" },
+        { nombre: "verde", imagen: "productos/1003/7.jpeg" },
+        { nombre: "gris", imagen: "productos/1003/5.jpeg" }
+    ],
+    guiaTallas: "productos/1003/guia.jpeg"
+},
+{
+    id: 1004,
+    codigo: "1004",
+    nombre: "sudadera supreme satin appliqué hooded sweatshirt 1004",
+    marca: "supreme",
+    categoria: ["sudaderas"],
+    precioMenudeo: 1800,
+    precioMayoreo: 1700,
+    precioDistribuidor: 1370,
+    tallas: ["s","m","l","xl"],
+    colores: ["azul","camuflaje gris","camuflaje verde"],
+    descripcion: "sudadera supreme satin appliqué hooded sweatshirt, de algodón grueso con forro polar interior, con letras de satén blanco bordadas verticalmente en la espalda y capucha, etiqueta clásica roja en el cuello, bolsillo frontal tipo canguro y una pequeña etiqueta sutil con el logo en el lateral.",
+    imagen: [
+        'productos/1004/1.jpeg',
+        'productos/1004/2.jpeg',
+        'productos/1004/3.jpeg',
+        'productos/1004/4.jpeg',
+        'productos/1004/5.jpeg',
+        'productos/1004/6.jpeg',
+        'productos/1004/7.jpeg'
+    ],
+    variantes: [
+        { nombre: "azul", imagen: "productos/1004/1.jpeg" },
+        { nombre: "camuflaje gris", imagen: "productos/1004/6.jpeg" }
+    ],
+    guiaTallas: "productos/1004/guia.jpeg"
+},
+{
+    id: 1005,
+    codigo: "1005",
+    nombre: "pants supreme satin appliqué 1005",
+    marca: "supreme",
+    categoria: ["pants"],
+    precioMenudeo: 1550,
+    precioMayoreo: 1450,
+    precioDistribuidor: 1180,
+    tallas: ["s","m","l","xl"],
+    colores: ["azul","camuflaje verde","camuflaje gris"],
+    descripcion: "pants de chándal supreme satin appliqué sweatpant, de algodón grueso con forro polar interior, con letras de satén blanco bordadas verticalmente en el lateral de la pierna izquierda, cintura elástica con cordón ajustable y puños elásticos en los tobillos.",
+    imagen: [
+        'productos/1005/1.jpeg',
+        'productos/1005/2.jpeg',
+        'productos/1005/3.jpeg'
+    ],
+    variantes: [
+        { nombre: "azul", imagen: "productos/1005/1.jpeg" },
+        { nombre: "camuflaje gris", imagen: "productos/1005/3.jpeg" }
+    ],
+    guiaTallas: "productos/1005/guia.jpeg"
+},
+{
     id: 2000,
     codigo: "2000",
     nombre: "mochila nike elite",
