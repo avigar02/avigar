@@ -22,5 +22,5 @@
         { nombre: "naranja", imagen: "productos/0035/3.jpeg" },
         { nombre: "verde", imagen: "productos/0035/4.jpeg" }
     ],
-    guiaTallas: "productos/0011/guia.jpeg"
+    guiaTallas: "productos/0035/guia.jpeg"
 },
