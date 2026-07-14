@@ -1,0 +1,32 @@
+{
+    id: 32,
+    codigo: "0032",
+    nombre: "chaqueta de mezclilla chrome hearts ",
+    marca: "chrome-hearts",
+    link: "https://www.kakobuy.com/item/details?url=https%3A%2F%2Fdetail.1688.com%2Foffer%2F1042331290423.html%3Fsource_type%3Dimage",
+    categoria: ["chaquetas"],
+    precioMenudeo: 1210,
+    precioMayoreo: 1110,
+    precioDistribuidor: 920,
+    tallas: ["s","m","l","xl"],
+    colores: ["negro","blanco","azul","gris/azul","beige"],
+    descripcion: "chamarra de mezclilla chrome hearts, de materiales de algodon con insignias de metal en la parte del pecho, el cuello y en la parte de atras con detalles de desgaste.",
+    imagen: [
+        'productos/0032/1.jpeg',
+        'productos/0032/2.jpeg',
+        'productos/0032/3.jpeg',
+        'productos/0032/4.jpeg',
+        'productos/0032/5.jpeg',
+        'productos/0032/6.jpeg',
+        'productos/0032/7.jpeg',
+        'productos/0032/8.jpeg',
+        'productos/0032/9.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0032/1.jpeg" },
+        { nombre: "blanco", imagen: "productos/0032/5.jpeg" },
+        { nombre: "azul", imagen: "productos/0032/7.jpeg" },
+        { nombre: "gris/azul", imagen: "productos/0032/8.jpeg" },
+        { nombre: "beige", imagen: "productos/0032/9.jpeg" }
+    ],
+},
