@@ -43,7 +43,10 @@
                 <label class="block text-xs text-zinc-400 mb-1">Categorías (Ej: chamarras, mezclilla)</label>
                 <input type="text" id="categoria" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl outline-none lowercase">
             </div>
-            
+            <div>
+    <label class="block text-xs text-zinc-400 mb-1">Link del producto (Proveedor)</label>
+    <input type="text" id="link" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded-xl outline-none">
+</div>
             <!-- CALCULADORA ORIGINAL RESTAURADA -->
             <div class="md:col-span-2 bg-emerald-900/20 border border-emerald-500/30 rounded-xl p-4 my-2">
                 <h3 class="text-emerald-400 font-bold mb-3 text-sm">🧮 Calculadora de Costo Real y Precios</h3>
@@ -344,6 +347,7 @@
     codigo: "${codigoString}",
     nombre: "${document.getElementById('nombre').value.toLowerCase()}",
     marca: "${marca}",
+    link: "${document.getElementById('link').value}",
     categoria: ${formatoArray(document.getElementById('categoria').value)},
     precioMenudeo: ${document.getElementById('pMenudeo').value || 0},
     precioMayoreo: ${document.getElementById('pMayoreo').value || 0},
