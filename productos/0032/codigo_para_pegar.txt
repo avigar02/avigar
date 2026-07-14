@@ -1,7 +1,7 @@
 {
     id: 32,
     codigo: "0032",
-    nombre: "chaqueta de mezclilla chrome hearts ",
+    nombre: "chaqueta de mezclilla chrome hearts 0032",
     marca: "chrome-hearts",
     link: "https://www.kakobuy.com/item/details?url=https%3A%2F%2Fdetail.1688.com%2Foffer%2F1042331290423.html%3Fsource_type%3Dimage",
     categoria: ["chaquetas"],
