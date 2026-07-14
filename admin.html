@@ -358,7 +358,7 @@
     imagen: [\n        ${rutas.join(',\n        ')}\n    ],${variantesPathText}${guiaPathText}
 },`;
 
-            zip.file(`${codigoString}/codigo_para_pegar.txt`, codigoJS);
+          zip.file(`${codigoString}/codigo_para_pegar.txt`, codigoJS);
             const blob = await zip.generateAsync({type:"blob"});
             saveAs(blob, `producto_${codigoString}.zip`);
             alert("¡Listo! Paquete generado.");
