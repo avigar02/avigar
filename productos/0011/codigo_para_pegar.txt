@@ -1,0 +1,29 @@
+{
+    id: 11,
+    codigo: "0011",
+    nombre: "sueter chrome hearts de punto ",
+    marca: "chrome-hearts",
+    link: "https://www.kakobuy.com/item/details?url=https%3A%2F%2Fdetail.1688.com%2Foffer%2F987698227996.html%3Fsource_type%3Dimage",
+    categoria: ["sueters"],
+    precioMenudeo: 1070,
+    precioMayoreo: 970,
+    precioDistribuidor: 810,
+    tallas: ["s","m","l","xl"],
+    colores: ["negro","gris","beige"],
+    descripcion: "sueter de punto chrome hearts, de materiales de algodon con insignias de metal en la parte del pecho, el cuello y en la parte de atras con detalles de desgaste en la parte de enfrente y en los bordes",
+    imagen: [
+        'productos/0011/1.jpeg',
+        'productos/0011/2.jpeg',
+        'productos/0011/3.jpeg',
+        'productos/0011/4.jpeg',
+        'productos/0011/5.jpeg',
+        'productos/0011/6.jpeg',
+        'productos/0011/7.jpeg',
+        'productos/0011/8.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0011/1.jpeg" },
+        { nombre: "gris", imagen: "productos/0011/5.jpeg" },
+        { nombre: "beige", imagen: "productos/0011/7.jpeg" }
+    ],
+},

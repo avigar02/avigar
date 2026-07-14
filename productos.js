@@ -210,6 +210,35 @@ const productos = [
         
             },
 {
+    id: 11,
+    codigo: "0011",
+    nombre: "sueter chrome hearts de punto ",
+    marca: "chrome-hearts",
+    link: "https://www.kakobuy.com/item/details?url=https%3A%2F%2Fdetail.1688.com%2Foffer%2F987698227996.html%3Fsource_type%3Dimage",
+    categoria: ["sueters"],
+    precioMenudeo: 1070,
+    precioMayoreo: 970,
+    precioDistribuidor: 810,
+    tallas: ["s","m","l","xl"],
+    colores: ["negro","gris","beige"],
+    descripcion: "sueter de punto chrome hearts, de materiales de algodon con insignias de metal en la parte del pecho, el cuello y en la parte de atras con detalles de desgaste en la parte de enfrente y en los bordes",
+    imagen: [
+        'productos/0011/1.jpeg',
+        'productos/0011/2.jpeg',
+        'productos/0011/3.jpeg',
+        'productos/0011/4.jpeg',
+        'productos/0011/5.jpeg',
+        'productos/0011/6.jpeg',
+        'productos/0011/7.jpeg',
+        'productos/0011/8.jpeg'
+    ],
+    variantes: [
+        { nombre: "negro", imagen: "productos/0011/1.jpeg" },
+        { nombre: "gris", imagen: "productos/0011/5.jpeg" },
+        { nombre: "beige", imagen: "productos/0011/7.jpeg" }
+    ],
+},
+{
     id: 12,
     codigo: "0012",
     nombre: "supreme backpack ss20 0012",
@@ -887,5 +916,39 @@ const productos = [
         { nombre: "18", imagen: "productos/2000/18.jpeg" },
         { nombre: "19", imagen: "productos/2000/19.jpeg" }
     ],
+},
+{
+    id: 2003,
+    codigo: "2003",
+    nombre: "sudadera bape shark",
+    marca: "bape",
+    categoria: ["sudadera"],
+    precioMenudeo: 1250,
+    precioMayoreo: 1150,
+    precioDistribuidor: 950,
+    tallas: ["m","l","xl","2xl","3xl"],
+    colores: ["azul","verde con cafe claro","morado con rosa","negro con gris","negro con blanco","rojo","rosa","verde fuerte"],
+    descripcion: "sudadera bape shark confeccionada en algodón de alta calidad con tejido grueso y resistente, corte regular, capucha completa con cierre, bolsillo tipo canguro y puños y cintura acanalados para un mejor ajuste. su diseño icónico ofrece comodidad, durabilidad y un estilo urbano premium, ideal para el uso diario.",
+    imagen: [
+        'productos/2003/1.jpeg',
+        'productos/2003/2.jpeg',
+        'productos/2003/3.jpeg',
+        'productos/2003/4.jpeg',
+        'productos/2003/5.jpeg',
+        'productos/2003/6.jpeg',
+        'productos/2003/7.jpeg',
+        'productos/2003/8.jpeg'
+    ],
+    variantes: [
+        { nombre: "azul", imagen: "productos/2003/1.jpeg" },
+        { nombre: "verde con cafe claro", imagen: "productos/2003/2.jpeg" },
+        { nombre: "morado con rosa", imagen: "productos/2003/3.jpeg" },
+        { nombre: "negro con gris", imagen: "productos/2003/4.jpeg" },
+        { nombre: "negro con blanco", imagen: "productos/2003/5.jpeg" },
+        { nombre: "rojo", imagen: "productos/2003/6.jpeg" },
+        { nombre: "rosa", imagen: "productos/2003/7.jpeg" },
+        { nombre: "verde fuerte", imagen: "productos/2003/8.jpeg" }
+    ],
+    guiaTallas: "productos/2003/guia.jpeg"
 },
 ];
