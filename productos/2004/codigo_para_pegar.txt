@@ -10,7 +10,7 @@
     precioDistribuidor: 610,
     tallas: ["32 litros"],
     colores: ["1","2","3","4","5","6","7","8","9","10","11","12","13","14"],
-    descripcion: "",
+    descripcion: "la mochila nike elite cuenta con una capacidad aproximada de 32 l, compartimento acolchado para laptop de hasta 15.6 pulgadas, amplio espacio para libros, ropa o equipo deportivo, bolsillos laterales para botella, compartimentos con cierre para una mejor organización, material resistente y correas acolchadas y ajustables que brindan mayor comodidad durante el uso diario.",
     imagen: [
         'productos/2004/1.jpeg',
         'productos/2004/2.jpeg',
