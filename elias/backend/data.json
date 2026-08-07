@@ -1,0 +1,38 @@
+{
+  "tickets": [
+    {
+      "id": "TCK-45057128",
+      "userEmail": "cliente@test.com",
+      "userName": "Cliente Prueba",
+      "message": "Mi pedido nunca lleg�",
+      "date": "2026-08-07T23:24:17.128Z",
+      "resolved": true
+    },
+    {
+      "id": "TCK-45152577",
+      "userEmail": "admin@avigars.com",
+      "userName": "Admin",
+      "message": "No me llega mi pedido, ya pasaron 2 semanas.",
+      "date": "2026-08-07T23:25:52.577Z",
+      "resolved": true
+    },
+    {
+      "id": "TCK-45493088",
+      "userEmail": "invitado",
+      "userName": "Invitado (sin sesión)",
+      "message": "Hola, necesito hablar con alguien sobre mi pedido, por favor contáctenme.",
+      "date": "2026-08-07T23:31:33.088Z",
+      "resolved": false
+    }
+  ],
+  "subscriptions": [
+    {
+      "endpoint": "https://wns2-bn3p.notify.windows.com/w/?token=BQYAAADb8xeX5Z%2bCY0Gl2%2bnYJ3BQbJz4TxnetVsbOAXfwputibQeCZ7NrZc6pGS2MB%2fodf6gq%2bDbF45rGXjDXJyaEoCFoGPM8%2fxg9Wj2ke6FFz6rFA2nyEx7lT1QNHA9RM%2bnSJAWLmhqZfoh6zloklyiMIqCBQq5SDBwr81SVDodkWzk4rjy4ttLM0IIIU1pDe0SK6ycvZQCKsDYNFtes92X84KauNxV3qcV7vmhoHE6dFYxScJidtagpS%2fdcJzmrqV0mtUHVLfv3L4vohy4rRVRsXIntig5B91aqJIg64z%2ba09J0TuA8rD57eTeD6h7ubo%2bZlDVVeh0evh6fEOoXw2gz2s3",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BLpeqrVCZSBlqs6DcXIPjwIidYfHOI7TWkz41qMHOyThS49mY_R9eokw7ypLnSBNmJLtimJOAW8FQoTW1VV9fgM",
+        "auth": "9xH2PhkzVdlKPUApCxbbNQ"
+      }
+    }
+  ]
+}

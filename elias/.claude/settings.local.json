@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npm start *)",
+      "Read(//c/Users/avile/AppData/Local/Temp/claude/**)",
+      "Bash(curl -s http://localhost:3001/)",
+      "Bash(curl -s \"http://localhost:3001/scrape?url=https://example.com\")",
+      "PowerShell(Invoke-WebRequest http://localhost:3001/ -UseBasicParsing)",
+      "Bash(pkill -f \"node server.js\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3001/avigars.html)",
+      "Bash(curl -s http://localhost:3001/ -I)",
+      "Bash(curl -s -o /dev/null -w \"avigars.html status: %{http_code}\\\\n\" http://localhost:3001/avigars.html)",
+      "Bash(curl -s -o /dev/null -w \"raiz redirige a: %{redirect_url} \\(status %{http_code}\\)\\\\n\" http://localhost:3001/)",
+      "Bash(netstat -ano)",
+      "PowerShell(Stop-Process -Id 10264 -Force -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-NetTCPConnection -LocalPort 3001 -ErrorAction SilentlyContinue)",
+      "Bash(nohup npm start)",
+      "Bash(curl -s -o /dev/null -w \"raiz redirige status: %{http_code}\\\\n\" http://localhost:3001/)",
+      "Skill(claude-api)",
+      "Skill(claude-api:*)",
+      "Bash(npx web-push *)",
+      "Bash(curl -s http://localhost:3001/api/vapid-public-key)",
+      "Bash(curl -s -X POST http://localhost:3001/api/tickets -H \"Content-Type: application/json\" -d '{\"message\":\"Mi pedido nunca llegó\",\"userEmail\":\"cliente@test.com\",\"userName\":\"Cliente Prueba\"}')",
+      "Bash(curl -s http://localhost:3001/api/tickets)"
+    ]
+  }
+}

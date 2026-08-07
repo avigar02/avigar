@@ -1,0 +1,1979 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AVIGARS</title>
+<!--
+  ===================== NOTAS PARA TI (léelas antes de publicar) =====================
+  1) PAYPAL: busca la línea que dice  TU_CLIENT_ID_DE_PAYPAL  (hay 1 sola, en el <script src="https://www.paypal.com/sdk/js...">)
+     y sustitúyela por tu Client ID real (gratis en https://developer.paypal.com -> Apps & Credentials).
+     Mientras no lo cambies, el botón de PayPal no funcionará (mostrará error de PayPal, es normal).
+
+  2) LOGIN / CUENTAS: esto es una demo funcional en el navegador (localStorage). NO hay servidor,
+     así que las contraseñas NO están cifradas ni son seguras para un negocio real. Sirve para probar
+     el flujo (registro, login, carrito, pedidos por usuario). Si esto va a ser una tienda real con dinero
+     real, en algún momento vas a necesitar un backend (Node/PHP + base de datos) para manejar usuarios
+     y pagos de forma segura. Puedo ayudarte con eso cuando quieras dar ese paso.
+
+  3) SEGUIMIENTO DE PEDIDO: en vez de enviar correos automáticos (eso sí requiere servidor), agregué
+     un apartado "Mis Pedidos" dentro de la misma página donde se ve el estado del envío y se pueden
+     subir/ver fotos de QC. Tú (como admin) actualizas el estado y subes las fotos desde el panel de Admin.
+
+  4) PRECIOS: al agregar un producto pones el costo (en USD) y el peso en gramos. La página calcula un
+     "costo final" automático (envío por kg + inspección QC + comisión, redondeado) y sobre ese costo
+     aplica 3 niveles de precio: Menudeo, Mayoreo y Distribuidor. El nivel que se le cobra al cliente
+     depende del MONTO TOTAL de su carrito (a precio menudeo), no de la cantidad de piezas. Puedes
+     cambiar los multiplicadores y los montos mínimos en "Admin -> Configuración de precios".
+  ======================================================================================
+-->
+<style>
+  :root{
+    --bg:#0a0a0a;
+    --bg2:#141414;
+    --bg3:#1c1c1c;
+    --line:#2a2a2a;
+    --text:#f2f2f2;
+    --muted:#9a9a9a;
+    --accent:#c9a227;
+    --danger:#e05252;
+    --ok:#4caf7d;
+    --tier3:#7c83f0;
+    --radius:2px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI',Arial,sans-serif;
+    letter-spacing:.02em;
+    min-height:100vh;
+  }
+  a{color:inherit;text-decoration:none;}
+  button{
+    font-family:inherit;
+    cursor:pointer;
+  }
+  input,select,textarea{
+    font-family:inherit;
+    background:var(--bg2);
+    border:1px solid var(--line);
+    color:var(--text);
+    padding:10px 12px;
+    border-radius:var(--radius);
+    outline:none;
+  }
+  input:focus,select:focus,textarea:focus{border-color:var(--accent);}
+  ::placeholder{color:#6b6b6b;}
+
+  .btn{
+    display:inline-block;
+    padding:12px 22px;
+    border:1px solid var(--text);
+    background:transparent;
+    color:var(--text);
+    text-transform:uppercase;
+    font-size:12px;
+    letter-spacing:.15em;
+    transition:.2s;
+  }
+  .btn:hover{background:var(--text);color:#000;}
+  .btn-accent{border-color:var(--accent);color:var(--accent);}
+  .btn-accent:hover{background:var(--accent);color:#000;}
+  .btn-block{width:100%;text-align:center;}
+  .btn-sm{padding:7px 14px;font-size:11px;}
+  .btn-danger{border-color:var(--danger);color:var(--danger);}
+  .btn-danger:hover{background:var(--danger);color:#fff;}
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(10,10,10,.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar{
+    display:flex;align-items:center;gap:18px;
+    max-width:1300px;margin:0 auto;padding:14px 20px;
+  }
+  .logo{
+    font-size:22px;font-weight:800;letter-spacing:.25em;
+    color:var(--text);
+  }
+  .logo span{color:var(--text);}
+  .navlinks{display:flex;gap:22px;font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);}
+  .navlinks a:hover{color:var(--text);}
+  .search-box{
+    flex:1;max-width:340px;display:flex;
+  }
+  .search-box input{flex:1;border-right:none;}
+  .search-box button{border:1px solid var(--line);background:var(--bg2);color:var(--muted);padding:0 12px;}
+  .topbar-actions{display:flex;align-items:center;gap:14px;margin-left:auto;}
+  .icon-btn{
+    background:none;border:none;color:var(--text);font-size:18px;position:relative;
+  }
+  .badge{
+    position:absolute;top:-8px;right:-10px;background:var(--accent);color:#000;
+    font-size:10px;font-weight:700;border-radius:50%;width:16px;height:16px;
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    text-align:center;padding:90px 20px 70px;
+    border-bottom:1px solid var(--line);
+  }
+  .hero .pre{
+    color:var(--muted);text-transform:uppercase;letter-spacing:.3em;font-size:13px;margin-bottom:14px;
+  }
+  .hero h1{
+    font-size:clamp(48px,10vw,120px);
+    margin:0;font-weight:900;letter-spacing:.08em;
+    line-height:1;
+  }
+  .hero h1 span{color:var(--text);}
+  .hero p{color:var(--muted);max-width:520px;margin:22px auto 30px;font-size:14px;line-height:1.6;}
+
+  /* ---------- Sections ---------- */
+  section{max-width:1300px;margin:0 auto;padding:60px 20px;}
+  .section-title{
+    display:flex;align-items:baseline;justify-content:space-between;margin-bottom:26px;
+    border-bottom:1px solid var(--line);padding-bottom:14px;
+  }
+  .section-title h2{
+    font-size:20px;letter-spacing:.15em;text-transform:uppercase;margin:0;
+  }
+  .section-title small{color:var(--muted);font-size:12px;}
+
+  /* ---------- Filters ---------- */
+  .filters{
+    display:flex;flex-wrap:wrap;gap:8px;margin-bottom:30px;
+  }
+  .chip{
+    padding:8px 16px;border:1px solid var(--line);background:var(--bg2);
+    color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.1em;
+    border-radius:20px;
+  }
+  .chip.active{background:var(--accent);color:#000;border-color:var(--accent);}
+  .filters-label{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.14em;width:100%;margin-bottom:-2px;}
+  .card-brand{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.1em;}
+
+  .tier-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;text-transform:uppercase;letter-spacing:.1em;border:1px solid var(--accent);color:var(--accent);}
+  .tier-box{background:var(--bg3);border:1px solid var(--line);padding:12px;margin-bottom:14px;font-size:12px;color:var(--muted);}
+  .tier-box b{color:var(--text);}
+
+  /* ---------- Caja de niveles de precio (hero / sección mayoreo) ---------- */
+  .tiers-panel{
+    display:flex;border:1px solid var(--line);background:rgba(20,20,20,.6);
+    border-radius:4px;max-width:640px;margin:0 auto;
+  }
+  .tiers-panel .tier-col{
+    flex:1;text-align:center;padding:22px 14px;position:relative;
+  }
+  .tiers-panel .tier-col + .tier-col{border-left:1px solid var(--line);}
+  .tiers-panel .tier-n{font-size:11px;text-transform:uppercase;letter-spacing:.15em;margin-bottom:8px;}
+  .tiers-panel .tier-n.n1{color:var(--muted);}
+  .tiers-panel .tier-n.n2{color:var(--ok);}
+  .tiers-panel .tier-n.n3{color:var(--tier3);}
+  .tiers-panel .tier-name{font-size:20px;font-weight:800;margin-bottom:6px;}
+  .tiers-panel .tier-name.n1{color:var(--text);}
+  .tiers-panel .tier-name.n2{color:var(--ok);}
+  .tiers-panel .tier-name.n3{color:var(--tier3);}
+  .tiers-panel .tier-sub{color:var(--muted);font-size:12px;}
+  @media(max-width:600px){
+    .tiers-panel{flex-direction:column;max-width:320px;}
+    .tiers-panel .tier-col + .tier-col{border-left:none;border-top:1px solid var(--line);}
+  }
+
+  /* ---------- Product grid ---------- */
+  .grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px;
+  }
+  .card{
+    background:var(--bg2);border:1px solid var(--line);
+    display:flex;flex-direction:column;transition:.2s;
+  }
+  .card:hover{border-color:var(--accent);}
+  .card img{width:100%;aspect-ratio:1/1;object-fit:cover;background:#000;}
+  .card-body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1;}
+  .card-cat{color:var(--accent);font-size:10px;text-transform:uppercase;letter-spacing:.14em;}
+  .card-name{font-size:14px;font-weight:600;}
+  .card-prices{margin-top:auto;padding-top:8px;font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:2px;}
+  .card-prices b{color:var(--text);font-size:15px;}
+  .card-actions{display:flex;gap:8px;margin-top:10px;}
+  .qty-input{width:50px;text-align:center;padding:8px 4px;}
+  .empty-msg{color:var(--muted);font-size:13px;padding:30px 0;text-align:center;}
+
+  .color-swatches{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+  .swatch{
+    width:26px;height:26px;border-radius:50%;background-size:cover;background-position:center;
+    border:2px solid var(--line);padding:0;background-color:#000;
+  }
+  .swatch.active{border-color:var(--accent);}
+  .swatch-label{font-size:10px;color:var(--muted);margin-top:4px;}
+
+  .fetched-thumb{width:56px;height:56px;object-fit:cover;border:1px solid var(--line);cursor:pointer;}
+  .fetched-thumbs{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;}
+  .fetched-thumb-box{display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .fetched-thumb-box button{font-size:9px;padding:2px 4px;}
+  .color-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+  .color-row input{flex:1;}
+
+  /* ---------- Drawer (cart / auth / account) ---------- */
+  .overlay{
+    position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:90;
+    display:none;
+  }
+  .overlay.show{display:block;}
+  .drawer{
+    position:fixed;top:0;right:0;width:400px;max-width:92vw;height:100%;
+    background:var(--bg2);border-left:1px solid var(--line);z-index:100;
+    transform:translateX(100%);
+    transition:transform .25s ease;display:flex;flex-direction:column;
+  }
+  .drawer.open{transform:translateX(0);}
+  .drawer-head{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:18px 20px;border-bottom:1px solid var(--line);
+  }
+  .drawer-head h3{margin:0;font-size:15px;text-transform:uppercase;letter-spacing:.12em;}
+  .drawer-close{background:none;border:none;color:var(--muted);font-size:20px;}
+  .drawer-body{flex:1;overflow-y:auto;padding:18px 20px;}
+  .drawer-foot{padding:18px 20px;border-top:1px solid var(--line);}
+
+  .cart-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);}
+  .cart-item img{width:64px;height:64px;object-fit:cover;background:#000;}
+  .cart-item-info{flex:1;font-size:13px;}
+  .cart-item-info .name{font-weight:600;margin-bottom:4px;}
+  .cart-item-info .meta{color:var(--muted);font-size:11px;}
+  .cart-row-actions{display:flex;align-items:center;gap:8px;margin-top:6px;}
+  .cart-total-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;color:var(--muted);}
+  .cart-total-row.grand{color:var(--text);font-size:16px;font-weight:700;padding-top:10px;border-top:1px solid var(--line);margin-top:8px;}
+
+  .form-group{margin-bottom:14px;display:flex;flex-direction:column;gap:6px;}
+  .form-group label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);}
+  .form-row{display:flex;gap:10px;}
+  .form-row .form-group{flex:1;}
+  .tab-switch{display:flex;border:1px solid var(--line);margin-bottom:20px;}
+  .tab-switch button{flex:1;background:none;border:none;color:var(--muted);padding:10px;font-size:12px;text-transform:uppercase;letter-spacing:.1em;}
+  .tab-switch button.active{background:var(--accent);color:#000;}
+  .msg{font-size:12px;padding:8px 10px;border-radius:2px;margin-bottom:12px;display:none;}
+  .msg.show{display:block;}
+  .msg.ok{background:rgba(76,175,125,.15);color:var(--ok);border:1px solid var(--ok);}
+  .msg.err{background:rgba(224,82,82,.15);color:var(--danger);border:1px solid var(--danger);}
+
+  /* ---------- Orders / tracking ---------- */
+  .order-card{border:1px solid var(--line);background:var(--bg2);padding:18px;margin-bottom:16px;}
+  .order-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .order-head .oid{font-size:13px;font-weight:700;}
+  .order-head .odate{color:var(--muted);font-size:11px;}
+  .status-badge{padding:4px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.1em;border-radius:20px;border:1px solid var(--accent);color:var(--accent);}
+
+  .track{display:flex;justify-content:space-between;position:relative;margin:26px 0 18px;}
+  .track:before{
+    content:"";position:absolute;top:9px;left:0;right:0;height:2px;background:var(--line);z-index:0;
+  }
+  .track-step{flex:1;text-align:center;position:relative;z-index:1;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+  .track-dot{
+    width:18px;height:18px;border-radius:50%;background:var(--bg2);border:2px solid var(--line);
+    margin:0 auto 8px;
+  }
+  .track-step.done .track-dot{background:var(--accent);border-color:var(--accent);}
+  .track-step.done{color:var(--text);}
+
+  .qc-gallery{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+  .qc-gallery img{width:80px;height:80px;object-fit:cover;border:1px solid var(--line);}
+  .qc-empty{color:var(--muted);font-size:11px;font-style:italic;}
+
+  /* ---------- Reseñas ---------- */
+  .review-form{margin-top:16px;padding-top:16px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:10px;}
+  .review-form textarea{min-height:60px;resize:vertical;}
+  .review-form label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);}
+  .stars{font-size:24px;}
+  .stars .star{cursor:pointer;color:var(--line);}
+  .stars .star.active{color:var(--accent);}
+  .review-done{margin-top:16px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;}
+  .review-card{border:1px solid var(--line);background:var(--bg2);padding:18px;margin-bottom:14px;}
+  .review-stars-display{color:var(--accent);font-size:15px;letter-spacing:2px;}
+  .review-meta{color:var(--muted);font-size:11px;margin:6px 0 10px;}
+  .improve-card{border:1px solid var(--danger);background:var(--bg2);padding:14px;margin-bottom:12px;font-size:12px;}
+  .improve-card .review-meta{margin:6px 0 0;}
+
+  /* ---------- Chat de ayuda ---------- */
+  .chat-messages{display:flex;flex-direction:column;gap:12px;}
+  .chat-row{display:flex;}
+  .chat-row.bot{justify-content:flex-start;}
+  .chat-row.user{justify-content:flex-end;}
+  .chat-bubble{max-width:85%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.5;}
+  .chat-row.bot .chat-bubble{background:var(--bg3);border:1px solid var(--line);border-bottom-left-radius:2px;}
+  .chat-row.user .chat-bubble{background:var(--accent);color:#000;border-bottom-right-radius:2px;}
+  .chat-options{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
+  .chat-options .btn{text-align:left;}
+  .chat-ticket-form{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
+  .chat-ticket-form textarea{min-height:70px;resize:vertical;}
+
+  /* ---------- FAQ ---------- */
+  .faq-item{border-bottom:1px solid var(--line);}
+  .faq-q{
+    width:100%;text-align:left;background:none;border:none;color:var(--text);
+    padding:18px 4px;font-size:14px;display:flex;justify-content:space-between;align-items:center;
+  }
+  .faq-q .plus{color:var(--accent);font-size:18px;}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .25s ease;color:var(--muted);font-size:13px;line-height:1.6;}
+  .faq-a p{margin:0 4px 18px;}
+  .faq-item.open .faq-a{max-height:220px;}
+  .faq-item.open .plus{transform:rotate(45deg);}
+
+  /* ---------- Admin ---------- */
+  .admin-toggle{position:fixed;bottom:16px;left:16px;z-index:40;}
+  .help-toggle{position:fixed;bottom:16px;right:16px;z-index:40;}
+  .admin-panel-section{background:var(--bg2);border:1px solid var(--accent);}
+  .price-preview{background:var(--bg3);border:1px solid var(--line);padding:12px;font-size:13px;margin-top:10px;}
+  .price-preview b{color:var(--accent);}
+
+  footer{border-top:1px solid var(--line);padding:30px 20px;text-align:center;color:var(--muted);font-size:11px;letter-spacing:.08em;}
+
+  @media(max-width:820px){
+    .navlinks{display:none;}
+    .search-box{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== HEADER ===================== -->
+<header>
+  <div class="topbar">
+    <div class="logo">AVI<span>GARS</span></div>
+    <nav class="navlinks">
+      <a href="#catalogo">Catálogo</a>
+      <a href="#pedidos">Mis Pedidos</a>
+      <a href="#resenas">Reseñas</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Buscar producto por nombre...">
+      <button onclick="renderProducts()">🔍</button>
+    </div>
+    <div class="topbar-actions">
+      <button class="icon-btn" id="accountBtn" title="Mi cuenta">👤</button>
+      <button class="icon-btn" id="cartBtn" title="Carrito">
+        🛒<span class="badge" id="cartBadge">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<div class="hero">
+  <div class="pre">Bienvenido a</div>
+  <h1>AVI<span>GARS</span></h1>
+  <p>Catálogo de importación · Bajo pedido. Ropa, tenis y accesorios con seguimiento completo de tu pedido desde la compra hasta que llega a tu puerta.</p>
+  <div class="tiers-panel" id="heroTiers"></div>
+</div>
+
+<!-- ===================== CATALOGO ===================== -->
+<section id="catalogo">
+  <div class="section-title">
+    <h2>Catálogo</h2>
+    <small id="resultCount"></small>
+  </div>
+  <div class="filters" id="filterChips"></div>
+  <div class="filters" id="brandChips"></div>
+  <div class="grid" id="productGrid"></div>
+</section>
+
+<!-- ===================== MIS PEDIDOS / SEGUIMIENTO ===================== -->
+<section id="pedidos">
+  <div class="section-title"><h2>Mis Pedidos y Seguimiento</h2></div>
+  <div id="ordersContainer"></div>
+</section>
+
+<!-- ===================== RESEÑAS ===================== -->
+<section id="resenas">
+  <div class="section-title"><h2>Reseñas</h2></div>
+  <div id="reviewsContainer"></div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section id="faq">
+  <div class="section-title"><h2>Preguntas Frecuentes</h2></div>
+  <div id="faqList"></div>
+</section>
+
+<footer>
+  © <span id="year"></span> AVIGARS — Todos los derechos reservados.
+</footer>
+
+<!-- ===================== ADMIN TOGGLE (visible solo si el usuario logueado es admin) ===================== -->
+<button class="btn btn-sm admin-toggle" id="adminToggleBtn" style="display:none;" onclick="renderAdminOrders(); renderAdminImprovements(); renderAdminTickets(); loadConfigForm(); openDrawer('adminDrawer')">⚙ Admin</button>
+
+<!-- ===================== BOTÓN DE AYUDA ===================== -->
+<button class="btn btn-sm btn-accent help-toggle" id="helpToggleBtn" onclick="openHelpChat()">💬 Ayuda</button>
+
+<!-- ===================== OVERLAY ===================== -->
+<div class="overlay" id="overlay"></div>
+
+<!-- ===================== CART DRAWER ===================== -->
+<div class="drawer" id="cartDrawer">
+  <div class="drawer-head">
+    <h3>Carrito</h3>
+    <button class="drawer-close" onclick="closeDrawers()">✕</button>
+  </div>
+  <div class="drawer-body">
+    <div class="tier-box" id="tierBox"></div>
+    <div id="cartItems"></div>
+  </div>
+  <div class="drawer-foot">
+    <div class="cart-total-row"><span>Subtotal</span><span id="cartSubtotal">$0.00</span></div>
+    <div class="cart-total-row grand"><span>Total</span><span id="cartTotal">$0.00</span></div>
+    <div style="margin-top:14px;">
+      <button class="btn btn-accent btn-block" onclick="goToCheckout()">Pagar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== AUTH DRAWER ===================== -->
+<div class="drawer" id="authDrawer">
+  <div class="drawer-head">
+    <h3 id="authTitle">Mi Cuenta</h3>
+    <button class="drawer-close" onclick="closeDrawers()">✕</button>
+  </div>
+  <div class="drawer-body">
+    <div id="loggedOutView">
+      <div class="tab-switch">
+        <button class="active" id="tabLogin" onclick="switchAuthTab('login')">Iniciar sesión</button>
+        <button id="tabRegister" onclick="switchAuthTab('register')">Registrarme</button>
+      </div>
+      <div class="msg" id="authMsg"></div>
+
+      <form id="loginForm" onsubmit="return handleLogin(event)">
+        <div class="form-group"><label>Correo</label><input type="email" id="loginEmail" required></div>
+        <div class="form-group"><label>Contraseña</label><input type="password" id="loginPass" required></div>
+        <button class="btn btn-accent btn-block" type="submit">Entrar</button>
+      </form>
+
+      <form id="registerForm" style="display:none;" onsubmit="return handleRegister(event)">
+        <div class="form-group"><label>Nombre</label><input type="text" id="regName" required></div>
+        <div class="form-group"><label>Correo</label><input type="email" id="regEmail" required></div>
+        <div class="form-group"><label>Contraseña</label><input type="password" id="regPass" required minlength="4"></div>
+        <button class="btn btn-accent btn-block" type="submit">Crear cuenta</button>
+      </form>
+    </div>
+
+    <div id="loggedInView" style="display:none;">
+      <p style="color:var(--muted);font-size:13px;">Sesión iniciada como</p>
+      <p style="font-weight:700;margin-bottom:20px;" id="loggedUserName"></p>
+      <button class="btn btn-block" onclick="scrollToOrders()">Ver mis pedidos</button>
+      <button class="btn btn-danger btn-block" style="margin-top:10px;" onclick="handleLogout()">Cerrar sesión</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CHECKOUT DRAWER ===================== -->
+<div class="drawer" id="checkoutDrawer">
+  <div class="drawer-head">
+    <h3>Finalizar Compra</h3>
+    <button class="drawer-close" onclick="closeDrawers()">✕</button>
+  </div>
+  <div class="drawer-body">
+    <div class="msg" id="checkoutMsg"></div>
+    <div class="form-group"><label>Nombre completo</label><input type="text" id="coName"></div>
+    <div class="form-group"><label>Dirección de envío</label><input type="text" id="coAddress"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Ciudad</label><input type="text" id="coCity"></div>
+      <div class="form-group"><label>Código Postal</label><input type="text" id="coZip"></div>
+    </div>
+    <div class="form-group"><label>Teléfono</label><input type="text" id="coPhone"></div>
+
+    <div class="form-group">
+      <label>Total a pagar</label>
+      <div style="font-size:24px;font-weight:800;color:var(--accent);" id="coTotal">$0.00</div>
+    </div>
+
+    <div class="form-group">
+      <label>Método de pago</label>
+      <div class="tab-switch">
+        <button class="active" id="payTabPaypal" onclick="switchPayTab('paypal')">PayPal</button>
+        <button id="payTabOther" onclick="switchPayTab('other')">Otro método</button>
+      </div>
+    </div>
+
+    <div id="paypalPay">
+      <div id="paypal-button-container"></div>
+      <p style="color:var(--muted);font-size:11px;margin-top:8px;">Se procesa de forma segura con PayPal.</p>
+    </div>
+
+    <div id="otherPay" style="display:none;">
+      <p style="color:var(--muted);font-size:12px;line-height:1.6;">
+        Transferencia / depósito / OXXO: contáctanos por WhatsApp o Instagram con tu número de pedido
+        para recibir los datos de pago. Al confirmar el pago, tu pedido pasará a "En proceso".
+      </p>
+      <button class="btn btn-accent btn-block" style="margin-top:14px;" onclick="placeOrder('manual')">Confirmar pedido (pago manual)</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ADMIN DRAWER ===================== -->
+<div class="drawer" id="adminDrawer" style="width:460px;">
+  <div class="drawer-head">
+    <h3>Panel Admin</h3>
+    <button class="drawer-close" onclick="closeDrawers()">✕</button>
+  </div>
+  <div class="drawer-body">
+
+    <div class="section-title" style="margin-bottom:14px;"><h2 style="font-size:14px;">Agregar producto (link KakoBuy)</h2></div>
+    <div class="form-group">
+      <label>Link de KakoBuy</label>
+      <input type="text" id="pKako" placeholder="https://kakobuy.com/...">
+      <button class="btn btn-sm btn-accent" style="margin-top:6px;" id="autoFillBtn" onclick="autoFillFromKako()">Auto-rellenar desde link</button>
+      <div class="msg" id="autoFillMsg"></div>
+    </div>
+    <div id="fetchedImagesBox"></div>
+
+    <div class="form-group"><label>Nombre del producto</label><input type="text" id="pName"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Categoría</label>
+        <select id="pCat">
+          <option value="tenis">Tenis</option>
+          <option value="playeras">Playeras</option>
+          <option value="pantalones">Pantalones</option>
+          <option value="chamarras">Chamarras</option>
+          <option value="sudaderas">Sudaderas</option>
+          <option value="accesorios">Accesorios</option>
+          <option value="mochilas">Mochilas</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Marca</label>
+        <select id="pBrand">
+          <option value="">Sin marca</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label>URL de imagen (principal)</label><input type="text" id="pImg" placeholder="https://..."></div>
+    <div class="form-row">
+      <div class="form-group"><label>Costo del producto (USD)</label><input type="number" id="pCost" step="0.01" oninput="updatePricePreview()"></div>
+      <div class="form-group"><label>Peso (gramos)</label><input type="number" id="pWeight" step="1" placeholder="ej. 400" oninput="updatePricePreview()"></div>
+    </div>
+    <div class="price-preview" id="pricePreview"></div>
+
+    <div class="form-group" style="margin-top:16px;">
+      <label>Colores (opcional — cada color con su propia foto)</label>
+      <div id="colorRowsBox"></div>
+      <button class="btn btn-sm" onclick="addColorRow()">+ Agregar color</button>
+    </div>
+
+    <button class="btn btn-accent btn-block" style="margin-top:14px;" onclick="addProduct()">Agregar al catálogo</button>
+
+    <div class="section-title" style="margin:26px 0 14px;"><h2 style="font-size:14px;">Configuración de precios (3 niveles por monto total del carrito)</h2></div>
+    <div class="form-row">
+      <div class="form-group"><label>Multiplicador Menudeo</label><input type="number" id="cfgMenudeo" step="0.1" oninput="updatePricePreview()"></div>
+      <div class="form-group"><label>Multiplicador Mayoreo</label><input type="number" id="cfgMayoreo" step="0.1" oninput="updatePricePreview()"></div>
+      <div class="form-group"><label>Multiplicador Distribuidor</label><input type="number" id="cfgDistribuidor" step="0.1" oninput="updatePricePreview()"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Umbral Mayoreo (USD, total carrito)</label><input type="number" id="cfgMayoreoMin" step="1"></div>
+      <div class="form-group"><label>Umbral Distribuidor (USD, total carrito)</label><input type="number" id="cfgDistribuidorMin" step="1"></div>
+    </div>
+    <div class="form-group"><label>Tipo de cambio ¥ (yuan) a USD</label><input type="number" id="cfgCnyRate" step="0.01"></div>
+    <button class="btn btn-block" onclick="saveConfig()">Guardar configuración</button>
+
+    <div class="section-title" style="margin:26px 0 14px;"><h2 style="font-size:14px;">Calculadora de costo por peso</h2></div>
+    <p style="color:var(--muted);font-size:11px;line-height:1.6;margin-top:-8px;">
+      $20 USD de envío por kg (redondeado a bandas de 250g) + $1.6 USD de inspección QC por kg
+      + 4% (3% comisión KakoBuy + 1% margen) sobre el subtotal, y el resultado se redondea hacia
+      arriba a la decena. Este costo final es el que se multiplica por Menudeo/Mayoreo/Distribuidor.
+    </p>
+
+    <div class="section-title" style="margin:26px 0 14px;"><h2 style="font-size:14px;">Pedidos (actualizar estado / subir QC)</h2></div>
+    <div id="adminOrders"></div>
+
+    <div class="section-title" style="margin:26px 0 14px;"><h2 style="font-size:14px;">Puntos a mejorar (privado, solo Admin)</h2></div>
+    <p style="color:var(--muted);font-size:11px;line-height:1.6;margin-top:-8px;">
+      Esto lo escriben los clientes al dejar su reseña después de que su pedido llega. Nunca se muestra
+      en la sección pública de Reseñas — solo tú lo ves aquí.
+    </p>
+    <div id="adminImprovements"></div>
+
+    <div class="section-title" style="margin:26px 0 14px;"><h2 style="font-size:14px;">Solicitudes de contacto (chat de ayuda)</h2></div>
+    <p style="color:var(--muted);font-size:11px;line-height:1.6;margin-top:-8px;">
+      Mensajes de clientes que pidieron hablar con una persona real desde el botón de Ayuda.
+      Activa las notificaciones para que te avisen al instante, aunque tengas otra pestaña abierta.
+    </p>
+    <button class="btn btn-sm btn-accent" onclick="enableAdminPushNotifications()">🔔 Activar notificaciones</button>
+    <div class="msg" id="pushMsg" style="margin-top:10px;"></div>
+    <div id="adminTickets" style="margin-top:14px;"></div>
+
+  </div>
+</div>
+
+<!-- ===================== CHAT DE AYUDA ===================== -->
+<div class="drawer" id="helpDrawer">
+  <div class="drawer-head">
+    <h3>Ayuda AVIGARS</h3>
+    <button class="drawer-close" onclick="closeDrawers()">✕</button>
+  </div>
+  <div class="drawer-body">
+    <div class="chat-messages" id="helpMessages"></div>
+  </div>
+  <div class="drawer-foot" id="helpChatInputBar" style="display:none;">
+    <div style="display:flex;gap:8px;">
+      <input type="text" id="helpChatInput" placeholder="Escribe tu mensaje..." style="flex:1;" onkeydown="if(event.key==='Enter') sendUserChatMessage()">
+      <button class="btn btn-sm btn-accent" onclick="sendUserChatMessage()">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CHAT ADMIN <-> CLIENTE (en vivo) ===================== -->
+<div class="drawer" id="adminChatDrawer">
+  <div class="drawer-head">
+    <h3 id="adminChatTitle">Chat con cliente</h3>
+    <button class="drawer-close" onclick="closeAdminChat()">✕</button>
+  </div>
+  <div class="drawer-body">
+    <div class="chat-messages" id="adminChatMessages"></div>
+  </div>
+  <div class="drawer-foot">
+    <div style="display:flex;gap:8px;">
+      <input type="text" id="adminChatInput" placeholder="Escribe un mensaje..." style="flex:1;" onkeydown="if(event.key==='Enter') sendAdminChatMessage()">
+      <button class="btn btn-sm btn-accent" onclick="sendAdminChatMessage()">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<!-- PayPal SDK: reemplaza TU_CLIENT_ID_DE_PAYPAL por tu Client ID real de developer.paypal.com -->
+<script src="https://www.paypal.com/sdk/js?client-id=TU_CLIENT_ID_DE_PAYPAL&currency=USD"></script>
+
+<script>
+/* ============================================================
+   AVIGARS — Demo funcional frontend (localStorage)
+   ============================================================ */
+
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* Cambia esto por la URL pública de tu backend cuando lo publiques (ver backend/README.md).
+   Mientras pruebas en tu computadora, deja localhost:3001 y corre el backend con "npm start". */
+const SCRAPER_API = 'http://localhost:3001';
+
+/* ---------- Importación vía bookmarklet (ver backend/README.md) ----------
+   Cuando el bookmarklet abre esta página con ?import=..., guardamos los
+   datos aquí y los aplicamos al formulario de Admin en cuanto haya una
+   sesión de administrador activa (puede ser antes o después de loguearse). */
+let pendingImport = null;
+(function readImportParam(){
+  const params = new URLSearchParams(location.search);
+  const raw = params.get('import');
+  if(!raw) return;
+  try{ pendingImport = JSON.parse(raw); }catch(e){ pendingImport = null; }
+  const cleanUrl = location.origin + location.pathname + location.hash;
+  history.replaceState({}, '', cleanUrl);
+})();
+function applyPendingImportIfAdmin(){
+  if(!pendingImport) return;
+  if(!currentUser || !currentUser.isAdmin){
+    alert('Se detectó un producto importado desde KakoBuy. Inicia sesión como Admin (admin@avigars.com) para completarlo.');
+    return;
+  }
+  document.getElementById('pKako').value = pendingImport.sourceUrl || '';
+  document.getElementById('pName').value = pendingImport.title || '';
+  if(pendingImport.images && pendingImport.images.length){
+    fetchedImages = pendingImport.images;
+    renderFetchedImages();
+    document.getElementById('pImg').value = pendingImport.images[0];
+  }
+  if(pendingImport.price){
+    const num = parseFloat(String(pendingImport.price).replace(/[^\d.]/g,''));
+    if(!isNaN(num)){
+      const isYuan = /[¥￥]/.test(pendingImport.price);
+      const cfg = DB.get('avg_config');
+      const rate = cfg.cnyRate || 0.14;
+      document.getElementById('pCost').value = (isYuan ? (num*rate).toFixed(2) : num.toFixed(2));
+    }
+  }
+  renderAdminOrders();
+  loadConfigForm();
+  updatePricePreview();
+  openDrawer('adminDrawer');
+  pendingImport = null;
+}
+
+const DB = {
+  get(key, fallback){ try{ return JSON.parse(localStorage.getItem(key)) ?? fallback; }catch(e){ return fallback; } },
+  set(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
+};
+
+/* ---------- Seed data ---------- */
+const DEFAULT_CONFIG = {
+  menudeoMult: 2.5, mayoreoMult: 1.8, distribuidorMult: 1.4,
+  mayoreoMin: 4000, distribuidorMin: 8000,
+  cnyRate: 0.14
+};
+/* Migración: si ya tenías una configuración guardada de una versión anterior
+   (sin distribuidorMult / mayoreoMin / etc.), le rellenamos los campos que falten
+   en vez de dejarlos como undefined. */
+DB.set('avg_config', Object.assign({}, DEFAULT_CONFIG, DB.get('avg_config', {})));
+if(!DB.get('avg_products')){
+  DB.set('avg_products', [
+    {id:'p1', name:'Tenis Runner Classic', cat:'tenis', brand:'Nike', img:'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500', costoProducto:60, pesoGramos:900, landedCost:calcLandedCost(60,900).final, kako:'', colors:[]},
+    {id:'p2', name:'Playera Essential Negra', cat:'playeras', brand:'', img:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500', costoProducto:12, pesoGramos:200, landedCost:calcLandedCost(12,200).final, kako:'', colors:[]},
+    {id:'p3', name:'Mochila Urban Pro', cat:'mochilas', brand:'', img:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500', costoProducto:35, pesoGramos:700, landedCost:calcLandedCost(35,700).final, kako:'', colors:[]},
+    {id:'p4', name:'Sudadera Oversize', cat:'sudaderas', brand:'Supreme', img:'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500', costoProducto:28, pesoGramos:600, landedCost:calcLandedCost(28,600).final, kako:'', colors:[]},
+    {id:'p5', name:'Gorra Minimal', cat:'accesorios', brand:'', img:'https://images.unsplash.com/photo-1521369909029-2afed882baee?w=500', costoProducto:9, pesoGramos:150, landedCost:calcLandedCost(9,150).final, kako:'', colors:[]},
+    {id:'p6', name:'Pants Track Negro', cat:'pantalones', brand:'Adidas', img:'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500', costoProducto:22, pesoGramos:500, landedCost:calcLandedCost(22,500).final, kako:'', colors:[
+      {name:'Negro', img:'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500'},
+      {name:'Gris', img:'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=500'}
+    ]},
+    {id:'p7', name:'Tenis Runner Adidas', cat:'tenis', brand:'Adidas', img:'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500', costoProducto:55, pesoGramos:850, landedCost:calcLandedCost(55,850).final, kako:'', colors:[]}
+  ]);
+} else {
+  /* Migración: productos guardados con el esquema viejo (cost/ship en vez de
+     costoProducto/pesoGramos/landedCost) se recalculan para que no queden en $0. */
+  const existingProducts = DB.get('avg_products', []);
+  let migrated = false;
+  existingProducts.forEach(p => {
+    if(p.landedCost === undefined){
+      const cost = p.costoProducto !== undefined ? p.costoProducto : (p.cost || 0);
+      const weight = p.pesoGramos || 500;
+      p.costoProducto = cost;
+      p.pesoGramos = weight;
+      p.landedCost = calcLandedCost(cost, weight).final;
+      if(p.brand === undefined) p.brand = '';
+      migrated = true;
+    }
+  });
+  if(migrated) DB.set('avg_products', existingProducts);
+}
+if(!DB.get('avg_users')){
+  // admin de ejemplo: admin@avigars.com / admin1234
+  DB.set('avg_users', [{name:'Admin', email:'admin@avigars.com', pass:'admin1234', isAdmin:true}]);
+}
+if(!DB.get('avg_orders')) DB.set('avg_orders', []);
+if(!DB.get('avg_cart')) DB.set('avg_cart', []);
+if(!DB.get('avg_reviews')) DB.set('avg_reviews', []);
+if(!DB.get('avg_tickets')) DB.set('avg_tickets', []);
+
+let reviewDraft = {}; // { orderId: rating (1-5) }
+
+let currentFilter = 'all';
+let currentBrand = 'all';
+let currentUser = DB.get('avg_currentUser', null);
+let selectedColorIndex = {}; // { productId: colorIndex }
+let fetchedImages = []; // imágenes que trajo el auto-rellenado, pendientes de usar
+let colorRows = []; // colores que se están armando en el form de Admin
+
+const CATS = [
+  {id:'all', label:'Todo'},
+  {id:'tenis', label:'Tenis'},
+  {id:'playeras', label:'Playeras'},
+  {id:'pantalones', label:'Pantalones'},
+  {id:'chamarras', label:'Chamarras'},
+  {id:'sudaderas', label:'Sudaderas'},
+  {id:'accesorios', label:'Accesorios'},
+  {id:'mochilas', label:'Mochilas'}
+];
+
+const BRANDS = [
+  'Nike', 'Adidas', 'Jordan', 'New Balance', 'Puma', 'Vans', 'Converse',
+  'Supreme', 'Off-White', 'Bape', 'Palace', 'Stussy', 'Balenciaga',
+  'Gucci', 'Louis Vuitton', 'Chrome Hearts', 'Yeezy', 'Otra'
+];
+
+/* ---------- Calculadora de costo por peso ----------
+   $20 USD/kg de envío (peso redondeado a bandas de 250g) + $1.6 USD/kg de inspección QC
+   + 4% (3% comisión KakoBuy + 1% margen) sobre el subtotal, redondeado hacia arriba a la decena. */
+function calcLandedCost(costoProducto, pesoGramos){
+  costoProducto = Number(costoProducto) || 0;
+  pesoGramos = Math.max(Number(pesoGramos) || 0, 1);
+  const pesoRedondeado = Math.ceil(pesoGramos / 250) * 250;
+  const pesoKg = pesoRedondeado / 1000;
+  const envio = pesoKg * 20;
+  const inspeccion = pesoKg * 1.6;
+  const subtotal = costoProducto + envio + inspeccion;
+  const conComision = subtotal * 1.04;
+  const final = Math.ceil(conComision / 10) * 10;
+  return { pesoRedondeado, envio, inspeccion, subtotal, conComision, final };
+}
+
+/* ---------- Precios por nivel (Menudeo / Mayoreo / Distribuidor) ----------
+   El nivel se decide por el MONTO TOTAL del carrito (a precio Menudeo), no por pieza. */
+function priceForTier(product, tier){
+  const cfg = DB.get('avg_config');
+  const mult = tier==='distribuidor' ? cfg.distribuidorMult : tier==='mayoreo' ? cfg.mayoreoMult : cfg.menudeoMult;
+  return +((product.landedCost || 0) * mult).toFixed(2);
+}
+function determineCartTier(cart){
+  const products = DB.get('avg_products', []);
+  const cfg = DB.get('avg_config');
+  const listTotal = cart.reduce((s,i)=>{
+    const product = products.find(p=>p.id===i.id);
+    return s + (product ? priceForTier(product,'menudeo')*i.qty : 0);
+  }, 0);
+  if(listTotal >= cfg.distribuidorMin) return 'distribuidor';
+  if(listTotal >= cfg.mayoreoMin) return 'mayoreo';
+  return 'menudeo';
+}
+function tierLabel(tier){
+  return tier==='distribuidor' ? 'Distribuidor' : tier==='mayoreo' ? 'Mayoreo' : 'Menudeo';
+}
+
+const STEPS = [
+  {key:'recibido', label:'Pedido recibido'},
+  {key:'comprado', label:'Comprado al agente'},
+  {key:'qc', label:'QC recibido'},
+  {key:'empacado', label:'Empacado'},
+  {key:'enviado', label:'Enviado'},
+  {key:'entregado', label:'Entregado'}
+];
+
+/* ---------- Filters ---------- */
+function renderFilterChips(){
+  const box = document.getElementById('filterChips');
+  box.innerHTML = '<span class="filters-label">Categoría</span>' +
+    CATS.map(c => `<button class="chip ${c.id===currentFilter?'active':''}" onclick="setFilter('${c.id}')">${c.label}</button>`).join('');
+
+  const brandBox = document.getElementById('brandChips');
+  brandBox.innerHTML = '<span class="filters-label">Marca</span>' +
+    `<button class="chip ${currentBrand==='all'?'active':''}" onclick="setBrand('all')">Todas</button>` +
+    BRANDS.map(b => `<button class="chip ${currentBrand===b?'active':''}" onclick="setBrand('${b}')">${b}</button>`).join('');
+}
+function setFilter(id){ currentFilter = id; renderFilterChips(); renderProducts(); }
+function setBrand(brand){ currentBrand = brand; renderFilterChips(); renderProducts(); }
+function populateBrandSelect(){
+  const sel = document.getElementById('pBrand');
+  if(!sel || sel.options.length > 1) return;
+  BRANDS.forEach(b => {
+    const opt = document.createElement('option');
+    opt.value = b; opt.textContent = b;
+    sel.appendChild(opt);
+  });
+}
+
+/* ---------- Products ---------- */
+function money(n){ return '$' + Number(n||0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+
+function renderProducts(){
+  const products = DB.get('avg_products', []);
+  const term = document.getElementById('searchInput').value.trim().toLowerCase();
+  const filtered = products.filter(p =>
+    (currentFilter==='all' || p.cat===currentFilter) &&
+    (currentBrand==='all' || p.brand===currentBrand) &&
+    (term==='' || p.name.toLowerCase().includes(term))
+  );
+  document.getElementById('resultCount').textContent = filtered.length + ' producto(s)';
+  const grid = document.getElementById('productGrid');
+  if(filtered.length===0){
+    grid.innerHTML = '<div class="empty-msg">No se encontraron productos.</div>';
+    return;
+  }
+  grid.innerHTML = filtered.map(p => {
+    const hasColors = p.colors && p.colors.length > 0;
+    const selIdx = selectedColorIndex[p.id] || 0;
+    const displayImg = hasColors ? p.colors[selIdx].img : p.img;
+    return `
+    <div class="card">
+      <img src="${displayImg}" alt="${p.name}" id="cardimg_${p.id}" onerror="this.src='https://via.placeholder.com/400x400/141414/555?text=AVIGARS'">
+      <div class="card-body">
+        <div class="card-cat">${labelOfCat(p.cat)}${p.brand ? ' · <span class="card-brand">'+p.brand+'</span>' : ''}</div>
+        <div class="card-name">${p.name}</div>
+        ${hasColors ? `
+          <div class="color-swatches" id="colors_${p.id}">
+            ${p.colors.map((c,ci)=>`<button class="swatch ${ci===selIdx?'active':''}" style="background-image:url('${c.img}')" title="${c.name}" onclick="selectColor('${p.id}', ${ci})"></button>`).join('')}
+          </div>
+          <div class="swatch-label" id="colorlabel_${p.id}">${p.colors[selIdx].name}</div>
+        ` : ''}
+        <div class="card-prices">
+          <span>Menudeo: <b>${money(priceForTier(p,'menudeo'))}</b></span>
+          <span>Mayoreo: <b>${money(priceForTier(p,'mayoreo'))}</b></span>
+          <span>Distribuidor: <b>${money(priceForTier(p,'distribuidor'))}</b></span>
+        </div>
+        <div class="card-actions">
+          <input type="number" min="1" value="1" class="qty-input" id="qty_${p.id}">
+          <button class="btn btn-sm btn-accent" style="flex:1;" onclick="addToCart('${p.id}')">Agregar</button>
+        </div>
+      </div>
+    </div>
+  `;
+  }).join('');
+}
+function selectColor(productId, colorIndex){
+  selectedColorIndex[productId] = colorIndex;
+  const products = DB.get('avg_products', []);
+  const product = products.find(p=>p.id===productId);
+  if(!product) return;
+  const color = product.colors[colorIndex];
+  document.getElementById('cardimg_'+productId).src = color.img;
+  document.getElementById('colorlabel_'+productId).textContent = color.name;
+  document.querySelectorAll('#colors_'+productId+' .swatch').forEach((btn,i)=>{
+    btn.classList.toggle('active', i===colorIndex);
+  });
+}
+function labelOfCat(id){ const f = CATS.find(c=>c.id===id); return f?f.label:id; }
+
+document.getElementById('searchInput').addEventListener('input', renderProducts);
+
+/* ---------- Panel de niveles de precio (hero + sección mayoreo) ---------- */
+function renderTierPanelHtml(cfg){
+  return `
+    <div class="tier-col">
+      <div class="tier-n n1">Nivel 1</div>
+      <div class="tier-name n1">Menudeo</div>
+      <div class="tier-sub">1 pza</div>
+    </div>
+    <div class="tier-col">
+      <div class="tier-n n2">Nivel 2</div>
+      <div class="tier-name n2">Mayoreo</div>
+      <div class="tier-sub">&gt; ${money(cfg.mayoreoMin)}</div>
+    </div>
+    <div class="tier-col">
+      <div class="tier-n n3">Nivel 3</div>
+      <div class="tier-name n3">Distribuidor</div>
+      <div class="tier-sub">&gt; ${money(cfg.distribuidorMin)}</div>
+    </div>
+  `;
+}
+function renderMayoreoInfo(){
+  const cfg = DB.get('avg_config');
+  document.getElementById('heroTiers').innerHTML = renderTierPanelHtml(cfg);
+}
+
+/* ---------- Drawers ---------- */
+function openDrawer(id){
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById(id).classList.add('open');
+}
+function closeDrawers(){
+  document.getElementById('overlay').classList.remove('show');
+  document.querySelectorAll('.drawer').forEach(d=>d.classList.remove('open'));
+}
+document.getElementById('overlay').addEventListener('click', closeDrawers);
+document.getElementById('cartBtn').addEventListener('click', ()=>{ renderCart(); openDrawer('cartDrawer'); });
+document.getElementById('accountBtn').addEventListener('click', ()=>{ renderAuthDrawer(); openDrawer('authDrawer'); });
+
+/* ---------- Cart ---------- */
+function getCart(){ return DB.get('avg_cart', []); }
+function setCart(c){ DB.set('avg_cart', c); updateCartBadge(); }
+
+function addToCart(productId){
+  const qtyEl = document.getElementById('qty_'+productId);
+  const qty = Math.max(1, parseInt(qtyEl.value)||1);
+  const products = DB.get('avg_products', []);
+  const product = products.find(p=>p.id===productId);
+  if(!product) return;
+  const hasColors = product.colors && product.colors.length > 0;
+  const selIdx = selectedColorIndex[productId] || 0;
+  const color = hasColors ? product.colors[selIdx].name : null;
+  const img = hasColors ? product.colors[selIdx].img : product.img;
+  const cart = getCart();
+  const existing = cart.find(i=>i.id===productId && i.color===color);
+  if(existing){ existing.qty += qty; } else { cart.push({id:product.id, name:product.name, img, cat:product.cat, qty, color}); }
+  setCart(cart);
+  flashBadge();
+}
+function flashBadge(){
+  const b = document.getElementById('cartBadge');
+  b.style.background = '#fff';
+  setTimeout(()=>{ b.style.background=''; }, 200);
+}
+function updateCartBadge(){
+  const cart = getCart();
+  const count = cart.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('cartBadge').textContent = count;
+}
+
+function priceForItem(item, tier){
+  const products = DB.get('avg_products', []);
+  const product = products.find(p=>p.id===item.id);
+  if(!product) return 0;
+  return priceForTier(product, tier || determineCartTier(getCart()));
+}
+
+function renderCart(){
+  const cart = getCart();
+  const tier = determineCartTier(cart);
+  const cfg = DB.get('avg_config');
+  const box = document.getElementById('cartItems');
+  const tierBox = document.getElementById('tierBox');
+
+  if(cart.length===0){
+    box.innerHTML = '<div class="empty-msg">Tu carrito está vacío.</div>';
+    tierBox.innerHTML = '';
+  } else {
+    box.innerHTML = cart.map(item => {
+      const unit = priceForItem(item, tier);
+      return `
+      <div class="cart-item">
+        <img src="${item.img}" onerror="this.src='https://via.placeholder.com/80/141414/555?text=AV'">
+        <div class="cart-item-info">
+          <div class="name">${item.name}${item.color ? ' · '+item.color : ''}</div>
+          <div class="meta">${labelOfCat(item.cat)} · ${money(unit)} c/u</div>
+          <div class="cart-row-actions">
+            <input type="number" min="1" value="${item.qty}" class="qty-input" onchange="updateQty('${item.id}', this.value)">
+            <button class="btn btn-sm btn-danger" onclick="removeFromCart('${item.id}')">Quitar</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+
+    const products = DB.get('avg_products', []);
+    const listTotal = cart.reduce((s,i)=>{
+      const product = products.find(p=>p.id===i.id);
+      return s + (product ? priceForTier(product,'menudeo')*i.qty : 0);
+    }, 0);
+    let nextHint = '';
+    if(tier==='menudeo'){
+      nextHint = `Te faltan <b>${money(Math.max(0, cfg.mayoreoMin - listTotal))}</b> (a precio menudeo) para desbloquear precio Mayoreo.`;
+    } else if(tier==='mayoreo'){
+      nextHint = `Te faltan <b>${money(Math.max(0, cfg.distribuidorMin - listTotal))}</b> (a precio menudeo) para desbloquear precio Distribuidor.`;
+    } else {
+      nextHint = 'Ya tienes el mejor precio: Distribuidor.';
+    }
+    tierBox.innerHTML = `Nivel actual: <span class="tier-badge">${tierLabel(tier)}</span><br><br>${nextHint}`;
+  }
+  const subtotal = cart.reduce((s,i)=> s + priceForItem(i, tier)*i.qty, 0);
+  document.getElementById('cartSubtotal').textContent = money(subtotal);
+  document.getElementById('cartTotal').textContent = money(subtotal);
+  updateCartBadge();
+}
+function updateQty(id, qty){
+  qty = Math.max(1, parseInt(qty)||1);
+  const cart = getCart();
+  const item = cart.find(i=>i.id===id);
+  if(item){ item.qty = qty; setCart(cart); renderCart(); }
+}
+function removeFromCart(id){
+  setCart(getCart().filter(i=>i.id!==id));
+  renderCart();
+}
+
+/* ---------- Auth ---------- */
+function switchAuthTab(tab){
+  document.getElementById('tabLogin').classList.toggle('active', tab==='login');
+  document.getElementById('tabRegister').classList.toggle('active', tab==='register');
+  document.getElementById('loginForm').style.display = tab==='login' ? 'block':'none';
+  document.getElementById('registerForm').style.display = tab==='register' ? 'block':'none';
+  document.getElementById('authMsg').className = 'msg';
+}
+function showAuthMsg(text, ok){
+  const el = document.getElementById('authMsg');
+  el.textContent = text;
+  el.className = 'msg show ' + (ok?'ok':'err');
+}
+function handleRegister(e){
+  e.preventDefault();
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim().toLowerCase();
+  const pass = document.getElementById('regPass').value;
+  const users = DB.get('avg_users', []);
+  if(users.find(u=>u.email===email)){ showAuthMsg('Ese correo ya está registrado.', false); return false; }
+  users.push({name, email, pass, isAdmin:false});
+  DB.set('avg_users', users);
+  showAuthMsg('Cuenta creada. Ya puedes iniciar sesión.', true);
+  switchAuthTab('login');
+  return false;
+}
+function handleLogin(e){
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  const pass = document.getElementById('loginPass').value;
+  const users = DB.get('avg_users', []);
+  const user = users.find(u=>u.email===email && u.pass===pass);
+  if(!user){ showAuthMsg('Correo o contraseña incorrectos.', false); return false; }
+  currentUser = {name:user.name, email:user.email, isAdmin:!!user.isAdmin};
+  DB.set('avg_currentUser', currentUser);
+  showAuthMsg('Sesión iniciada.', true);
+  renderAuthDrawer();
+  renderOrders();
+  toggleAdminButton();
+  if(pendingImport){ closeDrawers(); applyPendingImportIfAdmin(); }
+  return false;
+}
+function handleLogout(){
+  currentUser = null;
+  localStorage.removeItem('avg_currentUser');
+  renderAuthDrawer();
+  renderOrders();
+  toggleAdminButton();
+}
+function renderAuthDrawer(){
+  const out = document.getElementById('loggedOutView');
+  const inn = document.getElementById('loggedInView');
+  if(currentUser){
+    out.style.display='none'; inn.style.display='block';
+    document.getElementById('loggedUserName').textContent = currentUser.name + ' (' + currentUser.email + ')';
+    document.getElementById('authTitle').textContent = 'Mi Cuenta';
+  } else {
+    out.style.display='block'; inn.style.display='none';
+    document.getElementById('authTitle').textContent = 'Iniciar sesión / Registro';
+  }
+}
+function scrollToOrders(){ closeDrawers(); document.getElementById('pedidos').scrollIntoView({behavior:'smooth'}); }
+function toggleAdminButton(){
+  document.getElementById('adminToggleBtn').style.display = (currentUser && currentUser.isAdmin) ? 'block' : 'none';
+}
+
+/* ---------- Checkout ---------- */
+let selectedPayTab = 'paypal';
+function switchPayTab(tab){
+  selectedPayTab = tab;
+  document.getElementById('payTabPaypal').classList.toggle('active', tab==='paypal');
+  document.getElementById('payTabOther').classList.toggle('active', tab==='other');
+  document.getElementById('paypalPay').style.display = tab==='paypal' ? 'block':'none';
+  document.getElementById('otherPay').style.display = tab==='other' ? 'block':'none';
+}
+function goToCheckout(){
+  const cart = getCart();
+  if(cart.length===0){ alert('Tu carrito está vacío.'); return; }
+  if(!currentUser){
+    closeDrawers();
+    openDrawer('authDrawer');
+    showAuthMsg('Inicia sesión para continuar con tu compra.', false);
+    return;
+  }
+  const tier = determineCartTier(cart);
+  const subtotal = cart.reduce((s,i)=> s + priceForItem(i, tier)*i.qty, 0);
+  document.getElementById('coTotal').textContent = money(subtotal) + ' (nivel ' + tierLabel(tier) + ')';
+  closeDrawers();
+  openDrawer('checkoutDrawer');
+  renderPaypalButton(subtotal);
+}
+function renderPaypalButton(total){
+  const container = document.getElementById('paypal-button-container');
+  container.innerHTML = '';
+  if(typeof paypal === 'undefined'){
+    container.innerHTML = '<p style="color:var(--danger);font-size:12px;">PayPal no está configurado todavía. Agrega tu Client ID de PayPal en el archivo HTML (busca TU_CLIENT_ID_DE_PAYPAL).</p>';
+    return;
+  }
+  paypal.Buttons({
+    style:{ layout:'vertical', color:'black', shape:'rect', label:'paypal' },
+    createOrder: function(data, actions){
+      return actions.order.create({ purchase_units:[{ amount:{ value: total.toFixed(2) } }] });
+    },
+    onApprove: function(data, actions){
+      return actions.order.capture().then(function(details){
+        placeOrder('paypal');
+      });
+    },
+    onError: function(err){
+      document.getElementById('checkoutMsg').className = 'msg show err';
+      document.getElementById('checkoutMsg').textContent = 'Ocurrió un error con PayPal. Intenta de nuevo.';
+    }
+  }).render('#paypal-button-container');
+}
+
+function placeOrder(method){
+  const cart = getCart();
+  if(cart.length===0) return;
+  const name = document.getElementById('coName').value.trim() || currentUser.name;
+  const address = document.getElementById('coAddress').value.trim();
+  const city = document.getElementById('coCity').value.trim();
+  const zip = document.getElementById('coZip').value.trim();
+  const phone = document.getElementById('coPhone').value.trim();
+  const tier = determineCartTier(cart);
+  const subtotal = cart.reduce((s,i)=> s + priceForItem(i, tier)*i.qty, 0);
+
+  const orders = DB.get('avg_orders', []);
+  const order = {
+    id: 'AVG-' + Date.now().toString().slice(-8),
+    userEmail: currentUser.email,
+    date: new Date().toISOString(),
+    items: cart.map(i => ({...i, unitPrice: priceForItem(i, tier)})),
+    total: subtotal,
+    tier,
+    payment: method,
+    shipping: {name, address, city, zip, phone},
+    status: 'recibido',
+    qcPhotos: []
+  };
+  orders.push(order);
+  DB.set('avg_orders', orders);
+  setCart([]);
+
+  document.getElementById('checkoutMsg').className = 'msg show ok';
+  document.getElementById('checkoutMsg').textContent = '¡Pedido confirmado! Número de pedido: ' + order.id + '. Puedes ver el seguimiento en "Mis Pedidos".';
+
+  setTimeout(()=>{
+    closeDrawers();
+    renderOrders();
+    document.getElementById('pedidos').scrollIntoView({behavior:'smooth'});
+  }, 1400);
+}
+
+/* ---------- Orders / tracking (client) ---------- */
+function renderOrders(){
+  const box = document.getElementById('ordersContainer');
+  if(!currentUser){
+    box.innerHTML = '<div class="empty-msg">Inicia sesión para ver tus pedidos.</div>';
+    return;
+  }
+  const orders = DB.get('avg_orders', []).filter(o=>o.userEmail===currentUser.email).reverse();
+  if(orders.length===0){
+    box.innerHTML = '<div class="empty-msg">Aún no tienes pedidos.</div>';
+    return;
+  }
+  box.innerHTML = orders.map(o => orderCardHtml(o)).join('');
+}
+function orderCardHtml(o){
+  const stepIndex = STEPS.findIndex(s=>s.key===o.status);
+  const trackHtml = STEPS.map((s,i) => `
+    <div class="track-step ${i<=stepIndex?'done':''}">
+      <div class="track-dot"></div>${s.label}
+    </div>
+  `).join('');
+  const qcHtml = o.qcPhotos && o.qcPhotos.length
+    ? `<div class="qc-gallery">${o.qcPhotos.map(u=>`<img src="${u}">`).join('')}</div>`
+    : `<div class="qc-empty">Aún no hay fotos de QC para este pedido.</div>`;
+  const itemsHtml = o.items.map(i=>`${i.qty}x ${i.name}${i.color?' ('+i.color+')':''}`).join(', ');
+  const reviews = DB.get('avg_reviews', []);
+  const existingReview = reviews.find(r=>r.orderId===o.id);
+  let reviewSection = '';
+  if(o.status === 'entregado'){
+    if(existingReview){
+      reviewSection = `
+        <div class="review-done">
+          Ya dejaste tu reseña para este pedido — ¡gracias!
+          <div class="review-stars-display" style="margin-top:6px;">${'★'.repeat(existingReview.rating)}${'☆'.repeat(5-existingReview.rating)}</div>
+        </div>
+      `;
+    } else {
+      const stars = [1,2,3,4,5].map(n=>`<span class="star" data-n="${n}" onclick="setReviewRating('${o.id}',${n})">★</span>`).join('');
+      reviewSection = `
+        <div class="review-form">
+          <label>¿Cómo calificarías tu compra?</label>
+          <div class="stars" id="stars_${o.id}">${stars}</div>
+          <label>Tu reseña (esto se publica en la sección Reseñas)</label>
+          <textarea id="reviewComment_${o.id}" placeholder="Cuéntanos tu experiencia..."></textarea>
+          <label>Puntos a mejorar (privado — solo lo ve el Admin, no se publica)</label>
+          <textarea id="reviewImprove_${o.id}" placeholder="¿Qué podríamos mejorar?"></textarea>
+          <button class="btn btn-sm btn-accent" onclick="submitReview('${o.id}')">Enviar reseña</button>
+        </div>
+      `;
+    }
+  }
+  return `
+    <div class="order-card">
+      <div class="order-head">
+        <div>
+          <div class="oid">${o.id}</div>
+          <div class="odate">${new Date(o.date).toLocaleString()}</div>
+        </div>
+        <span class="status-badge">${STEPS[stepIndex]?.label || o.status}</span>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">${itemsHtml}</div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Total: ${money(o.total)} · Nivel: ${tierLabel(o.tier||'menudeo')} · Pago: ${o.payment==='paypal'?'PayPal':'Manual'}</div>
+      <div class="track">${trackHtml}</div>
+      <div>
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;">Fotos de QC</div>
+        ${qcHtml}
+      </div>
+      ${reviewSection}
+    </div>
+  `;
+}
+function setReviewRating(orderId, n){
+  reviewDraft[orderId] = n;
+  document.querySelectorAll('#stars_'+orderId+' .star').forEach(el=>{
+    el.classList.toggle('active', parseInt(el.dataset.n) <= n);
+  });
+}
+function submitReview(orderId){
+  const rating = reviewDraft[orderId] || 0;
+  if(!rating){ alert('Selecciona una calificación de estrellas antes de enviar.'); return; }
+  const comment = document.getElementById('reviewComment_'+orderId).value.trim();
+  const improvement = document.getElementById('reviewImprove_'+orderId).value.trim();
+  const orders = DB.get('avg_orders', []);
+  const order = orders.find(o=>o.id===orderId);
+  const reviews = DB.get('avg_reviews', []);
+  reviews.push({
+    id: 'REV-' + Date.now().toString().slice(-8),
+    orderId,
+    userEmail: currentUser.email,
+    userName: currentUser.name,
+    items: order ? order.items.map(i=>i.name).join(', ') : '',
+    rating,
+    comment,
+    improvement,
+    date: new Date().toISOString()
+  });
+  DB.set('avg_reviews', reviews);
+  delete reviewDraft[orderId];
+  renderOrders();
+  renderReviews();
+  renderAdminImprovements();
+  alert('¡Gracias por tu reseña!');
+}
+
+/* ---------- Reseñas públicas (sin puntos a mejorar) ---------- */
+function renderReviews(){
+  const reviews = DB.get('avg_reviews', []).slice().reverse();
+  const box = document.getElementById('reviewsContainer');
+  if(reviews.length===0){
+    box.innerHTML = '<div class="empty-msg">Todavía no hay reseñas — sé el primero en dejar una cuando tu pedido llegue.</div>';
+    return;
+  }
+  box.innerHTML = reviews.map(r => `
+    <div class="review-card">
+      <div class="review-stars-display">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+      <div class="review-meta">${r.userName} · ${new Date(r.date).toLocaleDateString()} · ${r.items}</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.6;">${r.comment || '<i>Sin comentario escrito.</i>'}</p>
+    </div>
+  `).join('');
+}
+
+/* ---------- Puntos a mejorar (solo Admin) ---------- */
+function renderAdminImprovements(){
+  const box = document.getElementById('adminImprovements');
+  if(!box) return;
+  const reviews = DB.get('avg_reviews', []).filter(r => r.improvement && r.improvement.trim()).reverse();
+  if(reviews.length===0){
+    box.innerHTML = '<div class="empty-msg">Sin puntos a mejorar reportados todavía.</div>';
+    return;
+  }
+  box.innerHTML = reviews.map(r => `
+    <div class="improve-card">
+      <div class="review-stars-display" style="font-size:12px;">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+      <div class="review-meta">${r.userName} · Pedido ${r.orderId} · ${new Date(r.date).toLocaleDateString()}</div>
+      <p style="margin:0;">${r.improvement}</p>
+    </div>
+  `).join('');
+}
+
+/* ---------- FAQ ---------- */
+const FAQ = [
+  {q:'¿Qué es AVIGARS?', a:'Somos una tienda que vende ropa, tenis, mochilas y accesorios, con precios especiales para compra individual (menudeo) y para revendedores (mayoreo).'},
+  {q:'¿Qué métodos de pago aceptan?', a:'Aceptamos PayPal directamente desde la página, y también métodos alternos (transferencia, depósito, OXXO) que se coordinan manualmente después de confirmar tu pedido.'},
+  {q:'¿Puedo ver el estado de mi pedido?', a:'Sí. En la sección "Mis Pedidos" puedes ver en qué etapa va tu pedido: recibido, comprado al agente, QC recibido, empacado, enviado y entregado.'},
+  {q:'¿Qué son las fotos de QC?', a:'Son fotos de control de calidad que se toman del producto antes de enviarlo, para que verifiques que todo está en orden antes del envío final. Se publican en tu pedido dentro de "Mis Pedidos".'},
+  {q:'¿Necesito una cuenta para comprar?', a:'Sí, necesitas iniciar sesión o registrarte para poder finalizar una compra y darle seguimiento a tu pedido.'},
+  {q:'¿Hacen envíos a todo México?', a:'Sí, realizamos envíos a toda la república. Los tiempos varían según el producto y el método de envío.'}
+];
+function renderFaq(){
+  document.getElementById('faqList').innerHTML = FAQ.map((f,i)=>`
+    <div class="faq-item" id="faq_${i}">
+      <button class="faq-q" onclick="toggleFaq(${i})">${f.q}<span class="plus">+</span></button>
+      <div class="faq-a"><p>${f.a}</p></div>
+    </div>
+  `).join('');
+}
+function toggleFaq(i){ document.getElementById('faq_'+i).classList.toggle('open'); }
+
+/* ---------- Admin: add product with price auto-calc ---------- */
+function updatePricePreview(){
+  const cost = parseFloat(document.getElementById('pCost').value)||0;
+  const weight = parseFloat(document.getElementById('pWeight').value)||0;
+  const cfg = DB.get('avg_config');
+  const menudeoMult = parseFloat(document.getElementById('cfgMenudeo').value) || cfg.menudeoMult;
+  const mayoreoMult = parseFloat(document.getElementById('cfgMayoreo').value) || cfg.mayoreoMult;
+  const distribuidorMult = parseFloat(document.getElementById('cfgDistribuidor').value) || cfg.distribuidorMult;
+
+  if(!cost && !weight){
+    document.getElementById('pricePreview').innerHTML = 'Ingresa costo y peso para ver el precio calculado.';
+    return;
+  }
+  const calc = calcLandedCost(cost, weight);
+  document.getElementById('pricePreview').innerHTML = `
+    Peso redondeado: <b>${calc.pesoRedondeado}g</b> (${(calc.pesoRedondeado/1000).toFixed(2)}kg)<br>
+    Envío: <b>${money(calc.envio)}</b> · Inspección QC: <b>${money(calc.inspeccion)}</b><br>
+    Subtotal: <b>${money(calc.subtotal)}</b> · +4% comisión: <b>${money(calc.conComision)}</b><br>
+    <span style="font-size:15px;">Costo final de la pieza: <b>${money(calc.final)}</b></span><br><br>
+    Menudeo: <b>${money(calc.final*menudeoMult)}</b> ·
+    Mayoreo: <b>${money(calc.final*mayoreoMult)}</b> ·
+    Distribuidor: <b>${money(calc.final*distribuidorMult)}</b>
+  `;
+}
+function addProduct(){
+  const kako = document.getElementById('pKako').value.trim();
+  const name = document.getElementById('pName').value.trim();
+  const cat = document.getElementById('pCat').value;
+  const brand = document.getElementById('pBrand').value;
+  const img = document.getElementById('pImg').value.trim() || 'https://via.placeholder.com/500x500/141414/555?text=AVIGARS';
+  const cost = parseFloat(document.getElementById('pCost').value)||0;
+  const weight = parseFloat(document.getElementById('pWeight').value)||0;
+  if(!name || !cost || !weight){ alert('Ponle nombre, costo y peso al producto.'); return; }
+  const landedCost = calcLandedCost(cost, weight).final;
+  const colors = colorRows.filter(c => c.name.trim() && c.img.trim());
+  const products = DB.get('avg_products', []);
+  products.push({ id:'p'+Date.now(), name, cat, brand, img, costoProducto:cost, pesoGramos:weight, landedCost, kako, colors });
+  DB.set('avg_products', products);
+  renderProducts();
+  document.getElementById('pKako').value='';
+  document.getElementById('pName').value='';
+  document.getElementById('pImg').value='';
+  document.getElementById('pCost').value='';
+  document.getElementById('pWeight').value='';
+  colorRows = [];
+  renderColorRows();
+  fetchedImages = [];
+  renderFetchedImages();
+  updatePricePreview();
+  alert('Producto agregado al catálogo.');
+}
+function saveConfig(){
+  const menudeoMult = parseFloat(document.getElementById('cfgMenudeo').value)||2.5;
+  const mayoreoMult = parseFloat(document.getElementById('cfgMayoreo').value)||1.8;
+  const distribuidorMult = parseFloat(document.getElementById('cfgDistribuidor').value)||1.4;
+  const mayoreoMin = parseFloat(document.getElementById('cfgMayoreoMin').value)||4000;
+  const distribuidorMin = parseFloat(document.getElementById('cfgDistribuidorMin').value)||8000;
+  const cnyRate = parseFloat(document.getElementById('cfgCnyRate').value)||0.14;
+  DB.set('avg_config', {menudeoMult, mayoreoMult, distribuidorMult, mayoreoMin, distribuidorMin, cnyRate});
+  renderMayoreoInfo();
+  renderProducts();
+  alert('Configuración guardada.');
+}
+function loadConfigForm(){
+  const cfg = DB.get('avg_config');
+  document.getElementById('cfgMenudeo').value = cfg.menudeoMult;
+  document.getElementById('cfgMayoreo').value = cfg.mayoreoMult;
+  document.getElementById('cfgDistribuidor').value = cfg.distribuidorMult;
+  document.getElementById('cfgMayoreoMin').value = cfg.mayoreoMin;
+  document.getElementById('cfgDistribuidorMin').value = cfg.distribuidorMin;
+  document.getElementById('cfgCnyRate').value = cfg.cnyRate || 0.14;
+}
+
+/* ---------- Colores del producto (panel Admin) ---------- */
+function renderColorRows(){
+  const box = document.getElementById('colorRowsBox');
+  if(!box) return;
+  box.innerHTML = colorRows.length ? colorRows.map((c,i)=>`
+    <div class="color-row">
+      <input type="text" placeholder="Nombre (ej. Negro)" value="${c.name}" oninput="colorRows[${i}].name=this.value">
+      <input type="text" placeholder="URL de la foto" value="${c.img}" oninput="colorRows[${i}].img=this.value">
+      <button class="btn btn-sm btn-danger" onclick="removeColorRow(${i})">✕</button>
+    </div>
+  `).join('') : '<p class="qc-empty">Sin colores agregados (opcional, el producto puede no tener variantes).</p>';
+}
+function addColorRow(prefill){
+  colorRows.push(prefill || {name:'', img:''});
+  renderColorRows();
+}
+function removeColorRow(i){
+  colorRows.splice(i,1);
+  renderColorRows();
+}
+
+/* ---------- Auto-rellenado desde KakoBuy (usa el backend en /backend) ---------- */
+function renderFetchedImages(){
+  const box = document.getElementById('fetchedImagesBox');
+  if(!box) return;
+  if(!fetchedImages.length){ box.innerHTML=''; return; }
+  box.innerHTML = `
+    <div class="form-group">
+      <label>Fotos encontradas (haz clic en una para usarla)</label>
+      <div class="fetched-thumbs">
+        ${fetchedImages.map((url,i)=>`
+          <div class="fetched-thumb-box">
+            <img class="fetched-thumb" src="${url}" onclick="useFetchedAsMain(${i})" title="Clic para usar como imagen principal">
+            <button class="btn btn-sm" onclick="useFetchedAsColor(${i})">+ color</button>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+function useFetchedAsMain(i){
+  document.getElementById('pImg').value = fetchedImages[i];
+}
+function useFetchedAsColor(i){
+  addColorRow({name:'', img: fetchedImages[i]});
+}
+async function autoFillFromKako(){
+  const link = document.getElementById('pKako').value.trim();
+  const msgEl = document.getElementById('autoFillMsg');
+  msgEl.className = 'msg';
+  if(!link){ alert('Pega primero el link de KakoBuy en el campo de arriba.'); return; }
+
+  const btn = document.getElementById('autoFillBtn');
+  btn.disabled = true;
+  const originalText = btn.textContent;
+  btn.textContent = 'Buscando...';
+
+  try{
+    const res = await fetch(SCRAPER_API + '/scrape?url=' + encodeURIComponent(link));
+    const data = await res.json();
+
+    if(data.error){
+      msgEl.textContent = data.error;
+      msgEl.className = 'msg show err';
+      return;
+    }
+
+    if(data.title) document.getElementById('pName').value = data.title;
+
+    if(data.images && data.images.length){
+      fetchedImages = data.images;
+      renderFetchedImages();
+      document.getElementById('pImg').value = data.images[0];
+    }
+
+    if(data.price){
+      const num = parseFloat(String(data.price).replace(/[^\d.]/g,''));
+      if(!isNaN(num)){
+        const isYuan = /[¥￥]/.test(data.price);
+        const cfg = DB.get('avg_config');
+        const rate = cfg.cnyRate || 0.14;
+        document.getElementById('pCost').value = (isYuan ? (num*rate).toFixed(2) : num.toFixed(2));
+        updatePricePreview();
+      }
+    }
+
+    if(data.warning){
+      msgEl.textContent = data.warning;
+      msgEl.className = 'msg show err';
+    } else {
+      msgEl.textContent = 'Datos encontrados. Revisa y ajusta antes de agregar el producto.';
+      msgEl.className = 'msg show ok';
+    }
+  }catch(err){
+    msgEl.textContent = 'No se pudo conectar con el backend de auto-rellenado (' + SCRAPER_API + '). ¿Está corriendo? Revisa backend/README.md.';
+    msgEl.className = 'msg show err';
+  }finally{
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+}
+
+/* ---------- Admin: manage orders / status / QC photos ---------- */
+function renderAdminOrders(){
+  const box = document.getElementById('adminOrders');
+  const orders = DB.get('avg_orders', []).slice().reverse();
+  if(orders.length===0){ box.innerHTML = '<div class="empty-msg">No hay pedidos todavía.</div>'; return; }
+  box.innerHTML = orders.map(o => `
+    <div class="order-card">
+      <div class="order-head">
+        <div class="oid">${o.id}</div>
+        <div class="odate">${o.userEmail}</div>
+      </div>
+      <div class="form-group">
+        <label>Estado del pedido</label>
+        <select onchange="updateOrderStatus('${o.id}', this.value)">
+          ${STEPS.map(s=>`<option value="${s.key}" ${o.status===s.key?'selected':''}>${s.label}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Agregar foto de QC (URL de imagen)</label>
+        <div style="display:flex;gap:8px;">
+          <input type="text" id="qcInput_${o.id}" placeholder="https://...">
+          <button class="btn btn-sm" onclick="addQcPhoto('${o.id}')">Agregar</button>
+        </div>
+      </div>
+      <div class="qc-gallery">${(o.qcPhotos||[]).map(u=>`<img src="${u}">`).join('') || '<span class="qc-empty">Sin fotos aún</span>'}</div>
+    </div>
+  `).join('');
+}
+function updateOrderStatus(orderId, status){
+  const orders = DB.get('avg_orders', []);
+  const o = orders.find(x=>x.id===orderId);
+  if(o){ o.status = status; DB.set('avg_orders', orders); renderOrders(); }
+}
+function addQcPhoto(orderId){
+  const input = document.getElementById('qcInput_'+orderId);
+  const url = input.value.trim();
+  if(!url) return;
+  const orders = DB.get('avg_orders', []);
+  const o = orders.find(x=>x.id===orderId);
+  if(o){
+    o.qcPhotos = o.qcPhotos || [];
+    o.qcPhotos.push(url);
+    DB.set('avg_orders', orders);
+    input.value='';
+    renderAdminOrders();
+    renderOrders();
+  }
+}
+
+/* ---------- Chat de ayuda ---------- */
+let helpChatStarted = false;
+
+const HELP_MENU = [
+  {key:'pago', label:'💳 Problema de pago'},
+  {key:'general', label:'ℹ️ Ayuda general'},
+  {key:'paquete', label:'📦 Ayuda con mi paquete'},
+  {key:'persona', label:'🧑 Contactar con una persona real'}
+];
+
+function openHelpChat(){
+  openDrawer('helpDrawer');
+  if(!helpChatStarted){
+    helpChatStarted = true;
+    addBotMessage('¡Hola! Soy el asistente de AVIGARS. ¿En qué te puedo ayudar?');
+    showHelpMenu();
+  }
+}
+function chatScrollToBottom(){
+  const box = document.getElementById('helpMessages');
+  box.scrollTop = box.scrollHeight;
+}
+function addBotMessage(html){
+  const box = document.getElementById('helpMessages');
+  const row = document.createElement('div');
+  row.className = 'chat-row bot';
+  row.innerHTML = `<div class="chat-bubble">${html}</div>`;
+  box.appendChild(row);
+  chatScrollToBottom();
+  return row;
+}
+function addUserMessage(text){
+  const box = document.getElementById('helpMessages');
+  const row = document.createElement('div');
+  row.className = 'chat-row user';
+  row.innerHTML = `<div class="chat-bubble"></div>`;
+  row.querySelector('.chat-bubble').textContent = text;
+  box.appendChild(row);
+  chatScrollToBottom();
+}
+function showHelpMenu(){
+  const box = document.getElementById('helpMessages');
+  const row = document.createElement('div');
+  row.className = 'chat-row bot';
+  row.innerHTML = `<div class="chat-bubble" style="width:100%;">
+    <div class="chat-options">
+      ${HELP_MENU.map(o=>`<button class="btn btn-sm" onclick="selectHelpOption('${o.key}', this)">${o.label}</button>`).join('')}
+    </div>
+  </div>`;
+  box.appendChild(row);
+  chatScrollToBottom();
+}
+function selectHelpOption(key, btnEl){
+  const opt = HELP_MENU.find(o=>o.key===key);
+  if(btnEl){
+    const parentRow = btnEl.closest('.chat-row');
+    if(parentRow) parentRow.querySelectorAll('button').forEach(b=>b.disabled = true);
+  }
+  addUserMessage(opt.label);
+
+  if(key === 'pago'){
+    addBotMessage(`
+      Sobre pagos: aceptamos <b>PayPal</b> directo en la página, y también transferencia/depósito/OXXO
+      coordinando por WhatsApp o Instagram después de confirmar tu pedido.<br><br>
+      Si ya pagaste y tu pedido no se actualizó, revisa la sección <b>"Mis Pedidos"</b> — si sigue sin
+      aparecer el pago después de un rato, usa la opción de "Contactar con una persona real" de este chat.
+    `);
+    setTimeout(showHelpMenu, 300);
+  } else if(key === 'general'){
+    addBotMessage(`
+      Puedes revisar todas las preguntas frecuentes en la sección <b>FAQ</b> de la página
+      (cómo comprar, niveles de precio, envíos, etc). También puedes seguir el estado de tus
+      pedidos en <b>"Mis Pedidos"</b>, con fotos de QC incluidas.
+    `);
+    setTimeout(showHelpMenu, 300);
+  } else if(key === 'paquete'){
+    handlePaqueteHelp();
+  } else if(key === 'persona'){
+    showContactForm();
+  }
+}
+function handlePaqueteHelp(){
+  if(!currentUser){
+    addBotMessage('Para ver el estado de tu paquete necesitas iniciar sesión primero. Ve al ícono de 👤 arriba.');
+    setTimeout(showHelpMenu, 300);
+    return;
+  }
+  const orders = DB.get('avg_orders', []).filter(o=>o.userEmail===currentUser.email);
+  if(orders.length===0){
+    addBotMessage('No encuentro pedidos en tu cuenta todavía. Cuando hagas una compra, aquí mismo podrás ver su seguimiento.');
+  } else {
+    const last = orders[orders.length-1];
+    const stepIndex = STEPS.findIndex(s=>s.key===last.status);
+    addBotMessage(`
+      Tu pedido más reciente es <b>${last.id}</b>, estado actual: <b>${STEPS[stepIndex]?.label || last.status}</b>.
+      Puedes ver el detalle completo (fotos de QC incluidas) en la sección <b>"Mis Pedidos"</b>.
+    `);
+  }
+  setTimeout(showHelpMenu, 300);
+}
+function showContactForm(){
+  const box = document.getElementById('helpMessages');
+  const row = document.createElement('div');
+  row.className = 'chat-row bot';
+  row.innerHTML = `
+    <div class="chat-bubble" style="width:100%;">
+      Cuéntame brevemente tu problema y un admin de AVIGARS te va a contactar.
+      <div class="chat-ticket-form">
+        <textarea id="ticketMsg" placeholder="Escribe aquí tu problema..."></textarea>
+        <button class="btn btn-sm btn-accent" onclick="submitTicket(this)">Enviar</button>
+      </div>
+    </div>
+  `;
+  box.appendChild(row);
+  chatScrollToBottom();
+}
+async function submitTicket(btnEl){
+  const textarea = document.getElementById('ticketMsg');
+  const message = textarea.value.trim();
+  if(!message){ alert('Escribe tu problema antes de enviar.'); return; }
+  btnEl.disabled = true;
+  btnEl.textContent = 'Enviando...';
+
+  const payload = {
+    message,
+    userEmail: currentUser ? currentUser.email : 'invitado',
+    userName: currentUser ? currentUser.name : 'Invitado (sin sesión)'
+  };
+
+  let liveChatStarted = false;
+  try{
+    const res = await fetch(SCRAPER_API + '/api/tickets', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    if(!res.ok) throw new Error('El servidor respondió con error.');
+    const ticket = await res.json();
+    userChatTicketId = ticket.id;
+    startUserChatListening(ticket.id);
+    appendChatBubble('helpMessages', message, true); // muestra tu mensaje inicial en el chat
+    liveChatStarted = true;
+  }catch(err){
+    // Respaldo local si el backend no está corriendo: al menos queda guardado
+    // en este navegador, aunque no le llegue la notificación al admin ni
+    // pueda haber chat en vivo (eso sí necesita el backend).
+    const tickets = DB.get('avg_tickets', []);
+    tickets.push({ id:'TCK-'+Date.now().toString().slice(-8), ...payload, date:new Date().toISOString(), resolved:false });
+    DB.set('avg_tickets', tickets);
+  }
+
+  renderAdminTickets();
+  const formRow = btnEl.closest('.chat-row');
+  formRow.querySelector('.chat-ticket-form').remove();
+
+  if(liveChatStarted){
+    addBotMessage('¡Listo! Tu mensaje fue enviado. Un admin de AVIGARS te va a contestar aquí mismo — puedes seguir escribiendo abajo.');
+    document.getElementById('helpChatInputBar').style.display = 'block';
+    document.getElementById('helpChatInput').focus();
+  } else {
+    addBotMessage('¡Listo! Tu mensaje fue enviado, pero no pude conectar el chat en vivo (¿está corriendo el backend?). Un admin lo va a revisar cuando pueda.');
+    setTimeout(showHelpMenu, 300);
+  }
+}
+
+/* ---------- Admin: solicitudes de contacto ---------- */
+async function renderAdminTickets(){
+  const box = document.getElementById('adminTickets');
+  if(!box) return;
+  let tickets = [];
+  try{
+    const res = await fetch(SCRAPER_API + '/api/tickets');
+    if(!res.ok) throw new Error('sin backend');
+    tickets = await res.json();
+  }catch(err){
+    tickets = DB.get('avg_tickets', []);
+  }
+  tickets = tickets.slice().reverse();
+  lastRenderedTickets = tickets;
+  if(tickets.length===0){ box.innerHTML = '<div class="empty-msg">No hay solicitudes de contacto.</div>'; return; }
+  box.innerHTML = tickets.map(t => `
+    <div class="improve-card" style="border-color:${t.resolved?'var(--line)':'var(--accent)'};">
+      <div class="review-meta">${t.userName} (${t.userEmail}) · ${new Date(t.date).toLocaleString()} ${t.resolved?'· <span style="color:var(--ok)">Resuelto</span>':''}</div>
+      <p style="margin:6px 0 10px;">${t.message}</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-sm btn-accent" onclick="openAdminChat('${t.id}')">💬 Hablar con el usuario</button>
+        ${!t.resolved ? `<button class="btn btn-sm" onclick="markTicketResolved('${t.id}')">Marcar como resuelto</button>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+async function markTicketResolved(id){
+  try{
+    const res = await fetch(SCRAPER_API + '/api/tickets/' + id + '/resolve', { method:'PATCH' });
+    if(!res.ok) throw new Error('sin backend');
+  }catch(err){
+    const tickets = DB.get('avg_tickets', []);
+    const t = tickets.find(x=>x.id===id);
+    if(t){ t.resolved = true; DB.set('avg_tickets', tickets); }
+  }
+  renderAdminTickets();
+}
+
+/* ---------- Chat en vivo (admin <-> cliente), por Server-Sent Events ---------- */
+let lastRenderedTickets = [];
+let adminChatES = null;
+let adminChatTicketId = null;
+let userChatES = null;
+let userChatTicketId = null;
+
+function appendChatBubble(containerId, text, alignRight){
+  const box = document.getElementById(containerId);
+  const row = document.createElement('div');
+  row.className = 'chat-row ' + (alignRight ? 'user' : 'bot');
+  const bubble = document.createElement('div');
+  bubble.className = 'chat-bubble';
+  bubble.textContent = text;
+  row.appendChild(bubble);
+  box.appendChild(row);
+  box.scrollTop = box.scrollHeight;
+}
+
+/* --- Lado Admin --- */
+async function openAdminChat(ticketId){
+  if(adminChatES){ adminChatES.close(); adminChatES = null; }
+  adminChatTicketId = ticketId;
+
+  const ticket = lastRenderedTickets.find(t=>t.id===ticketId);
+  document.getElementById('adminChatTitle').textContent = 'Chat con ' + (ticket ? ticket.userName : 'cliente');
+  document.getElementById('adminChatMessages').innerHTML = '';
+  openDrawer('adminChatDrawer');
+
+  try{
+    const res = await fetch(SCRAPER_API + '/api/tickets/' + ticketId + '/messages');
+    if(!res.ok) throw new Error('sin backend');
+    const messages = await res.json();
+    messages.forEach(m => appendChatBubble('adminChatMessages', m.text, m.sender==='admin'));
+  }catch(err){
+    appendChatBubble('adminChatMessages', 'No se pudo cargar el historial (¿está corriendo el backend en ' + SCRAPER_API + '?).', false);
+    return;
+  }
+
+  adminChatES = new EventSource(SCRAPER_API + '/api/tickets/' + ticketId + '/stream');
+  adminChatES.onmessage = (e) => {
+    const msg = JSON.parse(e.data);
+    appendChatBubble('adminChatMessages', msg.text, msg.sender==='admin');
+  };
+}
+function closeAdminChat(){
+  if(adminChatES){ adminChatES.close(); adminChatES = null; }
+  adminChatTicketId = null;
+  closeDrawers();
+}
+async function sendAdminChatMessage(){
+  const input = document.getElementById('adminChatInput');
+  const text = input.value.trim();
+  if(!text || !adminChatTicketId) return;
+  input.value = '';
+  try{
+    await fetch(SCRAPER_API + '/api/tickets/' + adminChatTicketId + '/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ sender:'admin', text })
+    });
+    // No hace falta agregar la burbuja a mano: el mismo EventSource nos
+    // manda de vuelta el mensaje que acabamos de mandar.
+  }catch(err){
+    alert('No se pudo enviar el mensaje. ¿Está corriendo el backend?');
+  }
+}
+
+/* --- Lado Cliente (dentro del chat de Ayuda) --- */
+function startUserChatListening(ticketId){
+  if(userChatES){ userChatES.close(); userChatES = null; }
+  userChatES = new EventSource(SCRAPER_API + '/api/tickets/' + ticketId + '/stream');
+  userChatES.onmessage = (e) => {
+    const msg = JSON.parse(e.data);
+    // El primer mensaje (el que el cliente ya escribió en el formulario) también
+    // llega por aquí como eco; mostrar todo lo que llegue mantiene el historial
+    // igual en ambos lados sin duplicar nada.
+    if(msg.sender === 'admin'){
+      appendChatBubble('helpMessages', msg.text, false);
+    }
+  };
+}
+async function sendUserChatMessage(){
+  const input = document.getElementById('helpChatInput');
+  const text = input.value.trim();
+  if(!text || !userChatTicketId) return;
+  input.value = '';
+  appendChatBubble('helpMessages', text, true);
+  try{
+    await fetch(SCRAPER_API + '/api/tickets/' + userChatTicketId + '/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ sender:'user', text })
+    });
+  }catch(err){
+    appendChatBubble('helpMessages', 'No se pudo enviar tu mensaje. Intenta de nuevo.', false);
+  }
+}
+
+/* ---------- Notificaciones push (solo Admin) ---------- */
+function urlBase64ToUint8Array(base64String){
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+  const rawData = atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for(let i=0; i<rawData.length; i++){ outputArray[i] = rawData.charCodeAt(i); }
+  return outputArray;
+}
+async function enableAdminPushNotifications(){
+  const msgEl = document.getElementById('pushMsg');
+  const showMsg = (text, ok) => {
+    msgEl.textContent = text;
+    msgEl.className = 'msg show ' + (ok?'ok':'err');
+    if(!ok) alert(text); // además del recuadro, un alert para que no se pase desapercibido
+  };
+
+  // Si abriste el archivo con doble clic (file://...) esto no puede funcionar:
+  // las notificaciones push necesitan que la página esté servida por http/https.
+  if(location.protocol === 'file:'){
+    showMsg('Estás abriendo la página como archivo local (file://...). Para activar notificaciones, abre en tu navegador: ' + SCRAPER_API + '/avigars.html (con el backend corriendo).', false);
+    return;
+  }
+  if(!('serviceWorker' in navigator) || !('PushManager' in window)){
+    showMsg('Tu navegador no soporta notificaciones push.', false);
+    return;
+  }
+
+  // Si ya lo bloqueaste antes, el navegador nunca vuelve a mostrar el permiso;
+  // hay que desbloquearlo manualmente desde la configuración del sitio.
+  if(Notification.permission === 'denied'){
+    showMsg('Tienes las notificaciones bloqueadas para este sitio. Ábrelo desde el ícono de candado/información junto a la URL y cambia "Notificaciones" a Permitir, luego vuelve a intentar.', false);
+    return;
+  }
+
+  try{
+    // IMPORTANTE: pedir el permiso es lo PRIMERO que se hace, antes de cualquier
+    // await — si se pide después de esperar otra cosa, algunos navegadores ya
+    // no muestran el cuadro de permiso (se pierde el "gesto del usuario").
+    const permission = await Notification.requestPermission();
+    if(permission !== 'granted'){
+      showMsg('No se activaron las notificaciones (no diste permiso, o el navegador no mostró el cuadro de permiso).', false);
+      return;
+    }
+
+    const reg = await navigator.serviceWorker.register('/sw.js');
+    await navigator.serviceWorker.ready;
+
+    const keyRes = await fetch(SCRAPER_API + '/api/vapid-public-key');
+    if(!keyRes.ok) throw new Error('No se pudo obtener la llave del backend (status ' + keyRes.status + ')');
+    const { publicKey } = await keyRes.json();
+
+    const sub = await reg.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(publicKey)
+    });
+    const subRes = await fetch(SCRAPER_API + '/api/subscribe', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(sub)
+    });
+    if(!subRes.ok) throw new Error('El backend no guardó la suscripción (status ' + subRes.status + ')');
+
+    showMsg('¡Notificaciones activadas! Vas a recibir un aviso en este dispositivo cuando alguien pida hablar con una persona real.', true);
+  }catch(err){
+    showMsg('No se pudieron activar las notificaciones: ' + err.message + '. ¿Está corriendo el backend en ' + SCRAPER_API + '?', false);
+  }
+}
+
+/* ---------- Init ---------- */
+function init(){
+  renderFilterChips();
+  renderProducts();
+  renderMayoreoInfo();
+  renderFaq();
+  renderOrders();
+  renderReviews();
+  renderAuthDrawer();
+  loadConfigForm();
+  updatePricePreview();
+  renderColorRows();
+  renderFetchedImages();
+  populateBrandSelect();
+  renderAdminOrders();
+  renderAdminImprovements();
+  renderAdminTickets();
+  toggleAdminButton();
+  updateCartBadge();
+  applyPendingImportIfAdmin();
+}
+init();
+</script>
+</body>
+</html>
